@@ -25,10 +25,9 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // Simulate a data fetching delay
             setTimeout(() => {
                 setIsLoading(false);
-            }, 1000); // Adjust the timeout as needed
+            }, 1000);
         };
 
         fetchData();
