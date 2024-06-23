@@ -2,12 +2,14 @@ const { baseUrl } = require("../../config/host");
 const Cookies = require("js-cookie");
 const token = Cookies.get("token") || null;
 
+console.log(token)
+
 const GetTopics = async (subjectId: number) => {
   const res = await fetch(`${baseUrl}/topic/fetch/${subjectId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${JSON.parse(token)}`
+      Authorization: `Bearer ${token}`
     }
   });
   const data = await res.json();
@@ -21,7 +23,7 @@ const GetSubject = async (subjectId: number) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${JSON.parse(token)}`
+      Authorization: `Bearer ${token}`
     }
   });
   const data = await res.json();
@@ -35,7 +37,7 @@ const LoginUser = async (payload: { email: string; password: string }) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${JSON.parse(token)}`
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(payload)
   });
@@ -51,7 +53,7 @@ const VerifyToken = async () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${JSON.parse(token)}`
+      Authorization: `Bearer ${token}`
     }
   });
   const data = await res.json();
@@ -67,7 +69,7 @@ const CreateTopic = async (formData: any) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${token}`
       },
       body: formData
     });
@@ -88,7 +90,7 @@ const GetSubjects = async () => {
       headers: {
         "Content-Type": "multipart/form-data",
         accept: "application/json",
-        Authorization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${token}`
       }
     });
     const data = await res.json();
@@ -107,7 +109,7 @@ const CreateSubject = async (formData: any) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${token}`
       },
       body: formData
     });
@@ -128,7 +130,7 @@ const GetAllStudents =  async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${token}`
       }
     })
     const data = await res.json();
@@ -147,7 +149,7 @@ const GetAllTeachers =  async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${token}`
       }
     })
     const data = await res.json();
