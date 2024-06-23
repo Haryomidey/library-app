@@ -2,7 +2,10 @@ import React from "react";
 import { FaCircle } from "react-icons/fa";
 import LineChartComponent from "./LineChartComponent";
 function DashboardRowTwo() {
+
+
   const activities = ["", ""];
+  
   return (
     <div className="lg:grid grid-cols-5 w-full space-y-5 lg:gap-10">
       <div className="lg:col-span-3 bg-white rounded-xl w-full h-fit space-y-5 p-5">

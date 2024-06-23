@@ -3,7 +3,7 @@ import rightBg from "../img/rightLoginBackground.png";
 
 const BackgroundImageWrapper = () => {
     return (
-        <div className="hidden">
+        <div>
             <section
                 className="absolute left-0 top-0 bottom-0 h-full w-1/2" 
                 style={

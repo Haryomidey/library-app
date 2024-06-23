@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import users from "../../../utils/admin/users.json";
 import DashboardRowTwo from "./DashboardRowTwo";
 // import LeaderBoard from "./LeaderBoard";
 import Header from "../Header";
 import ContentDistribution from "./ContentDistribution";
+import { GetAdminDashboard } from "../AdminControllers";
 function DashboardBody() {
+
+  useEffect(() => {
+    const fetchAdminDashboard = async () => {
+      const data = await GetAdminDashboard();
+      console.log(data)
+    }
+  })
+
   return (
     <>
       <Header headerName="Dashboard" />

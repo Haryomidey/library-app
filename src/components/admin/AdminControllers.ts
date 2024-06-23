@@ -183,6 +183,25 @@ const RegisterAdmins = async (form: any) => {
   }
 };
 
+const GetAdminDashboard =  async () => {
+  try{
+    const res = await fetch(`${baseUrl}/dashboard/admin/1`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    })
+    const data = await res.json();
+    if (!res.ok){
+      throw new Error(data.error);
+    }
+    return data
+  } catch (error){
+    console.error(error)
+  }
+}
+
 
 export {
   GetTopics,
@@ -194,5 +213,6 @@ export {
   GetAllTeachers,
   LoginUser,
   VerifyToken,
-  RegisterAdmins
+  RegisterAdmins,
+  GetAdminDashboard
 };
