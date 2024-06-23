@@ -67,8 +67,8 @@ function UserManagementTeacher() {
               Add teacher
             </button>
 
-            <div className={`fixed left-0 bottom-0 right-0 top-0 flex items-center justify-center ${registerNewTeacher ? 'scale-1' : 'scale-0'} transition-transform ease duration-500 bg-[#00000094]`}>
-              <div className="w-[380px]" ref={containerRef}>
+            <div className={`fixed left-0 bottom-0 right-0 top-0 flex items-center justify-center ${registerNewTeacher ? 'scale-1' : 'scale-0'} transition-transform ease duration-500 bg-[#00000094] px-5`}>
+              <div className="max-w-full w-[380px]" ref={containerRef}>
                 <Register />
               </div>
             </div>
