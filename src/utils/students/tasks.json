@@ -1,0 +1,15 @@
+[{
+    "name": "Courses",
+    "image": "/images/courses.png",
+    "total": 16
+},
+{
+    "name": "Assignments",
+    "image": "/images/assignments.png",
+    "total": 3
+},
+{
+    "name": "Practicals",
+    "image": "/images/practicals.png",
+    "total": 3
+}]

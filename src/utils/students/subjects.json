@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Mathematics",
+    "image": "/images/abacus.png"
+  },
+  {
+    "name": "Biology",
+    "image": "/images/dna.png"
+  },
+  {
+    "name": "Geography",
+    "image": "/images/coin.png"
+  },
+  {
+    "name": "Physics",
+    "image": "/images/microscope.png"
+  },
+  {
+    "name": "Biology",
+    "image": "/images/dna.png"
+  },
+  {
+    "name": "Mathematics",
+    "image": "/images/abacus.png"
+  },
+  {
+    "name": "Physics",
+    "image": "/images/microscope.png"
+  },
+  {
+    "name": "Geography",
+    "image": "/images/coin.png"
+  },
+  {
+    "name": "Physics",
+    "image": "/images/microscope.png"
+  },
+  {
+    "name": "Mathematics",
+    "image": "/images/abacus.png"
+  },
+  {
+    "name": "Geography",
+    "image": "/images/coin.png"
+  },
+  {
+    "name": "Biology",
+    "image": "/images/dna.png"
+  }
+]

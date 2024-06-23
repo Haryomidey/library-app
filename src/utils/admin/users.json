@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Students",
+    "image": "/images/student.png",
+    "total": 1200
+  },
+  {
+    "name": "Instructors",
+    "image": "/images/instructor.png",
+    "total": 78
+  },
+  {
+    "name": "Files",
+    "image": "/images/folder.png",
+    "total": 400
+  },
+  {
+    "name": "Books",
+    "image": "/images/admin-books.png",
+    "total": 1200
+  }
+]

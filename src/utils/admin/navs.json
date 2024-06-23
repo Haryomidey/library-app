@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Home",
+    "image": "/images/home.png",
+    "path": "/admin/"
+  },
+  {
+    "name": "User Management",
+    "image": "/images/user-mgmt.png",
+    "path": ""
+  },
+  {
+    "name": "Subjects",
+    "image": "/images/subjects.png",
+    "path": "/admin/subjects"
+  },
+  {
+    "name": "Library",
+    "image": "/images/books.png",
+    "path": "/admin/library"
+  },
+  {
+    "name": "Announcements",
+    "image": "/images/loudspeaker.png",
+    "path": "/admin/announcement"
+  },
+  {
+    "name": "Help and Support",
+    "image": "/images/question-circle.png",
+    "path": "/admin/help-and-support"
+  },
+  {
+    "name": "Settings",
+    "image": "/images/settings.png",
+    "path": "/admin/settings"
+  }
+]

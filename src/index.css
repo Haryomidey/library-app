@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-[#F6F7F9];
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+.transform {
+  transform: translate(-50%, -50%);
+}
+
+textarea, button, input, select{
+  outline: none
+}
+
+.register-scrollbar::-webkit-scrollbar{
+  width: 5px;
+}
+
+.register-scrollbar::-webkit-scrollbar-thumb{
+  background-color: #0c0c0c56;
+}
+
+.table-head th{
+  text-align: left;
+  padding: 7px 10px;
+  color: #475467;
+  font-weight: 500;
+}
+
+.table-body td{
+  padding: 14px 10px;
+  color: #475467;
+  font-weight: 500;
+  border-top: 1px solid #d9d9d9;
+}
+
+.table-body tr:nth-child(odd){
+  background: #F9FAFB;
+}
+
+.dept p:nth-child(1){
+  background: #F9F5FF;
+  color: #6941C6;
+}
+
+.dept p:nth-child(2){
+  background: #EFF8FF;
+  color: #175CD3;
+}
+
+.dept p:nth-child(3){
+  background: #EEF4FF;
+  color: #3538CD;
+}

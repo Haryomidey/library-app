@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Visual Arts",
+    "lecturer": "Mr Ibe",
+    "picture": "/images/visual-arts.png"
+  },
+  {
+    "name": "Mathematics",
+    "lecturer": "Mr Adeshola",
+    "picture": "/images/maths.png"
+  }
+]

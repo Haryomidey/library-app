@@ -1,0 +1,18 @@
+[
+  {
+    "rank": 1,
+    "name": "Charlie Rawal",
+    "course": 53,
+    "hour": 250,
+    "status": "up",
+    "point": "13,450"
+  },
+  {
+    "rank": 2,
+    "name": "Ariana Agarwal",
+    "course": 88,
+    "hour": 212,
+    "status": "down",
+    "point": "10,333"
+  }
+]
