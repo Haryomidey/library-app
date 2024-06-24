@@ -9,27 +9,34 @@ import ManagementTableStudent from "./ManagementTableStudent";
 import { useEffect, useState } from "react";
 import { GetAllStudents } from "../AdminControllers";
 
-
-
 function UserManagementStudent() {
-
-  const [students, setStudents] = useState<any>(null)
+  const [students, setStudents] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const router = useNavigate();
 
   const fetchAllStudents = async () => {
     try {
       const response = await GetAllStudents();
       setStudents(response);
-    } catch(err: any){
-      console.error(err.message)
-    } 
-      
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   useEffect(() => {
     fetchAllStudents();
   }, []);
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredStudents = students?.filter(
+    (student: any) =>
+      student?.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student?.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student?.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="w-full h-screen bg-white">
@@ -38,14 +45,19 @@ function UserManagementStudent() {
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center gap-3">
             <p>Students</p>
-            <span className="text-[#175CD3] bg-[#EFF8FF] text-sm rounded-2xl px-3 py-1">{students?.length} users</span>
+            <span className="text-[#175CD3] bg-[#EFF8FF] text-sm rounded-2xl px-3 py-1">
+              {filteredStudents?.length} users
+            </span>
           </div>
           <div className="flex items-center gap-3">
-            <button className="border flex [&>*]:self-center gap-2  rounded-md py-2 px-5">
+            <button className="border flex [&>*]:self-center gap-2 rounded-md py-2 px-5">
               <LuUploadCloud />
               Import
             </button>
-            <button className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8" onClick={() => router('/register')}>
+            <button
+              className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8"
+              onClick={() => router("/register")}
+            >
               <IoMdAdd />
               Add student
             </button>
@@ -54,33 +66,49 @@ function UserManagementStudent() {
 
         <div className="w-full flex items-center justify-between mt-8">
           <div className="flex items-center border rounded-lg h-[40px] px-3">
-            <p className="cursor-pointer flex items-center pr-3 border-r h-full">View all</p>
-            <p className="cursor-pointer flex items-center px-3 border-r h-full">Junior</p>
+            <p className="cursor-pointer flex items-center pr-3 border-r h-full">
+              View all
+            </p>
+            <p className="cursor-pointer flex items-center px-3 border-r h-full">
+              Junior
+            </p>
             <p className="cursor-pointer pl-3">Senior</p>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 px-2 border rounded-md h-[40px]">
               <IoIosSearch />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className="h-full bg-transparent"
-                placeholder="Search" 
-                />
+                placeholder="Search"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
             </div>
             <div className="flex items-center gap-2 px-2 border rounded-md h-[40px]">
-              <button className=" flex [&>*]:self-center gap-2 py-2 px-5">
+              <button className="flex [&>*]:self-center gap-2 py-2 px-5">
                 <IoFilter />
                 Filters
-            </button>
+              </button>
             </div>
           </div>
         </div>
 
-        <ManagementTableStudent data={students} />
-
+        {searchQuery ? (
+          filteredStudents?.length > 0 ? (
+            <ManagementTableStudent data={filteredStudents} />
+          ) : (
+            <p className="mt-8 text-xl text-center text-gray-500">
+              Your search does not match any student!!!
+            </p>
+          )
+        ) : (
+          <ManagementTableStudent data={students} />
+        )}
       </div>
     </div>
   );
 }
+
 export default UserManagementStudent;

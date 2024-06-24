@@ -25,14 +25,11 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
     const rowsPerPage = 5;
 
     useEffect(() => {
-        setIsLoading(false);
+        // Simulating data loading delay (remove this in actual implementation)
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000); // Adjust timeout as needed or replace with actual data loading logic
     }, [data]);
-
-    const indexOfLastRow = currentPage * rowsPerPage;
-    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentRows = data?.slice(indexOfFirstRow, indexOfLastRow);
-
-    const totalPages = Math.ceil(data?.length / rowsPerPage);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -47,6 +44,15 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
     };
 
     const renderPageNumbers = () => {
+        if (isLoading) {
+            return <span>Loading...</span>;
+        }
+
+        if (!data || data.length === 0) {
+            return <span>No data available</span>;
+        }
+
+        const totalPages = Math.ceil(data.length / rowsPerPage);
         let pages = [];
 
         if (totalPages <= 6) {
@@ -79,6 +85,12 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
             }
         });
     };
+
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = data?.slice(indexOfFirstRow, indexOfLastRow);
+
+    const totalPages = Math.ceil(data?.length / rowsPerPage);
 
     return (
         <div className="w-full mt-8 pb-5">
@@ -141,7 +153,7 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
                     <IoMdArrowBack /> Previous
                 </button>
                 <div>
-                    {isLoading ? <span>Processing...</span> : renderPageNumbers()}
+                    {renderPageNumbers()}
                 </div>
                 <button
                     className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors ease duration-500 ${currentPage === totalPages ? '' : 'hover:bg-[#d4d4d4]'}`}

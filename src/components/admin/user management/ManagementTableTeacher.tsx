@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoArrowDownSharp } from "react-icons/io5";
 import { GoQuestion } from "react-icons/go";
 import { HiOutlineTrash } from "react-icons/hi";
@@ -9,7 +9,8 @@ interface User {
     first_name: string;
     last_name: string;
     dob: string;
-    gender: string | null;
+    gender: "male" | "female";
+    grade: string;
     role: string;
     email: string;
 }
@@ -18,26 +19,17 @@ interface UserTableProps {
     data: User[];
 }
 
-const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
+const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const rowsPerPage = 5;
 
     useEffect(() => {
-        const fetchData = async () => {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 1000);
-        };
-
-        fetchData();
+        // Simulating data loading delay (remove this in actual implementation)
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000); // Adjust timeout as needed or replace with actual data loading logic
     }, [data]);
-
-    const indexOfLastRow = currentPage * rowsPerPage;
-    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentRows = data?.slice(indexOfFirstRow, indexOfLastRow);
-
-    const totalPages = Math.ceil(data?.length / rowsPerPage);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -52,6 +44,15 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
     };
 
     const renderPageNumbers = () => {
+        if (isLoading) {
+            return <span>Loading...</span>;
+        }
+
+        if (!data || data.length === 0) {
+            return <span>No data available</span>;
+        }
+
+        const totalPages = Math.ceil(data.length / rowsPerPage);
         let pages = [];
 
         if (totalPages <= 6) {
@@ -60,11 +61,11 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
             }
         } else {
             if (currentPage <= 3) {
-                pages = [1, 2, 3, 4, '...', totalPages];
+                pages = [1, 2, 3, 4, '...', totalPages - 2, totalPages - 1, totalPages];
             } else if (currentPage >= totalPages - 2) {
-                pages = [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+                pages = [1, 2, 3, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
             } else {
-                pages = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+                pages = [1, 2, 3, '...', currentPage, totalPages - 2, totalPages - 1, totalPages];
             }
         }
 
@@ -85,6 +86,12 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
         });
     };
 
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = data?.slice(indexOfFirstRow, indexOfLastRow);
+
+    const totalPages = Math.ceil(data?.length / rowsPerPage);
+
     return (
         <div className="w-full mt-8 pb-5">
             <table className="w-full">
@@ -100,7 +107,7 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
                             <p className="flex items-center gap-1">Status <IoArrowDownSharp /></p>
                         </th>
                         <th>
-                            <p className="flex items-center gap-1">Role <GoQuestion /></p>
+                            <p className="flex items-center gap-1">Class <GoQuestion /></p>
                         </th>
                         <th>Email address</th>
                         <th>Date of Birth</th>
@@ -123,10 +130,10 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
                                     <p className="text-[#027A48]">active</p>
                                 </div>
                             </td>
-                            <td>{user?.role}</td>
+                            <td>{user?.grade}</td>
                             <td>{user?.email}</td>
                             <td>{user?.dob}</td>
-                            <td>{user?.gender ? user.gender : 'nill'}</td>
+                            <td>{user?.gender}</td>
                             <td>
                                 <div className="flex items-center gap-2">
                                     <p><HiOutlineTrash /></p>
@@ -146,7 +153,7 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
                     <IoMdArrowBack /> Previous
                 </button>
                 <div>
-                    {isLoading ? <span>Processing...</span> : renderPageNumbers()}
+                    {renderPageNumbers()}
                 </div>
                 <button
                     className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors ease duration-500 ${currentPage === totalPages ? '' : 'hover:bg-[#d4d4d4]'}`}
@@ -160,4 +167,4 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
     );
 };
 
-export default ManagementTableTeacher;
+export default ManagementTableStudent;
