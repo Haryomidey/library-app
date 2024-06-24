@@ -2,8 +2,6 @@ const { baseUrl } = require("../../config/host");
 const Cookies = require("js-cookie");
 const token = Cookies.get("token") || null;
 
-console.log(token)
-
 const GetTopics = async (subjectId: number) => {
   const res = await fetch(`${baseUrl}/topic/fetch/${subjectId}`, {
     method: "GET",
@@ -130,7 +128,7 @@ const GetAllStudents =  async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${JSON.parse(token)}`
       }
     })
     const data = await res.json();
@@ -149,7 +147,7 @@ const GetAllTeachers =  async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${JSON.parse(token)}`
       }
     })
     const data = await res.json();
@@ -183,25 +181,31 @@ const RegisterAdmins = async (form: any) => {
   }
 };
 
-const GetAdminDashboard =  async () => {
-  try{
+const GetAdminDashboard = async () => {
+  try {
+    if (!token) {
+      console.error('Token is not provided');
+      return;
+    }
+
     const res = await fetch(`${baseUrl}/dashboard/admin/1`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Accept": "application/json",
+        "Authorization": `Bearer ${JSON.parse(token)}`
       }
-    })
-    const data = await res.json();
-    if (!res.ok){
-      throw new Error(data.error);
-    }
-    return data
-  } catch (error){
-    console.error(error)
-  }
-}
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error(data.error);
+    }
+    return data;
+  } catch (error: any) {
+    console.error('Error:', error.message);
+  }
+};
 
 export {
   GetTopics,

@@ -1,4 +1,4 @@
-// components/ContentDistribution.tsx
+
 import React from "react";
 import {
   PieChart,
@@ -9,19 +9,28 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-const data = [
-  { name: "Video", value: 65, color: "#8884d8" },
-  { name: "Audio", value: 17, color: "#82ca9d" },
-  { name: "PDF", value: 15, color: "#ffc658" },
-  { name: "Others", value: 3, color: "#ff8042" }
-];
+interface ContentDistributionProps {
+  data: {
+    video_count: number;
+    pdf_count: number;
+    audio_count: number;
+    other_count: number;
+  };
+}
 
-const ContentDistribution: React.FC = () => {
+const ContentDistribution: React.FC<ContentDistributionProps> = ({ data }) => {
+  const chartData = [
+    { name: "Video", value: data?.video_count, color: "#8884d8" },
+    { name: "PDF", value: data?.pdf_count, color: "#ffc658" },
+    { name: "Audio", value: data?.audio_count, color: "#82ca9d" },
+    { name: "Others", value: data?.other_count, color: "#ff8042" }
+  ];
+
   return (
-    <ResponsiveContainer width={"100%"} height={"100%"}>
+    <ResponsiveContainer width={"100%"}>
       <PieChart>
         <Pie
-          data={data}
+          data={chartData}
           cx={200}
           cy={200}
           labelLine={false}
@@ -29,7 +38,7 @@ const ContentDistribution: React.FC = () => {
           fill="#8884d8"
           dataKey="value"
         >
-          {data.map((entry, index) => (
+          {chartData?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>

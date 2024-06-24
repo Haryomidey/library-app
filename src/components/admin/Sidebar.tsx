@@ -54,7 +54,7 @@ function Sidebar(props: SidebarProps) {
       <ul className="flex flex-col gap-8 py-20">
         {navs.map((nav, index) => (
           index === 1 ? 
-            <div className="flex flex-col gap-4 ">
+            <div key={index} className="flex flex-col gap-4 ">
                 <div className="flex gap-4 whitespace-nowrap border-blue-500 hover:border-l-4 px-5 hover:text-blue-500 transition-all ease duration-300 cursor-pointer" onClick={handleManagementClicked}>
                   <FaUsers className="text-2xl" />
                   <div className="flex items-center gap-1">

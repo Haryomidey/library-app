@@ -106,7 +106,6 @@ const Login = () => {
     setLoader(true);
     try {
       const data = await LoginUser({ email, password });
-      console.log(data)
       Cookies.set("token", JSON.stringify(data.token));
       Cookies.set("user", JSON.stringify(data.user));
       Swal.fire({

@@ -107,7 +107,7 @@ const Register: React.FC = () => {
           icon: 'success',
           timer: 4000
         });
-        router('/')
+        router(-1)
       }
     } catch (error: any) {
       console.error('Error during registration:', error.message);
@@ -119,10 +119,10 @@ const Register: React.FC = () => {
     <main className="w-full h-screen relative flex items-center justify-center">
       <BackgroundImageWrapper />
 
-      <section className="h-full w-full max-w-full z-10 flex flex-col items-center justify-center pt-5">
-        {/* <img src={loginlogo} className="max-w-[130px]" alt='register-logo' /> */}
+      <section className="h-full w-full max-w-full z-10 flex flex-col items-center justify-center pt-5 px-2">
+        <img src={loginlogo} className="max-w-[130px]" alt='register-logo' />
         <div 
-          className="bg-white w-full h-[400px] mt-3 rounded-[75px] p-5 overflow-y-hidden"
+          className="bg-white max-w-full w-[380px] h-[400px] mt-3 rounded-[75px] p-5 overflow-y-hidden"
           style={{boxShadow: "0px 4px 64px 0px rgba(0, 0, 0, 0.10)"}}
         >
           <form onSubmit={handleSubmit} className="w-full max-h-[96%] overflow-y-scroll register-scrollbar rounded-xl pb-5">

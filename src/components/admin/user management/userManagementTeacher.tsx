@@ -1,4 +1,4 @@
-
+import { useNavigate } from "react-router-dom";
 import Header from "../Header";
 
 // Icons import
@@ -6,17 +6,15 @@ import { IoMdAdd, IoIosSearch } from "react-icons/io";
 import { IoFilter } from "react-icons/io5";
 import { LuUploadCloud } from "react-icons/lu";
 import ManagementTableTeacher from "./ManagementTableTeacher";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { GetAllTeachers } from "../AdminControllers";
-import Register from "../../../pages/Register";
 
 
 
 function UserManagementTeacher() {
 
   const [teachers, setTeachers] = useState<any>(null)
-  const [registerNewTeacher, setRegisterNewTeacher] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const router = useNavigate();
 
   const fetchAllTeachers = async () => {
     try {
@@ -30,20 +28,6 @@ function UserManagementTeacher() {
 
   useEffect(() => {
     fetchAllTeachers();
-    
-    const menuOutsideClick = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setRegisterNewTeacher(false);
-      } else {
-        setRegisterNewTeacher(true);
-      }
-    }
-
-    document.addEventListener('mousedown', menuOutsideClick);
-
-    return () => {
-      document.removeEventListener('mousedown', menuOutsideClick);
-    }
   }, []);
 
 
@@ -62,17 +46,10 @@ function UserManagementTeacher() {
               <LuUploadCloud />
               Import
             </button>
-            <button className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8" onClick={() => setRegisterNewTeacher(true)}>
+            <button className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8" onClick={() => router('/register')}>
               <IoMdAdd />
               Add teacher
             </button>
-
-            <div className={`fixed left-0 bottom-0 right-0 top-0 flex items-center justify-center ${registerNewTeacher ? 'scale-1' : 'scale-0'} transition-transform ease duration-500 bg-[#00000094] px-5`}>
-              <div className="max-w-full w-[380px]" ref={containerRef}>
-                <Register />
-              </div>
-            </div>
-
           </div>
         </div>
 
