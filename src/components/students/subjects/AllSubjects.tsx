@@ -15,7 +15,7 @@ function AllSubjects() {
   const route = useNavigate();
 
   const handleRouting = (subject: any) => {
-    route(`/student/${subject.subject_name}/${subject.id}`);
+    route(`/student/${subject?.subject_name}/${subject.id}`);
     Cookies.set("selectedSubject", JSON.stringify(subject));
     Cookies.set("grades", JSON.stringify(subject.grades));
   };
@@ -67,24 +67,24 @@ function AllSubjects() {
           <FaAngleDown />
         </div>
       </div>
-      {filteredSubjects.length === 0 ? (
+      {filteredSubjects?.length === 0 ? (
         <div className="p-5 lg:p-10">
           <p className="text-center text-xl text-gray-500">Your search does not yield any result!!!</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-5 lg:p-10 py-4">
-          {filteredSubjects.map((subject, index) => (
+          {filteredSubjects?.map((subject, index) => (
             <div
               className="bg-white p-4 h-full max-h-[300px] rounded-lg space-y-5 w-full cursor-pointer"
               key={index}
               onClick={() => handleRouting(subject)}
             >
               <img
-                src={subject.cover ? subject.cover : DefaultImage}
+                src={subject?.cover ? subject?.cover : DefaultImage}
                 alt=""
                 className="w-full h-[70%] object-cover rounded-md"
               />
-              <h3>{subject.subject_name}</h3>
+              <h3>{subject?.subject_name}</h3>
             </div>
           ))}
         </div>
