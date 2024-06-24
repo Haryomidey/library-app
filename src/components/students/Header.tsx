@@ -1,14 +1,52 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FaBars } from "react-icons/fa";
 import Sidebar from "./SideBar";
 import { MdClose } from "react-icons/md";
+import { useUserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+
+
 function Header({ headerName }: any) {
 
   const [openState, setOpenState] = useState(false);
+  const [searchState, setSearchState] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const [searchItems, setSearchItems] = useState<string>('');
+  const router = useNavigate();
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {value} = e.target;
+    setSearchItems(value)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      console.log("Enter key pressed");
+      router(`/student/subjects?q=${searchItems}`)
+
+    }
+  }
+
+
+  useEffect(() => {
+    const menuOutsideClick = (e: MouseEvent) => {
+      if (searchRef && searchRef.current?.contains(e.target as Node)) {
+        setSearchState(true);
+      }
+      else {
+        setSearchState(false);
+      }
+    }
+  
+    document.addEventListener('mousedown', menuOutsideClick);
+  
+    return () => {
+      document.removeEventListener('mousedown', menuOutsideClick);
+    }
+      
+  }, []);
 
   useEffect(() => {
     const menuOutsideClick = (e: MouseEvent) => {
@@ -50,8 +88,25 @@ function Header({ headerName }: any) {
           </div>
         </div>
         <div className="flex gap-2 lg:gap-5 [&>*]:self-center">
-          <div className="border-2 p-2 rounded-lg">
-            <BiSearch className="text-lg lg:text-xl self-center" />
+          <div className="border-2 p-2 rounded-lg cursor-pointer relative">
+            {
+              searchState ?
+              <BiSearch className="text-lg lg:text-xl self-center"  onClick={() => setSearchState(false)} />
+              :
+              <BiSearch className="text-lg lg:text-xl self-center"  onClick={() => setSearchState(true)} />
+            }
+
+            <div ref={searchRef} className={`absolute w-[180px] h-[70px] shadow-md bg-white border top-12 right-0 p-2 transition-transform ease duration-300 ${searchState ? 'scale-1' : 'scale-0'}`}>
+              <input 
+                type="text"
+                className="w-full h-full border px-2"
+                placeholder="Search..."
+                value={searchItems}
+                onChange={handleSearch}
+                onKeyDown={handleKeyDown}
+                autoFocus={true}
+              />
+            </div>
           </div>
           <img src="/images/student-avatar.png" alt="feyi" />
           <div className="hidden lg:flex flex-col text-sm text-slate-500 self-center">

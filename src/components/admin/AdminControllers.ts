@@ -7,7 +7,7 @@ const GetTopics = async (subjectId: number) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${JSON.parse(token)}`
     }
   });
   const data = await res.json();
@@ -21,7 +21,7 @@ const GetSubject = async (subjectId: number) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${JSON.parse(token)}`
     }
   });
   const data = await res.json();
@@ -67,7 +67,7 @@ const CreateTopic = async (formData: any) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${JSON.parse(token)}`
       },
       body: formData
     });
@@ -88,7 +88,7 @@ const GetSubjects = async () => {
       headers: {
         "Content-Type": "multipart/form-data",
         accept: "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${JSON.parse(token)}`
       }
     });
     const data = await res.json();
@@ -107,7 +107,7 @@ const CreateSubject = async (formData: any) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${JSON.parse(token)}`
       },
       body: formData
     });

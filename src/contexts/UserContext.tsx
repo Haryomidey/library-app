@@ -1,32 +1,22 @@
-import Cookies from "js-cookie";
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
-
-type MyContextProps = {
-  token: string;
+interface ContextType {
+  searchParams: string;
+  setSearchParams: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const Context = createContext<MyContextProps | null>(null);
+
+export const Context = createContext<ContextType | null>(null);
 
 export const ContextWrapper = ({ children }: { children: ReactNode }) => {
 
-    const token = Cookies.get('token')?.toString() || '';
+  const [searchParams, setSearchParams] = useState<string>('')
 
-    const getAuthToken = (): string | null => {
-      const token = sessionStorage.getItem("token")?.toString();
-       if (token) {
-        return token;
-      }
-      return "";
-    };
-
-    getAuthToken()
-
-    return (
-        <Context.Provider value={{ token }}>
-            {children}
-        </Context.Provider>
-    );
+  return (
+    <Context.Provider value={{ searchParams, setSearchParams }}>
+      {children}
+    </Context.Provider>
+  );
 }
 
 export const useUserContext = () => {

@@ -109,14 +109,8 @@ const router = createBrowserRouter([
         element: <StudentDashboard />
       },
       {
-        path: "subjects/",
-        children: [
-          {
-            path: "",
-            element: <AllSubjects />
-          },
-          
-        ]
+        path: "subjects",
+        element: <AllSubjects />
       },
       {
         path: ":subject/",

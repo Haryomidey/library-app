@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../Header";
 import TaskBar from "./TaskBar";
 import { GetSubjects } from "../AdminControllers";
 import Cookies from "js-cookie";
 
 function SubjectsDisplay() {
-  const [subjects, setSubjects] = useState<any>(null);
+  const [searchParams] = useSearchParams();
+  const queryParam = searchParams.get('q');
   const route = useNavigate();
+
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [filteredSubjects, setFilteredSubjects] = useState<any[]>([]);
+
   const handleRouter = (subject: any) => {
-    console.log(subject);
     route(`/admin/subjects/${subject.subject_name}`);
     Cookies.set("selectedSubject", JSON.stringify(subject));
     Cookies.set("grades", JSON.stringify(subject.grades));
   };
+
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
@@ -25,19 +30,37 @@ function SubjectsDisplay() {
     };
     fetchSubjects();
   }, []);
+
+  useEffect(() => {
+    if (queryParam) {
+      const filtered = subjects.filter(subject =>
+        subject?.subject_name.toLowerCase().includes(queryParam.toLowerCase()) ||
+        subject?.subject_description.toLowerCase().includes(queryParam.toLowerCase())
+      );
+      setFilteredSubjects(filtered);
+    } else {
+      setFilteredSubjects(subjects);
+    }
+  }, [queryParam, subjects]);
+
   return (
     <>
       <Header headerName="Subjects" />
       <div className="px-10 py-5 space-y-10">
         <TaskBar total={subjects?.length} />
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {subjects &&
-            subjects.map(
+        {filteredSubjects.length === 0 ? (
+          <div className="text-center text-gray-500">
+            Your search does not yield any result
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredSubjects.map(
               (subject: {
                 id: number;
                 subject_name: string;
                 cover: string | null;
                 subject_description: string;
+                department: string;
               }) => (
                 <div
                   className="bg-white p-2 h-80 rounded-lg cursor-pointer"
@@ -68,7 +91,8 @@ function SubjectsDisplay() {
                 </div>
               )
             )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
