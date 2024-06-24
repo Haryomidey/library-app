@@ -25,10 +25,9 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
     const rowsPerPage = 5;
 
     useEffect(() => {
-        // Simulating data loading delay (remove this in actual implementation)
         setTimeout(() => {
             setIsLoading(false);
-        }, 1000); // Adjust timeout as needed or replace with actual data loading logic
+        }, 1000);
     }, [data]);
 
     const handleNextPage = () => {
