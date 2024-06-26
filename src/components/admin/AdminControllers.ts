@@ -61,13 +61,12 @@ const VerifyToken = async () => {
   return data;
 };
 
-const CreateTopic = async (formData: any) => {
+const CreateTopic = async (formData: FormData) => {
   try {
     const res = await fetch(`${baseUrl}/topic/store`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${JSON.parse(token)}`,
       },
       body: formData
     });
@@ -76,10 +75,13 @@ const CreateTopic = async (formData: any) => {
       throw new Error(data.error);
     }
     return data;
-  } catch (error: any) {
-    console.log(error);
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
+
+
 
 const GetSubjects = async () => {
   try {
@@ -93,21 +95,20 @@ const GetSubjects = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.error);
+      console.log(data.error)
     }
     return data;
   } catch (error) {
-    console.log(error);
+    console.error('Error', error);
   }
 };
 
-const CreateSubject = async (formData: any) => {
+const CreateSubject = async (formData: FormData) => {
   try {
     const res = await fetch(`${baseUrl}/subject/store`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${JSON.parse(token)}`,
       },
       body: formData
     });
@@ -118,8 +119,10 @@ const CreateSubject = async (formData: any) => {
     return data;
   } catch (error) {
     console.error(error);
+    return null;
   }
 };
+
 
 
 const GetAllStudents =  async () => {

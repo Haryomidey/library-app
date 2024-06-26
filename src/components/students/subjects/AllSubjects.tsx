@@ -24,7 +24,7 @@ function AllSubjects() {
     try {
       const response = await GetAllSubjects();
       setSubjects(response);
-    } catch(err: any) {
+    } catch (err: any) {
       console.error(err.message);
     }
   };
@@ -36,14 +36,14 @@ function AllSubjects() {
   useEffect(() => {
     if (queryParam) {
       const filtered = subjects.filter(subject =>
-        subject?.subject_name.toLowerCase().includes(queryParam.toLowerCase()) ||
-        subject?.subject_description.toLowerCase().includes(queryParam.toLowerCase())
+        subject?.subject_name.toLowerCase().includes(queryParam.toLowerCase())
+        // subject?.subject_description.toLowerCase().includes(queryParam.toLowerCase())
       );
       setFilteredSubjects(filtered);
     } else {
       setFilteredSubjects(subjects);
     }
-  }, [queryParam, subjects, route]);
+  }, [queryParam, subjects]);
 
   return (
     <div>
@@ -67,7 +67,7 @@ function AllSubjects() {
           <FaAngleDown />
         </div>
       </div>
-      {filteredSubjects?.length === 0 ? (
+      {queryParam && filteredSubjects?.length === 0 ? (
         <div className="p-5 lg:p-10">
           <p className="text-center text-xl text-gray-500">Your search does not yield any result!!!</p>
         </div>

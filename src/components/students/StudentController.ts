@@ -16,16 +16,15 @@ const getToken = () => {
 
 const token = getToken();
 
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: token ? `Bearer ${token}` : ''
-};
 
 const GetAllSubjects = async () => {
   try {
-    const res = await fetch(`${baseUrl}/subject/student/fetch?school_id=1&grade_id=1`, {
+    const res = await fetch(`${baseUrl}/subject/fetch?school_id=1`, {
       method: "GET",
-      headers
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : ''
+      }
     });
 
     const data = await res.json();
@@ -43,7 +42,10 @@ const GetAllTopicsUnderSubject = async (subject_id: string) => {
   try {
     const res = await fetch(`${baseUrl}/topic/fetch/${subject_id}`, {
       method: "GET",
-      headers
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : ''
+      }
     });
 
     const data = await res.json();
@@ -61,7 +63,10 @@ const GetAllSubjectsAndGrades = async () => {
   try {
     const res = await fetch(`${baseUrl}/subject/fetch?school_id=1`, {
       method: "GET",
-      headers
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : ''
+      }
     });
 
     const data = await res.json();
@@ -78,7 +83,10 @@ const GetSingleTopic = async (subject_id: string) => {
   try {
     const res = await fetch(`${baseUrl}/topic/show/1`, {
       method: "GET",
-      headers
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : ''
+      }
     });
 
     const data = await res.json();
@@ -92,4 +100,9 @@ const GetSingleTopic = async (subject_id: string) => {
   }
 };
 
-export { GetAllSubjects, GetAllTopicsUnderSubject, GetAllSubjectsAndGrades, GetSingleTopic };
+export { 
+  GetAllSubjects,
+  GetAllTopicsUnderSubject,
+  GetAllSubjectsAndGrades,
+  GetSingleTopic
+};

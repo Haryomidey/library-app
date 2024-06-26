@@ -48,7 +48,7 @@ function SubjectsDisplay() {
       <Header headerName="Subjects" />
       <div className="px-10 py-5 space-y-10">
         <TaskBar total={subjects?.length} />
-        {filteredSubjects?.length === 0 ? (
+        {queryParam && filteredSubjects?.length === 0 ? (
           <div className="text-center text-xl text-gray-500">
             Your search does not yield any result
           </div>

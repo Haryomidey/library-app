@@ -1,4 +1,4 @@
-import{ useRef, useState } from "react";
+import { useRef, useState } from "react";
 import NewSubjectHeader from "./NewSubjectHeader";
 import { BiCloudUpload } from "react-icons/bi";
 import { CreateSubject } from "../AdminControllers";
@@ -11,10 +11,10 @@ interface NewSubjectProps {
 function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   const [grade, setGrade] = useState<number[]>([]);
   const [loader, setLoader] = useState(false);
-  const [subject_description, setSubjectDescription] = useState("");
+  const [subjectDescription, setSubjectDescription] = useState("");
   const [department, setDepartment] = useState("");
-  const [subject_name, setSubjectName] = useState("");
-  const [teacher_id, setTeacherId] = useState<number | null>(1);
+  const [subjectName, setSubjectName] = useState("");
+  const [teacherId, setTeacherId] = useState<number | null>(1);
   const coverPhoto = useRef<any>();
   const [selectedCoverPhoto, setSelectedCoverPhoto] = useState<File | null>(null);
 
@@ -24,18 +24,23 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
     try {
       const formData = new FormData();
       formData.append('school_id', '1');
-      formData.append('teacher_id', teacher_id?.toString() || '');
+      formData.append('teacher_id', teacherId?.toString() || '');
       grade.forEach((g) => formData.append('grade_ids[]', g.toString()));
-      formData.append('subject_name', subject_name);
-      formData.append('subject_description', subject_description);
+      formData.append('subject_name', subjectName);
+      formData.append('subject_description', subjectDescription);
       formData.append('department', department);
       if (selectedCoverPhoto) {
         formData.append('cover', selectedCoverPhoto);
       }
 
       const data = await CreateSubject(formData);
-      idUpdate(data.subject.id);
-      contentUpdate("topic");
+      if (data && data.subject) {
+        idUpdate(data.subject.id);
+        contentUpdate("topic");
+      } else {
+        console.error("Unexpected response structure:", data);
+        // Handle unexpected response structure here
+      }
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +53,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
       setSelectedCoverPhoto(file);
     }
 
-    console.log(file)
+    console.log(file);
   };
 
   return (
@@ -102,134 +107,47 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
             ref={coverPhoto}
             onChange={handleSelectionDisplay}
             className="hidden"
-
           />
         </div>
         <div className="space-y-3">
           <label className="font-semibold">Class Grade</label>
           <div className="flex flex-wrap gap-3">
-            <input
-              type="checkbox"
-              value={1}
-              name="grade"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setGrade((prevGrade) => {
-                  if (prevGrade.includes(value)) {
-                    return prevGrade.filter((item) => item !== value);
-                  } else {
-                    return [...prevGrade, value];
-                  }
-                });
-              }}
-            />
-            <label>JSS1</label>
-            <input
-              type="checkbox"
-              value={2}
-              name="grade"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setGrade((prevGrade) => {
-                  if (prevGrade.includes(value)) {
-                    return prevGrade.filter((item) => item !== value);
-                  } else {
-                    return [...prevGrade, value];
-                  }
-                });
-              }}
-            />
-            <label>JSS2</label>
-            <input
-              type="checkbox"
-              value={3}
-              name="grade"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setGrade((prevGrade) => {
-                  if (prevGrade.includes(value)) {
-                    return prevGrade.filter((item) => item !== value);
-                  } else {
-                    return [...prevGrade, value];
-                  }
-                });
-              }}
-            />
-            <label>JSS3</label>
-            <input
-              type="checkbox"
-              value={4}
-              name="grade"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setGrade((prevGrade) => {
-                  if (prevGrade.includes(value)) {
-                    return prevGrade.filter((item) => item !== value);
-                  } else {
-                    return [...prevGrade, value];
-                  }
-                });
-              }}
-            />
-            <label>SS1</label>
-            <input
-              type="checkbox"
-              value={5}
-              name="grade"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setGrade((prevGrade) => {
-                  if (prevGrade.includes(value)) {
-                    return prevGrade.filter((item) => item !== value);
-                  } else {
-                    return [...prevGrade, value];
-                  }
-                });
-              }}
-            />
-            <label>SS2</label>
-            <input
-              type="checkbox"
-              value={6}
-              name="grade"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setGrade((prevGrade) => {
-                  if (prevGrade.includes(value)) {
-                    return prevGrade.filter((item) => item !== value);
-                  } else {
-                    return [...prevGrade, value];
-                  }
-                });
-              }}
-            />
-            <label>SS3</label>
+            {['JSS1', 'JSS2', 'JSS3', 'SS1', 'SS2', 'SS3'].map((gradeLabel, index) => (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  value={index + 1}
+                  name="grade"
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    setGrade((prevGrade) => {
+                      if (prevGrade.includes(value)) {
+                        return prevGrade.filter((item) => item !== value);
+                      } else {
+                        return [...prevGrade, value];
+                      }
+                    });
+                  }}
+                />
+                <label>{gradeLabel}</label>
+              </div>
+            ))}
           </div>
         </div>
         <div className="space-y-3">
           <label className="font-semibold">Subject department</label>
           <div className="flex gap-3">
-            <input
-              type="radio"
-              onChange={(e) => setDepartment(e.target.value)}
-              value={"Art"}
-              name="department"
-            />
-            <label>Art</label>
-            <input
-              type="radio"
-              onChange={(e) => setDepartment(e.target.value)}
-              value={"Science"}
-              name="department"
-            />
-            <label>Science</label>
-            <input
-              type="radio"
-              onChange={(e) => setDepartment(e.target.value)}
-              value={"Commercial"}
-              name="department"
-            />
-            <label>Commercial</label>
+            {['Art', 'Science', 'Commercial'].map((dept, index) => (
+              <div key={index}>
+                <input
+                  type="radio"
+                  onChange={(e) => setDepartment(e.target.value)}
+                  value={dept}
+                  name="department"
+                />
+                <label>{dept}</label>
+              </div>
+            ))}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-10">
@@ -259,9 +177,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
           <label className="font-semibold">Description</label>
           <textarea
             className="rounded-md min-h-36 p-3 focus:outline-none"
-            onChange={(e) => {
-              setSubjectDescription(e.target.value);
-            }}
+            onChange={(e) => setSubjectDescription(e.target.value)}
           />
         </div>
       </form>

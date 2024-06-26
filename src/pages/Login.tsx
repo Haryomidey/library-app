@@ -114,6 +114,7 @@ const Login = () => {
         timer: 4000
       });
       data.user.role === "admin" && route("/admin");
+      data.user.role === "teacher" && route("/teacher");
       data.user.role === "student" && route("/student");
     } catch (error: any) {
       Swal.fire({

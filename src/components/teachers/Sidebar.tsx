@@ -1,11 +1,14 @@
 import React, { RefObject } from "react";
-import navs from "../../utils/students/navs.json";
 import { useNavigate } from "react-router-dom";
-
-
-import { FiLogOut } from "react-icons/fi";
-import Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+
+// Icon import
+import { FiLogOut } from "react-icons/fi";
+import { RxDashboard } from "react-icons/rx";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { GrSettingsOption } from "react-icons/gr";
+import { BsCollection } from "react-icons/bs";
 
 type SidebarProps = {
   openState: boolean
@@ -40,7 +43,7 @@ function Sidebar(props: SidebarProps) {
     ref={props.sidebarRef as React.RefObject<HTMLDivElement>}
       className={
         props.openState
-          ? `absolute h-screen w-screen md:w-[25vw] duration-300 lg:w-[18vw] overflow-hidden top-4 bg-white`
+          ? `absolute h-screen w-screen md:w-[50vw] duration-300 lg:w-[18vw] overflow-hidden top-4 bg-white`
           : "absolute h-screen w-0 overflow-hidden duration-300 top-4 bg-white"
       }
     >
@@ -49,10 +52,9 @@ function Sidebar(props: SidebarProps) {
           <div
             key={index}
             onClick={() => handleRouting(nav.path)}
-            className="flex whitespace-nowrap gap-4 group border-blue-500 hover:border-l-4 px-5 hover:text-blue-500 cursor-pointer"
+            className="flex items-center whitespace-nowrap gap-4 group border-blue-500 hover:border-l-4 px-5 hover:text-blue-500 transition-all ease duration-300 cursor-pointer"
           >
-            <img src={nav.image} alt="" className="w-6" />
-            {/* <FaGraduationCap className="self-center group-hover:text-blue-500" /> */}
+            <p>{nav.image}</p>
             <li>{nav.name}</li>
           </div>
         ))}
@@ -67,3 +69,28 @@ function Sidebar(props: SidebarProps) {
 }
 
 export default Sidebar;
+
+
+const navs = [
+    {
+      "name": "Home",
+      "image": <RxDashboard />,
+      "path": "/teacher/"
+    },
+    {
+      "name": "Courses",
+      "image": <BsCollection />,
+      "path": "/teacher/subjects"
+    },
+    {
+      "name": "Messages",
+      "image": <MdOutlineMailOutline />,
+      "path":"/teacher/messages"
+      },
+    {
+      "name": "Settings",
+      "image": <GrSettingsOption />,
+      "path": "/teacher/settings"
+    }
+  ]
+  

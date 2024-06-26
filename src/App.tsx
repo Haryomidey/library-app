@@ -24,6 +24,8 @@ import AddContainer from "./components/admin/subjects/AddContainer";
 import OneSubject from "./components/admin/subjects/OneSubject";
 import SubjectForGrade from "./components/admin/subjects/SubjectForGrade";
 import Register from "./pages/Register";
+import TeacherComp from "./components/teachers/TeacherComp";
+import TeacherDashboard from "./components/teachers/dashboard/TeacherDashboard";
 
 const router = createBrowserRouter([
   {
@@ -97,6 +99,16 @@ const router = createBrowserRouter([
       {
         path: "settings",
         element: <AdminSettings />
+      }
+    ]
+  },
+  {
+    path: '/teacher/',
+    element: <TeacherComp element={null} />,
+    children: [
+      {
+        path: '',
+        element: <TeacherDashboard />
       }
     ]
   },
