@@ -79,9 +79,10 @@ const GetAllSubjectsAndGrades = async () => {
   }
 };
 
+
 const GetSingleTopic = async (subject_id: string) => {
   try {
-    const res = await fetch(`${baseUrl}/topic/show/1`, {
+    const res = await fetch(`${baseUrl}/topic/show/${subject_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

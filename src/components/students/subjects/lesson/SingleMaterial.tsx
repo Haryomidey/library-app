@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Header from "../../Header";
-import { GetSingleTopic } from "../../StudentController";
+import { GetAllTopicsUnderSubject } from "../../StudentController";
 import Cookies from "js-cookie";
 
 
@@ -26,8 +26,9 @@ function SingleMaterial() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetSingleTopic(subjectState.subject_id);
-          setTopics(data);
+          const data = await GetAllTopicsUnderSubject(subjectState?.subject_id);
+          setTopics(data[0]);
+          console.log(topics?.video)
         } catch (error: any) {
           console.error(error.message);
         }

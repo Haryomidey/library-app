@@ -61,10 +61,10 @@ function SubjectsDisplay() {
                 cover: string | null;
                 subject_description: string;
                 department: string;
-              }) => (
+              }, index: number) => (
                 <div
                   className="bg-white p-2 h-80 rounded-lg cursor-pointer"
-                  key={subject.id}
+                  key={index}
                   onClick={() => handleRouter(subject)}
                 >
                   {subject.cover ? (

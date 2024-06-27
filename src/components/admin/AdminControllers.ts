@@ -2,7 +2,8 @@ const { baseUrl } = require("../../config/host");
 const Cookies = require("js-cookie");
 const token = Cookies.get("token") || null;
 
-const GetTopics = async (subjectId: number) => {
+
+const GetTopics = async (subjectId: string) => {
   const res = await fetch(`${baseUrl}/topic/fetch/${subjectId}`, {
     method: "GET",
     headers: {
@@ -112,6 +113,7 @@ const CreateSubject = async (formData: FormData) => {
       },
       body: formData
     });
+    console.log(res)
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.error);

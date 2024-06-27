@@ -52,7 +52,6 @@ function Sidebar(props: SidebarProps) {
             className="flex whitespace-nowrap gap-4 group border-blue-500 hover:border-l-4 px-5 hover:text-blue-500 cursor-pointer"
           >
             <img src={nav.image} alt="" className="w-6" />
-            {/* <FaGraduationCap className="self-center group-hover:text-blue-500" /> */}
             <li>{nav.name}</li>
           </div>
         ))}

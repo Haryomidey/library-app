@@ -3,12 +3,13 @@ import Header from "../../Header";
 import { BiCheckCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { GetSingleTopic } from "../../StudentController";
+import { GetAllTopicsUnderSubject } from "../../StudentController";
 
 function LessonDetails() {
   const route = useNavigate();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -21,14 +22,19 @@ function LessonDetails() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetSingleTopic(subjectState.subject_id);
-          setTopics(data);
+          const data = await GetAllTopicsUnderSubject(subjectState?.subject_id);
+          console.log(data)
+          setTopics(data[0]);
+          setLoading(false);
         } catch (error: any) {
           console.error(error.message);
+          setLoading(false);
         }
       }
     };
-    fetchTopicDetails();
+    if (subjectState) {
+      fetchTopicDetails();
+    }
   }, [subjectState]);
 
   const handleRouting = (subject_name: any, id: any, title: any) => {
@@ -36,22 +42,26 @@ function LessonDetails() {
   };
 
   const handleDownLoadFile = () => {
-    const blobUrl = topics.file;
-    const fileName = blobUrl.split('/').pop();
+    const blobUrl = topics?.file;
+    const fileName = blobUrl?.split('/').pop();
     const link = document.createElement("a");
     link.style.display = 'none';
     document.body.appendChild(link);
     link.href = blobUrl;
     link.download = fileName;
-    link.setAttribute('target', '_blank')
+    link.setAttribute('target', '_blank');
     link.click();
     window.URL.revokeObjectURL(blobUrl);
-    document.body.removeChild(link)
+    document.body.removeChild(link);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
-  
+
   return (
     <div>
-      <Header headerName={`Week ${topics?.week} -  ${topics?.title}`} />
+      <Header headerName={`Week ${topics?.week} - ${topics?.title}`} />
       <div className="lg:px-10 px-5 py-5">
         <div className="flex flex-wrap gap-2 text-blue-500 text-sm list-none [&>*]:self-center">
           <li>{subjectState?.subject_name} &gt;&nbsp;</li>
@@ -61,7 +71,7 @@ function LessonDetails() {
         <div className="py-5 space-y-3">
           <h3 className="font-semibold">Module Details</h3>
           <p className="text-sm lg:text-md lg:leading-[2rem]">
-          {topics?.introduction}
+            {topics?.introduction}
           </p>
         </div>
         <div className="py-5 space-y-4">
@@ -79,7 +89,7 @@ function LessonDetails() {
             <div className="flex gap-3 [&>*]:self-center ">
               <BiCheckCircle className="text-2xl" />
               <h3 className="text-blue-500 cursor-pointer" onClick={handleDownLoadFile}>
-                {topics?.file.split('/').pop()}
+                File - {topics?.file?.split('/').pop()}
               </h3>
             </div>
           </div>

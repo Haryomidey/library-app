@@ -44,8 +44,6 @@ function SingleSubject() {
         try {
           const data = await GetAllTopicsUnderSubject(subjectState.subject_id);
           setTopics(data);
-
-          console.log(subjectState?.subject_id)
           
           
           const coverPhotoData = {

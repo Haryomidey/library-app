@@ -34,12 +34,12 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
       }
 
       const data = await CreateSubject(formData);
+      console.log(data)
       if (data && data.subject) {
         idUpdate(data.subject.id);
         contentUpdate("topic");
       } else {
         console.error("Unexpected response structure:", data);
-        // Handle unexpected response structure here
       }
     } catch (error) {
       console.error(error);
