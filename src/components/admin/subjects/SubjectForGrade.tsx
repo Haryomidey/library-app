@@ -35,7 +35,7 @@ function SubjectForGrade() {
   const [topics, setTopics] = useState<Topic[]>([]);
 
   const handleRouting = (title: string) => {
-    router(`/admin/subjects/${subjectState?.subject_name}/${title}`);
+    router(`/admin/subjects/${subjectState?.subject_name}`);
   };
 
   useEffect(() => {
