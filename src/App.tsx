@@ -26,6 +26,7 @@ import SubjectForGrade from "./components/admin/subjects/SubjectForGrade";
 import Register from "./pages/Register";
 import TeacherComp from "./components/teachers/TeacherComp";
 import TeacherDashboard from "./components/teachers/dashboard/TeacherDashboard";
+import NewTeacher from "./components/admin/user management/NewTeacher";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
           {
             path: 'teacher',
             element: <UserManagementTeacher />
+          },
+          {
+            path: 'new-teacher',
+            element: <NewTeacher />
           },
           {
             path: 'student',

@@ -1,11 +1,13 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { BiSearch } from "react-icons/bi";
-import { FaBars } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 import Cookies from "js-cookie";
+
+import { BiSearch } from "react-icons/bi";
+import { FaBars } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 function Header({ headerName }: any) {
   const [openState, setOpenState] = useState(false);
@@ -32,6 +34,10 @@ function Header({ headerName }: any) {
 
     }
   }
+
+  const handleGoBack = () => {
+    window.history.back();
+  };
 
   useEffect(() => {
     const menuOutsideClick = (e: MouseEvent) => {
@@ -85,8 +91,9 @@ function Header({ headerName }: any) {
               <FaBars onClick={() => setOpenState(true)} className="z-20 cursor-pointer" />
             }
           </div>
-          <div className="hidden lg:flex gap-4">
-            <h1 className="font-semibold self-center">{headerName}</h1>
+          <div className="flex items-center gap-2 ml-4">
+            <p className="cursor-pointer" onClick={handleGoBack}><FaArrowLeftLong /></p>
+            <h1 className="hidden lg:block font-semibold self-center">{headerName}</h1>
           </div>
         </div>
         <div>

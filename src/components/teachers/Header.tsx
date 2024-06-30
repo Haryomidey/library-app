@@ -10,6 +10,7 @@ import { FaBars, FaUser } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 import { MdClose } from "react-icons/md";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 
 function Header({ headerName }: any) {
@@ -38,6 +39,10 @@ function Header({ headerName }: any) {
 
   const initialGetter = (value: string) => {
     return value.charAt(0);
+  };
+
+  const handleGoBack = () => {
+    window.history.back();
   };
 
 
@@ -94,8 +99,9 @@ function Header({ headerName }: any) {
             }
           </div>
 
-          <div className="hidden lg:flex gap-4">
-            <h1 className="font-semibold self-center">{headerName}</h1>
+          <div className="flex items-center gap-2 ml-4 cursor-pointer">
+            <p onClick={handleGoBack}><FaArrowLeftLong /></p>
+            <h1 className="hidden lg:block font-semibold self-center">{headerName}</h1>
           </div>
         </div>
         <div>

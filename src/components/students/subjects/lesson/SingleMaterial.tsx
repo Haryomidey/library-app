@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Header from "../../Header";
 import { GetAllTopicsUnderSubject } from "../../StudentController";
 import Cookies from "js-cookie";
+import { FaUser } from "react-icons/fa";
 
 
 
@@ -68,6 +69,39 @@ function SingleMaterial() {
           </div>
           <div>
             {topics?.introduction}
+          </div>
+
+          <div className='mt-5'>
+            <h2 className='font-semibold text-xl'>22 Comments</h2>
+            <div className='flex flex-col gap-4'>
+              <div className='mt-3 flex gap-4'>
+                <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
+                  <FaUser />
+                </div>
+                <div className="w-full">
+                  <input 
+                    type="text"
+                    placeholder="Do you have a question or comment? Drop it here..."
+                    className="w-full border-b border-[black] px-2 bg-transparent"
+                  />
+                  <div className="w-full flex items-center justify-end mt-3">
+                    <button className="px-5 py-2 rounded-full">Cancel</button>
+                    <button className="px-5 py-2 rounded-full bg-[#3471E1] text-white">Comment</button>
+                  </div>
+                </div>
+              </div>
+
+              <div className='mt-3 flex gap-4'>
+                <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
+                  <FaUser />
+                </div>
+                <div>
+                  <p><span className='font-semibold'>John Doe</span> <span className='text-[gray] text-sm'>12 mins ago</span></p>
+                  <p className='text-sm'>Elementum placerat semper ut porttitor. Diam aliquet ultrices suspendisse nunc. Venenatis ornare eu accumsan nec luctus lectus eget in. Placerat scelerisque eros volutpat eleifend a urna. Mollis proin ullamcorper nec semper in tortor platea est. Viverra justo et loborti arcu adipiscing nisl vehicula. Arcu nisl fusce eget purus quis quam ornare lectus rutrum. Bibendum nunc at viverra nunc quis mattis non nec sagittis. </p>
+                </div>
+              </div>
+                
+            </div>
           </div>
         </div>
       </div>
