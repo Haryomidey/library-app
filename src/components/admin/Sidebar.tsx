@@ -51,7 +51,7 @@ function Sidebar(props: SidebarProps) {
           : "absolute h-screen w-0 overflow-hidden duration-300 top-4 bg-white"
       }
     >
-      <ul className="flex flex-col gap-8 py-20">
+      <ul className="flex flex-col gap-8 py-16">
         {navs.map((nav, index) => (
           index === 1 ? 
             <div key={index} className="flex flex-col gap-4 ">

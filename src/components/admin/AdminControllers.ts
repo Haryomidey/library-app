@@ -226,6 +226,28 @@ const GetAdminDashboard = async () => {
   }
 };
 
+const PostNotification = async (form: any) => {
+  try {
+    let response = await fetch(`${baseUrl}/notifications/store`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        "Authorization": `Bearer ${token}`
+      },
+      body: form,
+      redirect: 'follow'
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      console.error(data.error);
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error; 
+  }
+}
+
 export {
   GetTopics,
   CreateTopic,
@@ -237,5 +259,6 @@ export {
   LoginUser,
   VerifyToken,
   RegisterAdmins,
-  GetAdminDashboard
+  GetAdminDashboard,
+  PostNotification
 };
