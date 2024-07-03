@@ -8,6 +8,7 @@ import timeAgo from "../../../../utils/time-converter";
 function SingleMaterialAdmin() {
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
+  const [topicId, setTopicId] = useState<string>()
   const [comments, setComments] = useState<any[]>([]);
 
   useEffect(() => {
@@ -107,7 +108,7 @@ function SingleMaterialAdmin() {
                       <FaUser />
                     </div>
                     <div>
-                      <p><span className='font-semibold'>{comment.user_name}</span> <span className='text-[gray] text-sm'>{timeAgo(commen.created_at)}</span></p>
+                      <p><span className='font-semibold'>{comment.user_name}</span> <span className='text-[gray] text-sm'>{timeAgo(comment.created_at)}</span></p>
                       <p className='text-sm'>{comment.comment}</p>
                     </div>
                   </div>
