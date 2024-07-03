@@ -3,6 +3,7 @@ import Header from "../../Header";
 import { GetAllTopicsUnderSubject, GetComments } from "../../AdminControllers";
 import Cookies from "js-cookie";
 import { FaUser } from "react-icons/fa";
+import timeAgo from "../../../../utils/time-converter";
 
 function SingleMaterialAdmin() {
   const [subjectState, setSubjectState] = useState<any>(null);
@@ -37,6 +38,7 @@ function SingleMaterialAdmin() {
     const fetchComments = async () => {
       try {
         const data = await GetComments();
+        console.log(data);
         setComments(data.data);
       } catch (error) {
         console.error(error);
@@ -70,7 +72,7 @@ function SingleMaterialAdmin() {
               className="self-center h-16 w-16 rounded-full"
             />
             <div className="flex flex-col text-slate-500 self-center">
-              <h3>{subjectState?.teacher_name ?? 'nill'}</h3>
+              <h3>{!subjectState?.teacher_name ? 'nill' : subjectState?.teacher_name}</h3>
               <span className="text-sm">Instructor</span>
             </div>
           </div>
@@ -79,7 +81,7 @@ function SingleMaterialAdmin() {
           </div>
 
           <div className='mt-5'>
-            <h2 className='font-semibold text-xl'>22 Comments</h2>
+            <h2 className='font-semibold text-xl'>{comments.length} Comments</h2>
             <div className='flex flex-col gap-4'>
               <div className='mt-3 flex gap-4'>
                 <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
@@ -99,23 +101,23 @@ function SingleMaterialAdmin() {
               </div>
 
               {comments.map(comment => (
-                <div key={comment.comment_id} className="flex flex-col gap-4">
+                <div key={comment.comment_id} className="flex flex-col gap-4 border-b pb-6">
                   <div className='mt-3 flex gap-4'>
                     <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
                       <FaUser />
                     </div>
                     <div>
-                      <p><span className='font-semibold'>{comment.user_name}</span> <span className='text-[gray] text-sm'>12 mins ago</span></p>
+                      <p><span className='font-semibold'>{comment.user_name}</span> <span className='text-[gray] text-sm'>{timeAgo(commen.created_at)}</span></p>
                       <p className='text-sm'>{comment.comment}</p>
                     </div>
                   </div>
                   {comment.replies && comment.replies.map((reply:any) => (
-                    <div key={reply.comment_id} className='ml-10 mt-3 flex gap-4'>
+                    <div key={reply.comment_id} className='ml-10 mt-3 flex gap-4 border-t pt-4'>
                       <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
                         <FaUser />
                       </div>
                       <div>
-                        <p><span className='font-semibold'>{reply.user_name}</span> <span className='text-[gray] text-sm'>12 mins ago</span></p>
+                        <p><span className='font-semibold'>{reply.user_name}</span> <span className='text-[gray] text-sm'>{timeAgo(reply.created_at)}</span></p>
                         <p className='text-sm'>{reply.comment}</p>
                       </div>
                     </div>
