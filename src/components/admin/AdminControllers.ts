@@ -248,6 +248,67 @@ const PostNotification = async (form: any) => {
   }
 }
 
+
+const GetAllTopicsUnderSubject = async (subject_id: string) => {
+  try {
+    const res = await fetch(`${baseUrl}/topic/fetch/${subject_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : ''
+      }
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      console.error(data.error);
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching topics under subject:", error);
+    console.error(error);
+  }
+};
+
+
+const GetNotifications =  async () => {
+  try{
+    const res = await fetch(`${baseUrl}/notifications/fetch`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    })
+    const data = await res.json();
+    if (!res.ok){
+      throw new Error(data.error);
+    }
+    return data
+  } catch (error){
+    console.error(error)
+  }
+}
+
+const GetComments =  async () => {
+  try{
+    const res = await fetch(`${baseUrl}/comments/fetch/10`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    })
+    const data = await res.json();
+    if (!res.ok){
+      throw new Error(data.error);
+    }
+    return data
+  } catch (error){
+    console.error(error)
+  }
+}
+
 export {
   GetTopics,
   CreateTopic,
@@ -260,5 +321,8 @@ export {
   VerifyToken,
   RegisterAdmins,
   GetAdminDashboard,
-  PostNotification
+  PostNotification,
+  GetAllTopicsUnderSubject,
+  GetNotifications,
+  GetComments
 };

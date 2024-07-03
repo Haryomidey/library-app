@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { IoIosAdd, IoIosClose } from 'react-icons/io';
 import { PostNotification } from '../AdminControllers';
 
@@ -10,6 +11,7 @@ const Communication = () => {
     till: '',
     message: ''
   });
+  const [errors, setErrors] = useState<any>({});
   const [modalBox, setModalBox] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -24,12 +26,32 @@ const Communication = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({});
+    console.log(form)
     try {
       const data = await PostNotification(form);
-      console.log('Notification posted:', data);
-      setModalBox(false);
-    } catch (error) {
+      if (data.errors) {
+        setErrors(data.errors);
+      } else {
+        console.log('Notification posted:', data);
+        setForm({
+          title: '',
+          group: '',
+          from: '',
+          till: '',
+          message: ''
+        });
+        setModalBox(false);
+      }
+    } catch (error: any) {
       console.error('Error posting notification:', error);
+      const errorMessage = error.response?.data?.message || 'The given data was invalid.';
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: errorMessage,
+        footer: '<a href>Why do I have this issue?</a>'
+      });
     } finally {
       setLoading(false);
     }
@@ -72,6 +94,7 @@ const Communication = () => {
                 className='w-full border p-2 rounded-md'
                 placeholder='Monthly Subscription'
               />
+              {errors.title && <p className="text-red-500 text-sm">{errors.title[0]}</p>}
             </div>
             <div>
               <label htmlFor="userGroup" className='text-sm mb-2'>User group(s)</label>
@@ -81,9 +104,11 @@ const Communication = () => {
                 onChange={handleChange}
                 className='w-full border p-2 rounded-md'
               >
+                <option value="" disabled>Select a group</option>
                 <option value="teachers">Teachers</option>
                 <option value="students">Students</option>
               </select>
+              {errors.group && <p className="text-red-500 text-sm">{errors.group[0]}</p>}
             </div>
             <div className='mt-6'>
               <label htmlFor="activeFrom" className='text-sm mb-2'>Active from</label>
@@ -94,6 +119,7 @@ const Communication = () => {
                 onChange={handleChange}
                 className='w-full border p-2 rounded-md'
               />
+              {errors.from && <p className="text-red-500 text-sm">{errors.from[0]}</p>}
             </div>
             <div className='mt-6'>
               <label htmlFor="activeUntil" className='text-sm mb-2'>Active until</label>
@@ -104,6 +130,7 @@ const Communication = () => {
                 onChange={handleChange}
                 className='w-full border p-2 rounded-md'
               />
+              {errors.till && <p className="text-red-500 text-sm">{errors.till[0]}</p>}
             </div>
             <div className='mt-6'>
               <label htmlFor="message" className='text-sm mb-2'>Message</label>
@@ -115,10 +142,11 @@ const Communication = () => {
                 placeholder='Message...'
               ></textarea>
               <small>Put your notification message here</small>
+              {errors.message && <p className="text-red-500 text-sm">{errors.message[0]}</p>}
             </div>
             <button className='w-[fit-content] gap-2 px-5 py-2 rounded bg-[#2B5BFC] text-white' type="submit">
               {loading ? (
-                <div className="loader">Loading...</div>
+                <div className="loader"></div>
               ) : (
                 <p>Save</p>
               )}

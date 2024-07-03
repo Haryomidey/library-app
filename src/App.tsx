@@ -27,6 +27,8 @@ import Register from "./pages/Register";
 import TeacherComp from "./components/teachers/TeacherComp";
 import TeacherDashboard from "./components/teachers/dashboard/TeacherDashboard";
 import NewTeacher from "./components/admin/user management/NewTeacher";
+import LessonDetailsAdmin from "./components/admin/subjects/lesson/LessonDetailsAdmin";
+import SingleMaterialAdmin from "./components/admin/subjects/lesson/SingleMaterialAdmin";
 
 const router = createBrowserRouter([
   {
@@ -38,12 +40,34 @@ const router = createBrowserRouter([
     element: <Register />
   },
   {
-    path: "/admin",
+    path: "/admin/",
     element: <AdminComp element={null} />,
     children: [
       {
         path: "/admin/",
         element: <DashboardBody />
+      },
+      {
+        path: ":subject/",
+        children: [
+          {
+            path: ":id/",
+            element: <SingleSubject />
+          },
+          {
+            path: ":id/",
+            children: [
+              {
+                path: ":subject_topic",
+                element: <LessonDetailsAdmin />
+              },
+              {
+                path: ":subject_topic/video",
+                element: <SingleMaterialAdmin />
+              }
+            ]
+          }
+        ]
       },
       {
         path: "subjects",
