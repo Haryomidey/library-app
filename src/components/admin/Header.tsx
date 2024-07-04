@@ -86,9 +86,8 @@ function Header({ headerName }: any) {
       }
     
     }
-    console.log(notifications.length)
     fetchData()
-  }, []);
+  }, [notifications]);
 
   return (
     <div className="z-[1111] w-full flex flex-col justify-center mb-[84px]">
@@ -155,6 +154,11 @@ function Header({ headerName }: any) {
             <p className="font-semibold">Notifications</p>
             <p className="text-sm text-[#5689E6]">Mark as read</p>
           </div>
+
+          {notifications.length < 1 && <div className='text-center my-5 font-semibold'>
+            No Notifications yet!!!  
+          </div>}
+
           {notifications.map((notification) => (
             <div key={notification.notification_id} className="mt-5 w-full flex gap-3">
               <p className="min-w-12 h-12 rounded-full bg-[#FFECE5] grid place-items-center"><FaUser /></p>

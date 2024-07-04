@@ -27,9 +27,33 @@ const Communication = () => {
     e.preventDefault();
     setLoading(true);
     setErrors({});
-    console.log(form)
+  
+    // Validation
+    const newErrors: any = {};
+    if (!form.title) newErrors.title = ["The title field is required."];
+    if (!form.group) newErrors.group = ["The group field is required."];
+    if (!form.from) newErrors.from = ["The from field is required."];
+    if (!form.till) newErrors.till = ["The till field is required."];
+    if (!form.message) newErrors.message = ["The message field is required."];
+    if (form.from && form.till && new Date(form.from) > new Date(form.till)) {
+      newErrors.till = ["The 'Active until' date must be later than the 'Active from' date."];
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setLoading(false);
+      return;
+    }
+  
     try {
-      const data = await PostNotification(form);
+      const formData = new FormData();
+      formData.append('title', form.title);
+      formData.append('group', form.group);
+      formData.append('from', form.from);
+      formData.append('till', form.till);
+      formData.append('message', form.message);
+
+      const data = await PostNotification(formData);
       if (data.errors) {
         setErrors(data.errors);
       } else {
@@ -42,6 +66,13 @@ const Communication = () => {
           message: ''
         });
         setModalBox(false);
+
+        // Display success message
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Notification has been sent successfully!'
+        });
       }
     } catch (error: any) {
       console.error('Error posting notification:', error);
@@ -56,6 +87,7 @@ const Communication = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="w-full">
@@ -107,6 +139,7 @@ const Communication = () => {
                 <option value="" disabled>Select a group</option>
                 <option value="teachers">Teachers</option>
                 <option value="students">Students</option>
+                <option value="all">All</option>
               </select>
               {errors.group && <p className="text-red-500 text-sm">{errors.group[0]}</p>}
             </div>
@@ -148,7 +181,7 @@ const Communication = () => {
               {loading ? (
                 <div className="loader"></div>
               ) : (
-                <p>Save</p>
+                <p>Send</p>
               )}
             </button>
           </form>

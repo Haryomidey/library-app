@@ -8,7 +8,7 @@ import Trending from "./Trending";
 function StudentDashboard() {
   return (
     <>
-      <Header headerName="" />
+      <Header headerName="Dashboard" />
       <div className="space-y-10 px-5 lg:px-10 ">
         <Tasks />
         <CoverPhotos />
