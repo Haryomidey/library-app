@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaAngleRight, FaSpinner } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 interface subjectHeaderProps {
   headerName: string;
@@ -14,12 +15,19 @@ function NewSubjectHeader({
   actionButtonName,
   loader
 }: subjectHeaderProps) {
+
+
+  const handleGoBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className="bg-white sticky top-0 py-3 border-b-2 w-full h-fit">
       <ul className="flex justify-between px-10 [&>*]:self-center">
-        <div className="flex gap-4">
-          <h1 className="font-semibold self-center">{headerName}</h1>
-        </div>
+      <div className="flex items-center gap-2 ml-4 cursor-pointer">
+            <p onClick={handleGoBack}><FaArrowLeftLong /></p>
+            <h1 className="hidden lg:block font-semibold self-center">{headerName}</h1>
+          </div>
         <div className="flex gap-5 [&>*]:self-center">
           {/* <button className="bg-[#FAFAFA] hover:bg-slate-500 hover:text-white flex [&>*]:self-center gap-2 text-[#71717A] rounded-md py-2 px-8">
             Save as Draft

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { FaUser } from "react-icons/fa";
 import timeAgo from "../../../../utils/time-converter";
 
-function SingleMaterialAdmin() {
+function SingleMaterial() {
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const [topicId, setTopicId] = useState<string>();
@@ -50,7 +50,7 @@ function SingleMaterialAdmin() {
     };
 
     fetchComments();
-  }, []);
+  }, [comments]);
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(event.target.value);
@@ -73,6 +73,7 @@ function SingleMaterialAdmin() {
       const data = await PostComment(formData);
       setComments([...comments, data]);
       setNewComment("");
+      setReplyingTo(null); // Reset replyingTo state
     } catch (error) {
       console.error("Error posting comment:", error);
     } finally {
@@ -183,7 +184,7 @@ function SingleMaterialAdmin() {
                       <p className='text-sm'>{comment.comment}</p>
                       <button onClick={() => handleReplyClick(comment.comment_id)} className="text-blue-500 text-sm">Reply</button>
                       {replyingTo === comment.comment_id && (
-                        <div className="mt-3 flex gap-4">
+                        <div className="mt-3 flex flex-col gap-4">
                           <input 
                             type="text"
                             placeholder="Write a reply..."
@@ -225,4 +226,4 @@ function SingleMaterialAdmin() {
   );
 }
 
-export default SingleMaterialAdmin;
+export default SingleMaterial;

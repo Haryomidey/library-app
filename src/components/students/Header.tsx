@@ -79,14 +79,17 @@ function Header({ headerName }: any) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await GetNotifications()
-    
+      const data = await GetNotifications();
       if (data?.success) {
-        setNotifications(data.data);
+        const sortedNotifications = data.data.sort((a: any, b: any) => b.notification_id - a.notification_id);
+        if (sortedNotifications.length > 3) {
+          setNotifications(sortedNotifications.slice(0, 3));
+        } else {
+          setNotifications(sortedNotifications);
+        }
       }
-    
-    }
-    fetchData()
+    };
+    fetchData();
   }, []);
 
   return (

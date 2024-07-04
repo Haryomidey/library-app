@@ -79,15 +79,18 @@ function Header({ headerName }: any) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await GetNotifications()
-    
+      const data = await GetNotifications();
       if (data?.success) {
-        setNotifications(data.data);
+        const sortedNotifications = data.data.sort((a: any, b: any) => b.notification_id - a.notification_id);
+        if (sortedNotifications.length > 3) {
+          setNotifications(sortedNotifications.slice(0, 3));
+        } else {
+          setNotifications(sortedNotifications);
+        }
       }
-    
-    }
-    fetchData()
-  }, [notifications]);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="z-[1111] w-full flex flex-col justify-center mb-[84px]">
@@ -164,12 +167,12 @@ function Header({ headerName }: any) {
               <p className="min-w-12 h-12 rounded-full bg-[#FFECE5] grid place-items-center"><FaUser /></p>
               <div>
                 <p className='font-semibold'>{notification.message}</p>
-                <p className="text-xs text-[#98A2B3] mt-3">{timeAgo(notification.from)}</p>
+                <p className="text-xs text-[#98A2B3] mt-1">{timeAgo(notification.from)}</p>
               </div>
             </div>
           ))}
 
-          <p className='text-right mt-6 underline cursor-pointer'>View all notifications</p>
+          <p className='text-right mt-6 underline cursor-pointer' onClick={() => router('/admin/all-notifications')}>View all notifications</p>
         </div>
       </div>
     </div>

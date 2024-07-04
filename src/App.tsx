@@ -29,6 +29,7 @@ import TeacherDashboard from "./components/teachers/dashboard/TeacherDashboard";
 import NewTeacher from "./components/admin/user management/NewTeacher";
 import LessonDetailsAdmin from "./components/admin/subjects/lesson/LessonDetailsAdmin";
 import SingleMaterialAdmin from "./components/admin/subjects/lesson/SingleMaterialAdmin";
+import AdminNotifications from "./components/admin/AdminNotifications";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/",
         element: <DashboardBody />
+      },
+      {
+        path: 'all-notifications',
+        element: <AdminNotifications />
       },
       {
         path: ":subject/",
