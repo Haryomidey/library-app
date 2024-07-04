@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Header from './Header'
-import { GetNotifications } from './AdminControllers';
+import Header from './Header';
 import timeAgo from '../../utils/time-converter';
 import { FaUser } from 'react-icons/fa';
+import { GetNotifications } from '../admin/AdminControllers';
 
-const AdminNotifications = () => {
+const StudentNotifications = () => {
     const [notifications, setNotifications] = useState<any[]>([]);
 
     useEffect(() => {
@@ -39,4 +39,4 @@ const AdminNotifications = () => {
     )
 }
 
-export default AdminNotifications
+export default StudentNotifications

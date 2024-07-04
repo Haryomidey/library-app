@@ -167,7 +167,7 @@ function Header({ headerName }: any) {
               <p className="min-w-12 h-12 rounded-full bg-[#FFECE5] grid place-items-center"><FaUser /></p>
               <div>
                 <p className='font-semibold'>{notification.message}</p>
-                <p className="text-xs text-[#98A2B3] mt-1">{timeAgo(notification.from)}</p>
+                <p className="text-xs text-[#98A2B3] mt-1">{timeAgo(notification.created_at)}</p>
               </div>
             </div>
           ))}

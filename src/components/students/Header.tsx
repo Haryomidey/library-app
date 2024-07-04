@@ -168,12 +168,11 @@ function Header({ headerName }: any) {
               <p className="min-w-12 h-12 rounded-full bg-[#FFECE5] grid place-items-center"><FaUser /></p>
               <div>
                 <p className='font-semibold'>{notification.message}</p>
-                <p className="text-xs text-[#98A2B3] mt-3">{timeAgo(notification.from)}</p>
+                <p className="text-xs text-[#98A2B3] mt-1">{timeAgo(notification.created_at)}</p>
               </div>
             </div>
           ))}
-
-          <p className='text-right mt-6 underline cursor-pointer'>View all notifications</p>
+          <p className='text-right mt-6 underline cursor-pointer' onClick={() => router('/student/all-notifications')}>View all notifications</p>
         </div>
       </div>
     </div>

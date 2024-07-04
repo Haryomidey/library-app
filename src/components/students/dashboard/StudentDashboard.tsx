@@ -1,5 +1,4 @@
 import React from "react";
-import users from "../../../utils/admin/users.json";
 import Header from "../Header";
 import Tasks from "./Tasks";
 import CoverPhotos from "./CoverPhotos";

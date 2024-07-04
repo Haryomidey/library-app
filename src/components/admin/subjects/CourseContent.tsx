@@ -27,6 +27,8 @@ function CourseContent({ contents, subject_name }: Props) {
     router(`/admin/${subject_name}/${id}/${title}`);
   };
 
+  console.log(contents)
+
   if (loading) {
     return <p>Loading...</p>;
   }

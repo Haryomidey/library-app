@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import NewSubjectHeader from "./NewSubjectHeader";
 import { BiCloudUpload } from "react-icons/bi";
-import { CreateSubject } from "../AdminControllers";
+import { CreateSubject, GetAllTeachers } from "../AdminControllers";
 
 interface NewSubjectProps {
   contentUpdate: any;
@@ -14,9 +14,10 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   const [subjectDescription, setSubjectDescription] = useState("");
   const [department, setDepartment] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [teacherId, setTeacherId] = useState<number | null>(1);
+  const [teacherName, setTeacherName] = useState<string | null>("");
   const coverPhoto = useRef<any>();
   const [selectedCoverPhoto, setSelectedCoverPhoto] = useState<File | null>(null);
+  const [teachers, setTeachers] = useState<{ teacher_id: string, first_name: string, last_name: string }[]>([]);
 
   const handleSubjectSubmission = async (e: any) => {
     e.preventDefault();
@@ -24,7 +25,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
     try {
       const formData = new FormData();
       formData.append('school_id', '1');
-      formData.append('teacher_id', teacherId?.toString() || '');
+      formData.append('teacher_name', teacherName || '');
       grade.forEach((g) => formData.append('grade_ids[]', g.toString()));
       formData.append('subject_name', subjectName);
       formData.append('subject_description', subjectDescription);
@@ -34,7 +35,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
       }
 
       const data = await CreateSubject(formData);
-      console.log(data)
+      console.log(data);
       if (data && data.subject) {
         idUpdate(data.subject.id);
         contentUpdate("topic");
@@ -52,9 +53,22 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
     if (file) {
       setSelectedCoverPhoto(file);
     }
-
-    console.log(file);
   };
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const data = await GetAllTeachers();
+        if (data) {
+          setTeachers(data);
+        }
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
 
   return (
     <div>
@@ -165,11 +179,15 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
             <label className="font-semibold">Teacher</label>
             <select
               className="focus:outline-none rounded-md py-4 px-3"
-              onChange={(e) => setTeacherId(Number(e.target.value))}
+              value={teacherName || ""}
+              onChange={(e) => setTeacherName(e.target.value)}
             >
-              <option value={1}>Mr Adebayo</option>
-              <option value={2}>Mrs Sharon</option>
-              <option value={3}>Mr Zion</option>
+              <option value="" disabled>Select Teacher</option>
+              {teachers.map((teacher, index) => (
+                <option key={index} value={teacher.teacher_id}>
+                  {`${teacher.first_name} ${teacher.last_name}`}
+                </option>
+              ))}
             </select>
           </div>
         </div>

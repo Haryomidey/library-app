@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import AdminComp from "./components/admin/AdminComp";
 import DashboardBody from "./components/admin/dashboard/DashoardBody";
 import StudentComp from "./components/students/StudentComp";
-import StudentDashboard from "./components/students/dashboard/StudentDashoard";
+import StudentDashboard from "./components/students/dashboard/StudentDashboard";
 import AllSubjects from "./components/students/subjects/AllSubjects";
 import SingleSubject from "./components/students/subjects/SingleSubject";
 import LessonDetails from "./components/students/subjects/lesson/LessonDetails";
@@ -30,6 +30,7 @@ import NewTeacher from "./components/admin/user management/NewTeacher";
 import LessonDetailsAdmin from "./components/admin/subjects/lesson/LessonDetailsAdmin";
 import SingleMaterialAdmin from "./components/admin/subjects/lesson/SingleMaterialAdmin";
 import AdminNotifications from "./components/admin/AdminNotifications";
+import StudentNotifications from "./components/students/StudentNotifications";
 
 const router = createBrowserRouter([
   {
@@ -153,6 +154,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <StudentDashboard />
+      },
+      {
+        path: 'all-notifications',
+        element: <StudentNotifications />
       },
       {
         path: "subjects",
