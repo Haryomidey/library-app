@@ -93,7 +93,7 @@ function AllSubjects() {
         </div>
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-5 lg:p-10 py-4">
-          {filteredSubjects?.map((subject, index) => (
+          {filteredSubjects?.length > 0 && filteredSubjects?.map((subject, index) => (
             <div
               className="bg-white p-4 h-full max-h-[300px] rounded-lg space-y-5 w-full cursor-pointer"
               key={index}

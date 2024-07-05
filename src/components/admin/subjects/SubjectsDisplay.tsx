@@ -54,7 +54,7 @@ function SubjectsDisplay() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredSubjects?.map(
+            {filteredSubjects?.length > 0 && filteredSubjects?.map(
               (subject: {
                 id: number;
                 subject_name: string;

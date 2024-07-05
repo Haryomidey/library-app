@@ -14,7 +14,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   const [subjectDescription, setSubjectDescription] = useState("");
   const [department, setDepartment] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [teacherName, setTeacherName] = useState<string | null>("");
+  const [teacherId, setTeacherId] = useState<string | null>("");
   const coverPhoto = useRef<any>();
   const [selectedCoverPhoto, setSelectedCoverPhoto] = useState<File | null>(null);
   const [teachers, setTeachers] = useState<{ teacher_id: string, first_name: string, last_name: string }[]>([]);
@@ -25,7 +25,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
     try {
       const formData = new FormData();
       formData.append('school_id', '1');
-      formData.append('teacher_name', teacherName || '');
+      formData.append('teacher_id', teacherId || '');
       grade.forEach((g) => formData.append('grade_ids[]', g.toString()));
       formData.append('subject_name', subjectName);
       formData.append('subject_description', subjectDescription);
@@ -179,8 +179,8 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
             <label className="font-semibold">Teacher</label>
             <select
               className="focus:outline-none rounded-md py-4 px-3"
-              value={teacherName || ""}
-              onChange={(e) => setTeacherName(e.target.value)}
+              value={teacherId || ""}
+              onChange={(e) => setTeacherId(e.target.value)}
             >
               <option value="" disabled>Select Teacher</option>
               {teachers.map((teacher, index) => (
