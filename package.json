@@ -41,6 +41,7 @@
     "react-spinners": "^0.13.8",
     "react-table": "^7.8.0",
     "react-to-print": "^2.14.13",
+    "react-toastify": "^10.0.5",
     "recharts": "^2.12.3",
     "sweetalert2": "^11.11.1",
     "typescript": "^4.9.5",

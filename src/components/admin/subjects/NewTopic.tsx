@@ -30,6 +30,18 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
 
   const handleTopicSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validation check
+    if (!title || !introduction || !selectedGrade) {
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: "Please fill all required fields",
+        timer: 4000
+      });
+      return;
+    }
+
     setLoader(true);
     try {
       const formData = new FormData();

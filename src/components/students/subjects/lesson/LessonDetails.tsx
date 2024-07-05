@@ -76,23 +76,24 @@ function LessonDetails() {
         </div>
         <div className="py-5 space-y-4">
           <h3 className="font-semibold">Module Materials</h3>
-          <div className="space-y-5">
-            <div className="flex gap-3 [&>*]:self-center ">
+          <div className="flex gap-3 [&>*]:self-center ">
               <BiCheckCircle className="text-2xl" />
-              <h3
+              {topics?.title ?
+                <h3
                 className="text-blue-500 cursor-pointer"
                 onClick={() => handleRouting(subjectState?.subject_name, topics?.id, topics?.title)}
               >
                 Video - {topics?.title}
               </h3>
-            </div>
-            <div className="flex gap-3 [&>*]:self-center ">
-              <BiCheckCircle className="text-2xl" />
-              <h3 className="text-blue-500 cursor-pointer" onClick={handleDownLoadFile}>
-                File - {topics?.file?.split('/').pop()}
+              :
+              <h3
+                className="text-blue-500 cursor-pointer"
+                onClick={() => handleRouting(subjectState?.subject_name, topics?.id, topics?.title)}
+              >
+                No Video Attached
               </h3>
+              }
             </div>
-          </div>
         </div>
       </div>
     </div>

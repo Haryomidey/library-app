@@ -93,9 +93,9 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   return (
     <div>
       <NewSubjectHeader
-        headerName="Add a New Subject"
+        headerName="Edit a New Subject"
         handleSubmit={handleSubjectSubmission}
-        actionButtonName="Next"
+        actionButtonName="Update"
         loader={loader}
       />
 

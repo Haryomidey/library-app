@@ -88,6 +88,10 @@ const router = createBrowserRouter([
             element: <AddContainer />
           },
           {
+            path: "edit-subject/:id",
+            element: <AddContainer />
+          },
+          {
             path: ":name",
             children: [
               {
