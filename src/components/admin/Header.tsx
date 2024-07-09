@@ -73,24 +73,31 @@ function Header({ headerName }: any) {
   }, []);
 
   useEffect(() => {
-    let user = Cookies.get("user");
-    user && setUserState(JSON.parse(user));
+    try {
+      let user = Cookies.get("user");
+      user && setUserState(JSON.parse(user));
+    } catch (error) {
+      console.error("Failed to parse user data from cookie", error);
+      setUserState(null);
+    }
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await GetNotifications();
-      if (data?.success) {
-        const sortedNotifications = data.data.sort((a: any, b: any) => b.notification_id - a.notification_id);
-        if (sortedNotifications.length > 3) {
+      try {
+        const data = await GetNotifications();
+        console.log(data)
+        if (data?.success) {
+          const sortedNotifications = data.data.sort((a: any, b: any) => b.notification_id - a.notification_id);
           setNotifications(sortedNotifications.slice(0, 3));
-        } else {
-          setNotifications(sortedNotifications);
         }
+      } catch (error) {
+        console.error("Failed to fetch notifications", error);
       }
     };
     fetchData();
   }, []);
+  
 
   return (
     <div className="z-[1111] w-full flex flex-col justify-center mb-[84px]">

@@ -56,7 +56,7 @@ function UserManagementStudent() {
             </button>
             <button
               className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8"
-              onClick={() => router("/register")}
+              onClick={() => router("/admin/user-management/new-student")}
             >
               <IoMdAdd />
               Add student

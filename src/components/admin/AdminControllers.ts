@@ -31,6 +31,7 @@ const GetTopics = async (subjectId: string) => {
   }
   return data;
 };
+
 const GetSubject = async (subjectId: number) => {
   const res = await fetch(`${baseUrl}/subject/show/${subjectId}`, {
     method: "GET",
@@ -276,8 +277,8 @@ const GetNotifications =  async () => {
     const res = await fetch(`${baseUrl}/notifications/fetch`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
       }
     })
     const data = await res.json();
@@ -322,7 +323,7 @@ const PostComment =  async (form: any) => {
     });
     const data = await response.json();
     if (!response.ok) {
-      console.error(data.error);
+      console.error('Error', data.error);
     }
     return data;
   } catch (error) {
@@ -330,6 +331,57 @@ const PostComment =  async (form: any) => {
     throw error; 
   }
 }
+
+const CreateTeacher = async (formData: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/teachers/create`, {
+      method: 'POST',
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return errorData
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+};
+
+const CreateStudent = async (formData: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/students/create`, {
+      method: 'POST',
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return errorData
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+};
+
 
 export {
   GetTopics,
@@ -347,5 +399,7 @@ export {
   GetAllTopicsUnderSubject,
   GetNotifications,
   GetComments,
-  PostComment
+  PostComment,
+  CreateTeacher,
+  CreateStudent
 };

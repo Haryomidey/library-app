@@ -8,7 +8,6 @@ import timeAgo from "../../../../utils/time-converter";
 function SingleMaterialAdmin() {
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
-  const [topicId, setTopicId] = useState<string>();
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState<string>("");
   const [isPostingMainComment, setIsPostingMainComment] = useState<boolean>(false);
@@ -18,7 +17,6 @@ function SingleMaterialAdmin() {
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
-
     if (subject) {
       setSubjectState(JSON.parse(subject));
     }
@@ -28,14 +26,13 @@ function SingleMaterialAdmin() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetAllTopicsUnderSubject(subjectState?.subject_id);
+          const data = await GetAllTopicsUnderSubject(subjectState.subject_id);
           setTopics(data[0]);
         } catch (error: any) {
           console.error(error.message);
         }
       }
     };
-
     fetchTopicDetails();
   }, [subjectState]);
 
@@ -43,14 +40,13 @@ function SingleMaterialAdmin() {
     const fetchComments = async () => {
       try {
         const data = await GetComments();
-        setComments(data.data);
+        setComments(data.data || []);
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchComments();
-  }, [comments]);
+  }, []);
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(event.target.value);
@@ -69,11 +65,14 @@ function SingleMaterialAdmin() {
     formData.append("comment", newComment);
     formData.append("comment_id", "");
 
+    console.log(formData)
+
     try {
       const data = await PostComment(formData);
+      console.log(data)
       setComments([...comments, data]);
       setNewComment("");
-      setReplyingTo(null); // Reset replyingTo state
+      setReplyingTo(null);
     } catch (error) {
       console.error("Error posting comment:", error);
     } finally {
@@ -93,7 +92,7 @@ function SingleMaterialAdmin() {
     try {
       const data = await PostComment(formData);
       setComments(comments.map(comment =>
-        comment.comment_id === commentId ? { ...comment, replies: [...comment.replies, data] } : comment
+        comment.comment_id === commentId ? { ...comment, replies: [...(comment.replies || []), data] } : comment
       ));
       setNewReply("");
       setReplyingTo(null);
@@ -125,18 +124,10 @@ function SingleMaterialAdmin() {
           <li className="text-black">Week {topics?.week} Video&gt;&nbsp;</li>
         </div>
         <div className="py-5 space-y-5">
-          <video
-            src={topics?.video}
-            controls
-            className="w-full h-[400px]"
-          />
+          <video src={topics?.video} controls className="w-full h-[400px]" />
           <h1 className="text-xl font-semibold">{topics?.title}</h1>
           <div className="flex gap-2">
-            <img
-              src="/images/student-avatar.png"
-              alt="student"
-              className="self-center h-16 w-16 rounded-full"
-            />
+            <img src="/images/student-avatar.png" alt="student" className="self-center h-16 w-16 rounded-full" />
             <div className="flex flex-col text-slate-500 self-center">
               <h3>{!subjectState?.teacher_name ? 'nill' : subjectState?.teacher_name}</h3>
               <span className="text-sm">Instructor</span>
@@ -173,14 +164,19 @@ function SingleMaterialAdmin() {
                 </div>
               </div>
 
-              {comments.map(comment => (
-                <div key={comment.comment_id} className="flex flex-col gap-4 border-b pb-6">
+              {comments && comments?.map((comment, index) => (
+                <div key={index} className="flex flex-col gap-4 border-b pb-6">
                   <div className='mt-3 flex gap-4'>
                     <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
                       <FaUser />
                     </div>
                     <div>
-                      <p><span className='font-semibold'>{comment.user_name}</span> <span className='text-[gray] text-sm'>{timeAgo(comment.created_at)}</span></p>
+                      <p>
+                        <span className='font-semibold'>{comment.user_name}</span> 
+                        <span className='text-[gray] text-sm'>
+                          {comment.created_at ? timeAgo(comment.created_at) : 'Date not available'}
+                        </span>
+                      </p>
                       <p className='text-sm'>{comment.comment}</p>
                       <button onClick={() => handleReplyClick(comment.comment_id)} className="text-blue-500 text-sm">Reply</button>
                       {replyingTo === comment.comment_id && (
@@ -203,21 +199,29 @@ function SingleMaterialAdmin() {
                           </div>
                         </div>
                       )}
+                      <div className="ml-10">
+                        {comment.replies?.map((reply: any, index: number) => (
+                          <div key={index} className='mt-3 flex gap-4'>
+                            <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
+                              <FaUser />
+                            </div>
+                            <div>
+                              <p>
+                                <span className='font-semibold'>{reply.user_name}</span> 
+                                <span className='text-[gray] text-sm'>
+                                  {reply.created_at ? timeAgo(reply.created_at) : 'Date not available'}
+                                </span>
+                              </p>
+                              <p className='text-sm'>{reply.comment}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  {comment.replies && comment.replies.map((reply: any) => (
-                    <div key={reply.comment_id} className='ml-10 mt-3 flex gap-4 border-t pt-4'>
-                      <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
-                        <FaUser />
-                      </div>
-                      <div>
-                        <p><span className='font-semibold'>{reply.user_name}</span> <span className='text-[gray] text-sm'>{timeAgo(reply.created_at)}</span></p>
-                        <p className='text-sm'>{reply.comment}</p>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               ))}
+
             </div>
           </div>
         </div>

@@ -5,10 +5,13 @@ import { FaAngleDown } from "react-icons/fa";
 import Cookies from "js-cookie";
 import DefaultImage from '../../../img/default-image.png';
 import { GetAllSubjects } from "../StudentController";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 function AllSubjects() {
   const [subjects, setSubjects] = useState<any[]>([]);
   const [filteredSubjects, setFilteredSubjects] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const queryParam = searchParams.get('q');
   const route = useNavigate();
@@ -27,7 +30,7 @@ function AllSubjects() {
   const fetchStudentSubjects = async () => {
     try {
       const response = await GetAllSubjects();
-      if (response) { // Check if response is valid
+      if (response) {
         setSubjects(response);
         if (queryParam) {
           const filtered = response.filter((subject: any) =>
@@ -43,8 +46,10 @@ function AllSubjects() {
       }
     } catch (err: any) {
       console.error(err.message);
-      setSubjects([]); // Handle error by setting empty array
+      setSubjects([]);
       setFilteredSubjects([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,6 +67,8 @@ function AllSubjects() {
       setFilteredSubjects(subjects);
     }
   }, [queryParam, subjects]);
+
+  const skeletonLength = subjects.length > 0 ? subjects.length : 8;
 
   return (
     <div>
@@ -87,7 +94,38 @@ function AllSubjects() {
           <FaAngleDown />
         </div>
       </div>
-      {queryParam && filteredSubjects?.length === 0 ? (
+      {loading ? (
+        <div className="p-5 lg:p-10">
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {Array.from({ length: skeletonLength || 6 }).map((_, index) => (
+                <div
+                  className="bg-white p-4 h-[250px] rounded-lg space-y-5 w-full"
+                  key={index}
+                >
+                  <Skeleton height="70%" className="rounded-md" />
+                  <Skeleton width="60%" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>
+              {Array.from({ length: skeletonLength || 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex items-center border-b border-gray-200 py-4"
+                >
+                  <Skeleton width="96px" height="96px" className="rounded-lg" />
+                  <div className="ml-4 w-full">
+                    <Skeleton width="60%" height="20px" />
+                    <Skeleton width="40%" height="20px" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : queryParam && filteredSubjects?.length === 0 ? (
         <div className="p-5 lg:p-10">
           <p className="text-center text-xl text-gray-500">Your search does not yield any result!!!</p>
         </div>
@@ -99,11 +137,13 @@ function AllSubjects() {
               key={index}
               onClick={() => handleRouting(subject)}
             >
-              <img
-                src={subject?.cover ? subject?.cover : DefaultImage}
-                alt=""
-                className="w-full h-[70%] object-cover rounded-md"
-              />
+              <div className='h-[70%]'>
+                <img
+                  src={subject?.cover ? subject?.cover : DefaultImage}
+                  alt=""
+                  className="w-full h-full object-cover rounded-md"
+                />
+              </div>
               <h3>{subject?.subject_name}</h3>
             </div>
           ))}

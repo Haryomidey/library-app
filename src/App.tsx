@@ -31,6 +31,7 @@ import LessonDetailsAdmin from "./components/admin/subjects/lesson/LessonDetails
 import SingleMaterialAdmin from "./components/admin/subjects/lesson/SingleMaterialAdmin";
 import AdminNotifications from "./components/admin/AdminNotifications";
 import StudentNotifications from "./components/students/StudentNotifications";
+import NewStudent from "./components/admin/user management/NewStudent";
 
 const router = createBrowserRouter([
   {
@@ -120,6 +121,10 @@ const router = createBrowserRouter([
           {
             path: 'student',
             element: <UserManagementStudent />
+          },
+          {
+            path: 'new-student',
+            element: <NewStudent />
           },
         ]
       },

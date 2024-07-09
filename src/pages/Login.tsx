@@ -138,6 +138,7 @@ const Login = () => {
           className="transform"
           left={"50%"}
           zIndex={"2"}
+          px={'10px'}
         >
           <Flex justifyContent={"center"}>
             <Image width={"140px"} src={loginlogo} />
