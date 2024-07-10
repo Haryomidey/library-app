@@ -161,6 +161,7 @@ const CommentContainer = ({ topic_id }: any) => {
                                 onClick={() => {
                                   setReplyingCommentId(null)
                                   setReplyText("")
+                                  setIsReplyingComment(false)
                                 }}
                               >
                                 Cancel
