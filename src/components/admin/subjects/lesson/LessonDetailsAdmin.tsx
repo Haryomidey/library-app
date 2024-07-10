@@ -102,8 +102,8 @@ function LessonDetailsAdmin() {
               </h3>
               :
               <h3 className="text-blue-500">
-              No File Attached
-            </h3>
+                No File Attached
+              </h3>
               }
             </div>
           </div>

@@ -86,7 +86,6 @@ function Header({ headerName }: any) {
     const fetchData = async () => {
       try {
         const data = await GetNotifications();
-        console.log(data)
         if (data?.success) {
           const sortedNotifications = data.data.sort((a: any, b: any) => b.notification_id - a.notification_id);
           setNotifications(sortedNotifications.slice(0, 3));

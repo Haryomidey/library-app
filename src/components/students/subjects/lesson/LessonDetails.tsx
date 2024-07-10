@@ -77,22 +77,33 @@ function LessonDetails() {
         <div className="py-5 space-y-4">
           <h3 className="font-semibold">Module Materials</h3>
           <div className="flex gap-3 [&>*]:self-center ">
-              <BiCheckCircle className="text-2xl" />
-              {topics?.title ?
-                <h3
-                className="text-blue-500 cursor-pointer"
-                onClick={() => handleRouting(subjectState?.subject_name, topics?.id, topics?.title)}
-              >
-                Video - {topics?.title}
-              </h3>
-              :
+            <BiCheckCircle className="text-2xl" />
+            {topics?.title ?
               <h3
-                className="text-blue-500 cursor-pointer"
-                onClick={() => handleRouting(subjectState?.subject_name, topics?.id, topics?.title)}
-              >
-                No Video Attached
-              </h3>
-              }
+              className="text-blue-500 cursor-pointer"
+              onClick={() => handleRouting(subjectState?.subject_name, topics?.id, topics?.title)}
+            >
+              Video - {topics?.title}
+            </h3>
+            :
+            <h3
+              className="text-blue-500 cursor-pointer"
+              onClick={() => handleRouting(subjectState?.subject_name, topics?.id, topics?.title)}
+            >
+              No Video Attached
+            </h3>
+            }
+          </div>
+          <div className="flex gap-3 [&>*]:self-center ">
+            <BiCheckCircle className="text-2xl" />
+            {topics?.file ? <h3 className="text-blue-500 cursor-pointer" onClick={handleDownLoadFile}>
+              File - {topics?.file?.split('/').pop()}
+            </h3>
+            :
+            <h3 className="text-blue-500">
+              No File Attached
+            </h3>
+            }
             </div>
         </div>
       </div>

@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
 import Header from "../../Header";
-import { GetAllTopicsUnderSubject, GetComments, PostComment } from "../../AdminControllers";
+import { GetAllTopicsUnderSubject } from "../../AdminControllers";
 import Cookies from "js-cookie";
-import { FaUser } from "react-icons/fa";
-import timeAgo from "../../../../utils/time-converter";
+import CommentContainer from "../../../CommentContainer";
 
 function SingleMaterialAdmin() {
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
-  const [comments, setComments] = useState<any[]>([]);
-  const [newComment, setNewComment] = useState<string>("");
-  const [isPostingMainComment, setIsPostingMainComment] = useState<boolean>(false);
-  const [isPostingReplyComment, setIsPostingReplyComment] = useState<boolean>(false);
-  const [replyingTo, setReplyingTo] = useState<string | null>(null);
-  const [newReply, setNewReply] = useState<string>("");
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -36,82 +29,6 @@ function SingleMaterialAdmin() {
     fetchTopicDetails();
   }, [subjectState]);
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const data = await GetComments();
-        setComments(data.data || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchComments();
-  }, []);
-
-  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewComment(event.target.value);
-  };
-
-  const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewReply(event.target.value);
-  };
-
-  const handleCommentSubmit = async () => {
-    setIsPostingMainComment(true);
-    const formData = new FormData();
-    formData.append("topic_id", "10");
-    formData.append("school_id", "1");
-    formData.append("type", "main");
-    formData.append("comment", newComment);
-    formData.append("comment_id", "");
-
-    console.log(formData)
-
-    try {
-      const data = await PostComment(formData);
-      console.log(data)
-      setComments([...comments, data]);
-      setNewComment("");
-      setReplyingTo(null);
-    } catch (error) {
-      console.error("Error posting comment:", error);
-    } finally {
-      setIsPostingMainComment(false);
-    }
-  };
-
-  const handleReplySubmit = async (commentId: string) => {
-    setIsPostingReplyComment(true);
-    const formData = new FormData();
-    formData.append("topic_id", "10");
-    formData.append("school_id", "1");
-    formData.append("type", "reply");
-    formData.append("comment", newReply);
-    formData.append("comment_id", commentId);
-
-    try {
-      const data = await PostComment(formData);
-      setComments(comments.map(comment =>
-        comment.comment_id === commentId ? { ...comment, replies: [...(comment.replies || []), data] } : comment
-      ));
-      setNewReply("");
-      setReplyingTo(null);
-    } catch (error) {
-      console.error("Error posting reply:", error);
-    } finally {
-      setIsPostingReplyComment(false);
-    }
-  };
-
-  const handleReplyClick = (commentId: string) => {
-    setReplyingTo(commentId);
-    setNewReply("");
-  };
-
-  const handleCancelReply = () => {
-    setReplyingTo(null);
-    setNewReply("");
-  };
 
   return (
     <div>
@@ -137,93 +54,7 @@ function SingleMaterialAdmin() {
             {topics?.introduction}
           </div>
 
-          <div className='mt-5'>
-            <h2 className='font-semibold text-xl'>{comments.length} Comments</h2>
-            <div className='flex flex-col gap-4'>
-              <div className='mt-3 flex gap-4'>
-                <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
-                  <FaUser />
-                </div>
-                <div className="w-full">
-                  <input 
-                    type="text"
-                    placeholder="Do you have a question or comment? Drop it here..."
-                    value={newComment}
-                    onChange={handleCommentChange}
-                    className="w-full border-b border-[black] px-2 bg-transparent"
-                  />
-                  <div className="w-full flex items-center justify-end mt-3">
-                    <button className="px-5 py-2 rounded-full">Cancel</button>
-                    <button 
-                      onClick={handleCommentSubmit}
-                      className="px-5 py-2 rounded-full bg-[#3471E1] text-white"
-                    >
-                      {isPostingMainComment ? 'Commenting...' : 'Comment'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {comments && comments?.map((comment, index) => (
-                <div key={index} className="flex flex-col gap-4 border-b pb-6">
-                  <div className='mt-3 flex gap-4'>
-                    <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
-                      <FaUser />
-                    </div>
-                    <div>
-                      <p>
-                        <span className='font-semibold'>{comment.user_name}</span> 
-                        <span className='text-[gray] text-sm'>
-                          {comment.created_at ? timeAgo(comment.created_at) : 'Date not available'}
-                        </span>
-                      </p>
-                      <p className='text-sm'>{comment.comment}</p>
-                      <button onClick={() => handleReplyClick(comment.comment_id)} className="text-blue-500 text-sm">Reply</button>
-                      {replyingTo === comment.comment_id && (
-                        <div className="mt-3 flex flex-col gap-4">
-                          <input 
-                            type="text"
-                            placeholder="Write a reply..."
-                            value={newReply}
-                            onChange={handleReplyChange}
-                            className="w-full border-b border-[black] px-2 bg-transparent"
-                          />
-                          <div className="w-full flex items-center justify-end mt-3">
-                            <button onClick={handleCancelReply} className="px-5 py-2 rounded-full">Cancel</button>
-                            <button 
-                              onClick={() => handleReplySubmit(comment.comment_id)}
-                              className="px-5 py-2 rounded-full bg-[#3471E1] text-white"
-                            >
-                              {isPostingReplyComment ? 'Replying...' : 'Reply'}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                      <div className="ml-10">
-                        {comment.replies?.map((reply: any, index: number) => (
-                          <div key={index} className='mt-3 flex gap-4'>
-                            <div className='min-w-12 h-12 rounded-full grid place-items-center shadow-md bg-[#eeeded]'>
-                              <FaUser />
-                            </div>
-                            <div>
-                              <p>
-                                <span className='font-semibold'>{reply.user_name}</span> 
-                                <span className='text-[gray] text-sm'>
-                                  {reply.created_at ? timeAgo(reply.created_at) : 'Date not available'}
-                                </span>
-                              </p>
-                              <p className='text-sm'>{reply.comment}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-            </div>
-          </div>
+          <CommentContainer topic_id={topics?.id} />
         </div>
       </div>
     </div>

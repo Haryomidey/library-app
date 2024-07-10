@@ -283,17 +283,17 @@ const GetNotifications =  async () => {
     })
     const data = await res.json();
     if (!res.ok){
-      throw new Error(data.error);
+      return data.error;
     }
     return data
-  } catch (error){
-    console.error(error)
+  } catch (error: any){
+    console.log(error)
   }
 }
 
-const GetComments =  async () => {
+const GetComments =  async (id: any) => {
   try{
-    const res = await fetch(`${baseUrl}/comments/fetch/10`, {
+    const res = await fetch(`${baseUrl}/comments/fetch/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -312,17 +312,18 @@ const GetComments =  async () => {
 
 const PostComment =  async (form: any) => {
   try {
-    let response = await fetch(`${baseUrl}/comments/store`, {
+    let res = await fetch(`${baseUrl}/comments/store`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        "Authorization": `Bearer ${token}`
+        // "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: form,
       redirect: 'follow'
     });
-    const data = await response.json();
-    if (!response.ok) {
+    const data = await res.json();
+    console.log(data)
+    if (!res.ok) {
       console.error('Error', data.error);
     }
     return data;
