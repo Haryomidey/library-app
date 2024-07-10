@@ -56,8 +56,6 @@ const CommentContainer = ({ topic_id }: any) => {
       }
   };
 
-  console.log(replyText)
-
   const handleCancelComment = () => {
     setNewComment("")
   }
