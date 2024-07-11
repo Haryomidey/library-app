@@ -9,8 +9,6 @@ interface CourseCoverPhotoProps {
 
 function CourseCoverPhoto(content: CourseCoverPhotoProps) {
 
-
-  console.log(content)
   return (
     <div className="flex flex-col lg:flex-row gap-5">
       <img src={content.cover ? content.cover : DefaultImage} className='w-[300px] max-h-[300px] rounded-md max-w-full object-cover' alt="Course Cover" />

@@ -168,7 +168,7 @@ const CommentContainer = ({ topic_id }: any) => {
                                 onClick={() => handleReplySubmit(comment.comment_id)}
                                 className="px-5 py-2 rounded-full bg-[#3471E1] text-white"
                               >
-                                Reply
+                                {isReplyingComment ? 'Replying...' : 'Reply'}
                               </button>
                             </div>
                           </div>

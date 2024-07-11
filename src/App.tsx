@@ -32,6 +32,7 @@ import SingleMaterialAdmin from "./components/admin/subjects/lesson/SingleMateri
 import AdminNotifications from "./components/admin/AdminNotifications";
 import StudentNotifications from "./components/students/StudentNotifications";
 import NewStudent from "./components/admin/user management/NewStudent";
+import NewTopicContainer from "./components/students/subjects/NewtTopicContainer";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
           {
             path: "new",
             element: <AddContainer />
+          },
+          {
+            path: "new-topic/:id",
+            element: <NewTopicContainer />
           },
           {
             path: "edit-subject/:id",

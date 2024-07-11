@@ -14,6 +14,7 @@ interface CourseCoverPhotoProps {
   teacher_name: string;
   subject_name: string;
   grade: string;
+  subject_id: string; // Added subject_id here
 }
 
 function SingleSubject() {
@@ -45,10 +46,9 @@ function SingleSubject() {
           const data = await GetAllTopicsUnderSubject(subjectState.subject_id);
           setTopics(data);
           
-          console.log(subjectState)
-          
           const coverPhotoData = {
             cover: subjectState.cover || "",
+            subject_id: subjectState.subject_id || "",
             teacher_name: subjectState.teacher_name || "",
             subject_name: subjectState.subject_name || "",
             grade: selectedGradeState.grade_id || "",
@@ -69,7 +69,11 @@ function SingleSubject() {
       <Header headerName="Course" />
       <div className="px-5 lg:px-10 py-5 space-y-5">
         {courseCoverPhotoContent && <CourseCoverPhoto {...courseCoverPhotoContent} />}
-        <CourseContent contents={topics} subject_name={courseCoverPhotoContent?.subject_name}  />
+        <CourseContent 
+          contents={topics} 
+          subject_name={courseCoverPhotoContent?.subject_name} 
+          subject_id={courseCoverPhotoContent?.subject_id}  
+        />
       </div>
     </div>
   );

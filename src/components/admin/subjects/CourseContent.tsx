@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
+import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 interface CourseContentProps {
@@ -11,15 +12,18 @@ interface CourseContentProps {
 interface Props {
   contents: CourseContentProps[];
   subject_name: string | undefined;
+  subject_id: any
 }
 
-function CourseContent({ contents, subject_name }: Props) {
+function CourseContent({ contents, subject_name, subject_id }: Props) {
   const [loading, setLoading] = useState(true);
   const router = useNavigate();
 
   useEffect(() => {
     if (contents?.length > 0 || contents?.length === 0) {
       setLoading(false);
+
+      console.log(contents)
     }
   }, [contents]);
 
@@ -27,7 +31,10 @@ function CourseContent({ contents, subject_name }: Props) {
     router(`/admin/${subject_name}/${id}/${title}`);
   };
 
-  console.log(contents)
+  const handleNewTopicRoute = () => {
+    router(`/admin/subjects/new-topic/${subject_id}`)
+  }
+
 
   if (loading) {
     return <p>Loading...</p>;
@@ -35,7 +42,13 @@ function CourseContent({ contents, subject_name }: Props) {
 
   return (
     <div>
-      <h1 className="hidden lg:block text-lg font-semibold py-2">Course Content</h1>
+      <div className='w-full flex items-center justify-between py-2'>
+        <h1 className="hidden lg:block text-lg font-semibold">Course Content</h1>
+        <button className='flex items-center gap-3 text-[#2B5BFC]' onClick={handleNewTopicRoute}>
+          <IoMdAdd />
+          Add new topic
+        </button>
+      </div>
       {contents?.length > 0 ? (
         contents.map((content, index: number) => (
           <div
