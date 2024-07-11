@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../../Header";
-import { GetAllTopicsUnderSubject } from "../../AdminControllers";
+import { GetSingleTopic } from "../../AdminControllers";
 import Cookies from "js-cookie";
 import CommentContainer from "../../../CommentContainer";
 
 function SingleMaterialAdmin() {
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
+  const {id} = useParams();
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -15,12 +17,14 @@ function SingleMaterialAdmin() {
     }
   }, []);
 
+  console.log(subjectState)
+
   useEffect(() => {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetAllTopicsUnderSubject(subjectState.subject_id);
-          setTopics(data[0]);
+          const data = await GetSingleTopic(id);
+          setTopics(data);
         } catch (error: any) {
           console.error(error.message);
         }

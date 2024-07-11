@@ -17,8 +17,8 @@ const getToken = () => {
 const token = getToken();
 
 
-const GetTopics = async (subjectId: string) => {
-  const res = await fetch(`${baseUrl}/topic/fetch/${subjectId}`, {
+const GetSingleTopic = async (topic_id: any) => {
+  const res = await fetch(`${baseUrl}/topic/show/${topic_id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -385,7 +385,7 @@ const CreateStudent = async (formData: any) => {
 
 
 export {
-  GetTopics,
+  GetSingleTopic,
   CreateTopic,
   CreateSubject,
   GetSubject,
