@@ -3,7 +3,7 @@
     "name": "Home",
     "image": "/images/home.png",
     "active": "/images/home-active.png",
-    "path": "/admin/"
+    "path": "/admin"
   },
   {
     "name": "User Management",
@@ -16,12 +16,6 @@
     "image": "/images/cap.png",
     "active": "/images/cap-active.png",
     "path": "/admin/subjects"
-  },
-  {
-    "name": "Library",
-    "image": "/images/library.png",
-    "active": "/images/library.png",
-    "path": "/admin/library"
   },
   {
     "name": "Help and Support",

@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { BiSearch } from "react-icons/bi";
 import { FaBars, FaUser } from "react-icons/fa";
-import { MdClose } from "react-icons/md";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { GetNotifications } from "./AdminControllers";
@@ -19,6 +18,7 @@ function Header({ headerName }: any) {
   const searchRef = useRef<HTMLDivElement>(null);
   const [searchItems, setSearchItems] = useState<string>('');
   const router = useNavigate();
+  const location = useLocation()
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -94,7 +94,8 @@ function Header({ headerName }: any) {
       <ul className="relative z-[111] border-b-2 w-full h-16 py-3 bg-white flex justify-between px-5 lg:px-10 [&>*]:self-center">
         <div className="flex gap-5 [&>*]:self-center">
           <div className="flex items-center gap-2 ml-4 cursor-pointer">
-            <p className='hidden sm:block' onClick={handleGoBack}><FaArrowLeftLong /></p>
+          <p className={`hidden sm:block ${location.pathname === '/admin' ? 'sm:hidden' : 'sm:block'}`}
+            onClick={handleGoBack}><FaArrowLeftLong /></p> 
             <div className='block sm:hidden'>
             {isAdminSearchBarOpen ? (
               <FaBars onClick={() => setAdminSearchBarOpen(false)} className="z-20 cursor-pointer" />

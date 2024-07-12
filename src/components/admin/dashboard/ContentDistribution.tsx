@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   PieChart,
@@ -27,12 +26,12 @@ const ContentDistribution: React.FC<ContentDistributionProps> = ({ data }) => {
   ];
 
   return (
-    <ResponsiveContainer width={"100%"}>
+    <ResponsiveContainer width="100%" height={400}>
       <PieChart>
         <Pie
           data={chartData}
-          cx={200}
-          cy={200}
+          cx="50%"
+          cy="50%"
           labelLine={false}
           outerRadius={150}
           fill="#8884d8"
@@ -43,7 +42,7 @@ const ContentDistribution: React.FC<ContentDistributionProps> = ({ data }) => {
           ))}
         </Pie>
         <Tooltip />
-        <Legend />
+        <Legend layout="horizontal" verticalAlign="bottom" align="center" />
       </PieChart>
     </ResponsiveContainer>
   );

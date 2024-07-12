@@ -10,7 +10,7 @@ interface StudentCompProps {
 }
 
 const headers: { [key: string]: string } = {
-  "/student/": "Dashboard",
+  "/student": "Dashboard",
   "/student/settings": "Settings",
   "/student/library": "Library",
   "/student/subjects": "Subjects"
@@ -21,7 +21,7 @@ export default function StudentComp({ element }: StudentCompProps) {
   const [isAuthorizationChecked, setIsAuthorizationChecked] = useState(false);
   const route = useNavigate();
   const location = useLocation();
-  const [headerName, setHeaderName] = useState<string>('Dashboard');
+  const [headerName, setHeaderName] = useState<string | null>('Dashboard');
 
   useEffect(() => {
     const checkAuthorization = async () => {
@@ -42,7 +42,7 @@ export default function StudentComp({ element }: StudentCompProps) {
 
   useEffect(() => {
     const path = location.pathname;
-    setHeaderName(headers[path] || "Dashboard");
+    setHeaderName(headers[path] || null);
   }, [location.pathname]);
 
   if (!isAuthorizationChecked) {

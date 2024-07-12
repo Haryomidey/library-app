@@ -3,7 +3,7 @@
     "name": "Home",
     "image": "/images/home.png",
     "active": "/images/home-active.png",
-    "path": "/student/"
+    "path": "/student"
   },
   {
     "name": "Subjects",

@@ -10,7 +10,7 @@ interface AdminCompProps {
 }
 
 const headers: { [key: string]: string } = {
-  "/admin/": "Dashboard",
+  "/admin": "Dashboard",
   "/admin/user-management/teacher": "Teacher Management",
   "/admin/user-management/student": "Student Management",
   "/admin/settings": "Settings",
@@ -24,23 +24,7 @@ export default function AdminComp({ element }: AdminCompProps) {
   const [isAuthorizationChecked, setIsAuthorizationChecked] = useState(false);
   const route = useNavigate();
   const location = useLocation();
-  const [headerName, setHeaderName] = useState<string>("Dashboard");
-
-  // useEffect(() => {
-  //   const menuOutsideClick = (e: MouseEvent) => {
-  //     if (sidebarRef.current?.contains(e.target as Node)) {
-  //       setOpenState(true);
-  //     } else {
-  //       setOpenState(false);
-  //     }
-  //   };
-
-  //   document.addEventListener('mousedown', menuOutsideClick);
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', menuOutsideClick);
-  //   };
-  // }, []);
+  const [headerName, setHeaderName] = useState<string | null>("Dashboard");
 
   useEffect(() => {
     const checkAuthorization = async () => {
@@ -61,7 +45,7 @@ export default function AdminComp({ element }: AdminCompProps) {
 
   useEffect(() => {
     const path = location.pathname;
-    setHeaderName(headers[path] || "Dashboard");
+    setHeaderName(headers[path] || null);
   }, [location.pathname]);
 
   if (!isAuthorizationChecked) {

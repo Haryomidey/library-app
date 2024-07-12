@@ -62,7 +62,7 @@ const router = createBrowserRouter([
         path: ":subject/",
         children: [
           {
-            path: ":id/",
+            path: "",
             element: <SingleSubject />
           },
           {
@@ -192,7 +192,7 @@ const router = createBrowserRouter([
         path: ":subject/",
         children: [
           {
-            path: ":id/",
+            path: "",
             element: <SingleSubject />
           },
           {

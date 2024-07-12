@@ -10,17 +10,18 @@ function DashboardRowTwo(activities: any) {
 
   
   return (
-    <div className="lg:grid grid-cols-5 w-full space-y-5 lg:gap-10">
-      <div className="lg:col-span-3 bg-white rounded-xl w-full h-fit space-y-5 p-5">
-        <h3 className="font-semibold text-lg">Engagement Rate</h3>
-
-        <LineChartComponent/>
+    <div className="lg:grid grid-cols-5 w-full h-[350px] lg:gap-10">
+      <div className="lg:col-span-3 bg-white rounded-xl w-full h-full p-5">
+        <h3 className="font-semibold text-lg pb-6">Engagement Rate</h3>
+        <div className="-ml-5">
+          <LineChartComponent/>
+        </div>
       </div>
-      <div className="col-span-2 bg-[#FAFAFA] h-fit rounded-xl p-5">
+      <div className="col-span-2 bg-white h-full rounded-xl p-5">
         <h2 className="font-semibold text-lg ">Recent Activities</h2>
-        <div className="md:grid lg:grid-cols-1 grid-cols-2 gap-5">
+        <div className="md:grid lg:grid-cols-1 grid-cols-2 gap-3 h-full">
           {acts?.map((activity: any, index: number) => (
-            <div className="flex gap-2 py-4" key={index}>
+            <div className="flex gap-2 py-2" key={index}>
               <img src="/images/ruby.png" className="h-fit" alt="" />
               <div className="space-y-4">
                 <div>

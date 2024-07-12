@@ -18,7 +18,7 @@ function AllSubjects() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const handleRouting = (subject: any) => {
-    route(`/student/${subject?.subject_name}/${subject.id}`);
+    route(`/student/${subject?.subject_name}`);
     Cookies.set("selectedSubject", JSON.stringify(subject));
     Cookies.set("grades", JSON.stringify(subject.grades));
   };

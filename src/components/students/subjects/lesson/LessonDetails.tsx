@@ -4,7 +4,7 @@ import Header from "../../Header";
 import { BiCheckCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { GetAllTopicsUnderSubject, GetSingleTopic } from "../../StudentController";
+import { GetSingleTopic } from "../../StudentController";
 
 function LessonDetails() {
   const route = useNavigate();
@@ -42,6 +42,10 @@ function LessonDetails() {
     route(`/student/${subject_name}/${id}/${title}/video`);
   };
 
+  const handleRoutToSubject = () => {
+    route(`/student/${subjectState?.subject_name}`)
+  }
+
   const handleDownLoadFile = () => {
     const blobUrl = topics?.file;
     const fileName = blobUrl?.split('/').pop();
@@ -65,9 +69,9 @@ function LessonDetails() {
       <Header headerName={`Week ${topics?.week} - ${topics?.title}`} />
       <div className="lg:px-10 px-5 py-5">
         <div className="flex flex-wrap gap-2 text-blue-500 text-sm list-none [&>*]:self-center">
-          <li>{subjectState?.subject_name} &gt;&nbsp;</li>
-          <li>Week {topics?.week} - {topics?.title} &gt;&nbsp;</li>
-          <li className="text-black">Module</li>
+          <li onClick={handleRoutToSubject} className='cursor-pointer'>{subjectState?.subject_name} &gt;&nbsp;</li>
+          <li className="text-black">Week {topics?.week} - {topics?.title} &gt;&nbsp;</li>
+          {/* <li className="text-black">Module</li> */}
         </div>
         <div className="py-5 space-y-3">
           <h3 className="font-semibold">Module Details</h3>

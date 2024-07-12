@@ -15,7 +15,6 @@ function LessonDetailsAdmin() {
   const {id} = useParams();
 
   const param = useParams()
-  console.log(param)
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -46,6 +45,10 @@ function LessonDetailsAdmin() {
     route(`/admin/${subject_name}/${id}/${title}/video`);
   };
 
+  const handleRoutToSubject = () => {
+    route(`/admin/${subjectState?.subject_name}`)
+  }
+
   const handleDownLoadFile = () => {
     const blobUrl = topics?.file;
     const fileName = blobUrl?.split('/').pop();
@@ -68,10 +71,10 @@ function LessonDetailsAdmin() {
     <div>
       <Header headerName={`Week ${topics?.week} - ${topics?.title}`} />
       <div className="lg:px-10 px-5 py-5">
-        <div className="flex flex-wrap gap-2 text-blue-500 text-sm list-none [&>*]:self-center">
-          <li>{subjectState?.subject_name} &gt;&nbsp;</li>
-          <li>Week {topics?.week} - {topics?.title} &gt;&nbsp;</li>
-          <li className="text-black">Module</li>
+      <div className="flex flex-wrap gap-2 text-blue-500 text-sm list-none [&>*]:self-center">
+          <li onClick={handleRoutToSubject} className='cursor-pointer'>{subjectState?.subject_name} &gt;&nbsp;</li>
+          <li className="text-black">Week {topics?.week} - {topics?.title} &gt;&nbsp;</li>
+          {/* <li className="text-black">Module</li> */}
         </div>
         <div className="py-5 space-y-3">
           <h3 className="font-semibold">Module Details</h3>

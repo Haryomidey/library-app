@@ -27,21 +27,6 @@ export default function AdminComp({ element }: AdminCompProps) {
   const location = useLocation();
   const [headerName, setHeaderName] = useState<string>("Dashboard");
 
-  // useEffect(() => {
-  //   const menuOutsideClick = (e: MouseEvent) => {
-  //     if (sidebarRef.current?.contains(e.target as Node)) {
-  //       setOpenState(true);
-  //     } else {
-  //       setOpenState(false);
-  //     }
-  //   };
-
-  //   document.addEventListener('mousedown', menuOutsideClick);
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', menuOutsideClick);
-  //   };
-  // }, []);
 
   useEffect(() => {
     const checkAuthorization = async () => {

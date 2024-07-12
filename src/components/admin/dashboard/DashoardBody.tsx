@@ -32,7 +32,7 @@ function DashboardBody() {
 
   return (
     <>
-      <div className="w-full h-full pt-8">
+      <div className="w-full min-h-full pt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 lg:gap-10 px-10  mb-6">
           <div
             className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
@@ -90,15 +90,16 @@ function DashboardBody() {
         <div className="px-5 lg:px-10">
           <DashboardRowTwo activities={dashboardInfo} />
         </div>
-        <div className="px-5 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 py-4">
-          <div className="bg-white rounded-xl w-full h-[450px] p-5">
-            <h3 className="font-semibold text-lg">Content Distribution</h3>
-            <div className='w-full h-full flex justify-center'>
-              <ContentDistribution data={dashboardInfo?.chart} />
-            </div>
+        <div className="px-5 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-8 pt-28">
+        <div className="bg-white rounded-xl w-full h-[450px]">
+          <h3 className="font-semibold text-lg p-5 pt-5">Content Distribution</h3>
+          <div className='w-full h-full flex justify-center items-center -mt-14'>
+            <ContentDistribution data={dashboardInfo?.chart} />
           </div>
+        </div>
+
           <div className="grid grid-rows-2 gap-5">
-            <div className="bg-white w-full flex flex-col justify-center rounded-xl p-5">
+            <div className="bg-white w-full rounded-xl p-5">
               <h2 className="text-[#6B6F80] text-lg">Total courses enrolled</h2>
               <div className="w-full flex justify-between items-center mt-4">
                 <div>

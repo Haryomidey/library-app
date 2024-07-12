@@ -45,7 +45,7 @@ function Sidebar() {
     <div
       className={`h-full w-full overflow-hidden duration-300 relative`}
     >
-      <ul className="flex flex-col gap-10 pt-6">
+      <ul className="flex flex-col gap-8 pt-16">
         {navs.map((nav, index) => (
           index === 1 ? 
             <div key={index} className="flex flex-col gap-4">
@@ -65,7 +65,7 @@ function Sidebar() {
                   <MdOutlineKeyboardArrowDown />
                 </div>
               </div>
-              <ul className={`flex-col gap-4 pl-3 lg:px-6 mt-3 ${isManagementClicked ? 'flex' : 'hidden'}`}>
+              <ul className={`flex-col gap-4 pl-3 lg:pl-8 mt-3 ${isManagementClicked ? 'flex' : 'hidden'}`}>
                 <li onClick={() => handleRouting('/admin/user-management/teacher')} className="list-none lg:list-disc mx-5">
                   <Link
                     to='/admin/user-management/teacher'
@@ -112,11 +112,11 @@ function Sidebar() {
         ))}
       </ul>
 
-      <button className='absolute left-5 bottom-[10%] shadow-sm text-red-600 px-4 py-2 rounded-md border border-[#d9d9d9] min-w-[fit-content] hidden lg:flex items-center gap-2' onClick={handleLogout}>
+      <button className='absolute left-5 bottom-[8%] shadow-sm text-red-600 px-4 py-2 rounded-md border border-[#d9d9d9] min-w-[fit-content] hidden lg:flex items-center gap-2' onClick={handleLogout}>
         Logout
         <FiLogOut />
       </button>
-      <div className='absolute left-0 bottom-[10%] w-full grid place-items-center'>
+      <div className='absolute left-0 bottom-[8%] w-full grid place-items-center'>
         <button className='text-red-600 px-4 py-2 rounded-md border border-[#d9d9d9] min-w-[fit-content] block lg:hidden items-center gap-2' onClick={handleLogout}>
           <FiLogOut />
         </button>

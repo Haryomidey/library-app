@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../Header";
 import { GetSingleTopic } from "../../AdminControllers";
 import Cookies from "js-cookie";
 import CommentContainer from "../../../CommentContainer";
 
 function SingleMaterialAdmin() {
+  const route = useNavigate()
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const {id} = useParams();
   const param = useParams()
-  console.log(param)
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -18,6 +18,13 @@ function SingleMaterialAdmin() {
       setSubjectState(JSON.parse(subject));
     }
   }, []);
+
+  const handleRoutToSubject = () => {
+    route(`/student/${subjectState?.subject_name}`)
+  }
+  const handleRoutToTopic = () => {
+    route(`/admin/${subjectState?.subject_name}/${id}/${topics?.title}`)
+  }
 
   useEffect(() => {
     const fetchTopicDetails = async () => {
@@ -38,11 +45,10 @@ function SingleMaterialAdmin() {
     <div>
       <Header headerName="Courses" />
       <div className="px-5 lg:px-10 py-5">
-        <div className="flex flex-wrap gap-2 text-blue-500 text-sm list-none [&>*]:self-center">
-          <li>{subjectState?.subject_name} &gt;&nbsp;</li>
-          <li>Week {topics?.week} - {topics?.title} &gt;&nbsp;</li>
-          <li>Week {topics?.week} Material &gt;&nbsp;</li>
-          <li className="text-black">Week {topics?.week} Video&gt;&nbsp;</li>
+      <div className="flex flex-wrap gap-2 text-blue-500 text-sm list-none [&>*]:self-center">
+          <li className="cursor-pointer" onClick={handleRoutToSubject}>{subjectState?.subject_name} &gt;&nbsp;</li>
+          <li className="cursor-pointer" onClick={handleRoutToTopic}>Week {topics?.week} - {topics?.title} &gt;&nbsp;</li>
+          <li className="text-black">Week - {topics?.week} Video&gt;&nbsp;</li>
         </div>
         <div className="py-5 space-y-5">
           <video src={topics?.video} controls className="w-full h-[400px]" />
