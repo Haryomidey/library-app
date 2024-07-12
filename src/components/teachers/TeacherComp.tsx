@@ -71,7 +71,7 @@ export default function AdminComp({ element }: AdminCompProps) {
 
   return (
     <div className="w-full h-screen flex">
-      <div className={`${isAdminSearchBarOpen ? 'w-[80px]' : 'w-[0]'}  sm:w-[80px] lg:w-[28%] lg:max-w-[250px] overflow-x-hidden border-r bg-white`}>
+      <div className={`${isAdminSearchBarOpen ? 'w-[80px]' : 'w-[0]'}  sm:w-[80px] lg:w-[28%] lg:max-w-[220px] overflow-x-hidden border-r bg-white`}>
         <Sidebar />
       </div>
       <div className="w-full h-full overflow-y-scroll">
