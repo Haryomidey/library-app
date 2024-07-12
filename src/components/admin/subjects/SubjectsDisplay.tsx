@@ -50,7 +50,6 @@ function SubjectsDisplay() {
 
   return (
     <>
-      <Header headerName="Subjects" />
       <div className="px-10 py-5 space-y-10">
         <TaskBar total={subjects?.length} />
         {loading ? (

@@ -72,7 +72,6 @@ function AllSubjects() {
 
   return (
     <div>
-      <Header headerName={"Subjects"} />
       <h1 className="lg:hidden font-semibold text-xl p-5">Subjects</h1>
       <div className="hidden lg:flex gap-4 py-4 px-5 lg:px-10 justify-end">
         <div className="bg-white flex gap-5 px-4 py-2 rounded-md">
@@ -98,19 +97,19 @@ function AllSubjects() {
         <div className="p-5 lg:p-10">
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {Array.from({ length: skeletonLength || 6 }).map((_, index) => (
+              {Array.from({ length: skeletonLength }).map((_, index) => (
                 <div
                   className="bg-white p-4 h-[250px] rounded-lg space-y-5 w-full"
                   key={index}
                 >
-                  <Skeleton height="70%" className="rounded-md" />
+                  <Skeleton height="70%" className="rounded-md min-h-[100px]" />
                   <Skeleton width="60%" />
                 </div>
               ))}
             </div>
           ) : (
             <div>
-              {Array.from({ length: skeletonLength || 6 }).map((_, index) => (
+              {Array.from({ length: skeletonLength }).map((_, index) => (
                 <div
                   key={index}
                   className="flex items-center border-b border-gray-200 py-4"
@@ -137,7 +136,7 @@ function AllSubjects() {
               key={index}
               onClick={() => handleRouting(subject)}
             >
-              <div className='h-[70%]'>
+              <div className='h-[70%] min-h-[100px]'>
                 <img
                   src={subject?.cover ? subject?.cover : DefaultImage}
                   alt=""

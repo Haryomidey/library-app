@@ -5,7 +5,7 @@ import Header from "../Header";
 function HelpAndSupport() {
   return (
     <div>
-      <Header headerName="Help and Support" />
+      {/* <Header headerName="Help and Support" /> */}
       <div className="relative">
         <ComingSoon />
       </div>

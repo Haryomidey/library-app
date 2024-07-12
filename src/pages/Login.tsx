@@ -101,6 +101,7 @@ const Login = () => {
       }
     }
   });
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoader(true);
@@ -108,6 +109,10 @@ const Login = () => {
       const data = await LoginUser({ email, password });
       Cookies.set("token", JSON.stringify(data.token));
       Cookies.set("user", JSON.stringify(data.user));
+      
+     
+      const token = getToken();
+      
       Swal.fire({
         title: "Login Successful",
         icon: "success",
@@ -126,6 +131,17 @@ const Login = () => {
     }
     setLoader(false);
   };
+  
+  const getToken = () => {
+    const token = Cookies.get('token');
+    if (token) {
+      return JSON.parse(token);
+    } else {
+      return '';
+    }
+  };
+  
+
   return (
     <>
       <Box position={"relative"} width={"100%"} height={"100vh"}>

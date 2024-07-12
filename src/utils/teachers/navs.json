@@ -1,0 +1,21 @@
+[
+    {
+      "name": "Home",
+      "image": "/images/home.png",
+      "active": "/images/home-active.png",
+      "path": "/teacher/"
+    },
+    {
+      "name": "Subjects",
+      "image": "/images/cap.png",
+      "active": "/images/cap-active.png",
+      "path": "/teacher/subjects"
+    },
+    {
+      "name": "Settings",
+      "image": "/images/settings.png",
+      "active": "/images/settings-active.png",
+      "path": "/teacher/settings"
+    }
+  ]
+  

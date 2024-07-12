@@ -9,6 +9,8 @@ function SingleMaterialAdmin() {
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const {id} = useParams();
+  const param = useParams()
+  console.log(param)
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -16,8 +18,6 @@ function SingleMaterialAdmin() {
       setSubjectState(JSON.parse(subject));
     }
   }, []);
-
-  console.log(subjectState)
 
   useEffect(() => {
     const fetchTopicDetails = async () => {

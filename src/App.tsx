@@ -33,6 +33,9 @@ import AdminNotifications from "./components/admin/AdminNotifications";
 import StudentNotifications from "./components/students/StudentNotifications";
 import NewStudent from "./components/admin/user management/NewStudent";
 import NewTopicContainer from "./components/students/subjects/NewtTopicContainer";
+import Sidebar from "./components/admin/Sidebar";
+import Courses from "./components/teachers/courses/Courses";
+import TeacherSettings from "./components/teachers/settings/TeacherSettings";
 
 const router = createBrowserRouter([
   {
@@ -158,6 +161,14 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <TeacherDashboard />
+      },
+      {
+        path: 'subjects',
+        element: <Courses />
+      },
+      {
+        path: 'settings',
+        element: <TeacherSettings />
       }
     ]
   },
@@ -222,7 +233,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider router={router} />
+  )
 }
 
 export default App;

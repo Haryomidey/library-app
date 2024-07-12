@@ -1,6 +1,6 @@
 import ComingSoon from "../../ComingSoon";
 
-function LibraryHome() {
+function TeacherSettings() {
   return (
     <div>
       <ComingSoon />
@@ -8,4 +8,4 @@ function LibraryHome() {
   );
 }
 
-export default LibraryHome;
+export default TeacherSettings;

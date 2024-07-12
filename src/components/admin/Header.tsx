@@ -3,20 +3,19 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { BiSearch } from "react-icons/bi";
 import { FaBars, FaUser } from "react-icons/fa";
-import Sidebar from "./Sidebar";
 import { MdClose } from "react-icons/md";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { GetNotifications } from "./AdminControllers";
 import timeAgo from "../../utils/time-converter";
+import { useUserContext } from "../../contexts/UserContext";
 
 function Header({ headerName }: any) {
-  const [openState, setOpenState] = useState(false);
+  const {isAdminSearchBarOpen, setAdminSearchBarOpen} = useUserContext()
   const [userState, setUserState] = useState<any>(null);
   const [searchState, setSearchState] = useState(false);
   const [notifState, setNotifState] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
-  const sidebarRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const [searchItems, setSearchItems] = useState<string>('');
   const router = useNavigate();
@@ -42,7 +41,7 @@ function Header({ headerName }: any) {
 
   useEffect(() => {
     const menuOutsideClick = (e: MouseEvent) => {
-      if (searchRef && searchRef.current?.contains(e.target as Node)) {
+      if (searchRef.current?.contains(e.target as Node)) {
         setSearchState(true);
       } else {
         setSearchState(false);
@@ -56,34 +55,21 @@ function Header({ headerName }: any) {
     };
   }, []);
 
+
   useEffect(() => {
-    const menuOutsideClick = (e: MouseEvent) => {
-      if (sidebarRef && sidebarRef.current?.contains(e.target as Node)) {
-        setOpenState(true);
-      } else {
-        setOpenState(false);
+    const user = Cookies.get("user");
+    if (user) {
+      try {
+        setUserState(JSON.parse(user));
+      } catch (error) {
+        console.error("Failed to parse user data from cookie", error);
+        setUserState(null);
       }
-    };
-
-    document.addEventListener('mousedown', menuOutsideClick);
-
-    return () => {
-      document.removeEventListener('mousedown', menuOutsideClick);
-    };
-  }, []);
-
-  useEffect(() => {
-    try {
-      let user = Cookies.get("user");
-      user && setUserState(JSON.parse(user));
-    } catch (error) {
-      console.error("Failed to parse user data from cookie", error);
-      setUserState(null);
     }
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchNotifications = async () => {
       try {
         const data = await GetNotifications();
         if (data?.success) {
@@ -94,31 +80,32 @@ function Header({ headerName }: any) {
         console.error("Failed to fetch notifications", error);
       }
     };
-    fetchData();
-  }, []);
-  
+
+
+    fetchNotifications();
+
+    if (userState) {
+      fetchNotifications();
+    }
+  }, [userState]);
 
   return (
-    <div className="z-[1111] w-full flex flex-col justify-center mb-[84px]">
-      <ul className="fixed z-[1111] top-0 border-b-2 w-full h-16 py-3 bg-white flex justify-between px-5 lg:px-10 [&>*]:self-center">
+    <div className="w-full flex flex-col justify-center sticky top-0 z-[1111]">
+      <ul className="relative z-[111] border-b-2 w-full h-16 py-3 bg-white flex justify-between px-5 lg:px-10 [&>*]:self-center">
         <div className="flex gap-5 [&>*]:self-center">
-          <div>
-            {openState ? (
-              <MdClose onClick={() => setOpenState(false)} className="z-20 cursor-pointer" />
+          <div className="flex items-center gap-2 ml-4 cursor-pointer">
+            <p className='hidden sm:block' onClick={handleGoBack}><FaArrowLeftLong /></p>
+            <div className='block sm:hidden'>
+            {isAdminSearchBarOpen ? (
+              <FaBars onClick={() => setAdminSearchBarOpen(false)} className="z-20 cursor-pointer" />
             ) : (
-              <FaBars onClick={() => setOpenState(true)} className="z-20 cursor-pointer" />
+              <FaBars onClick={() => setAdminSearchBarOpen(true)} className="z-20 cursor-pointer" />
             )}
           </div>
-
-          <div className="flex items-center gap-2 ml-4 cursor-pointer">
-            <p onClick={handleGoBack}><FaArrowLeftLong /></p>
-            <h1 className="hidden lg:block font-semibold self-center">{headerName}</h1>
+            <h1 className="lg:block font-semibold self-center">{headerName}</h1>
           </div>
         </div>
         <div>
-          <div className="absolute left-0">
-            <Sidebar openState={openState} sidebarRef={sidebarRef} />
-          </div>
         </div>
         <div className="flex gap-2 lg:gap-5 [&>*]:self-center">
           <div className="border-2 p-2 rounded-full cursor-pointer relative">
@@ -157,7 +144,7 @@ function Header({ headerName }: any) {
         </div>
       </ul>
 
-      <div className={`fixed left-0 top-0 bottom-0 w-full h-screen bg-[#00000048] z-[11] ${!notifState ? 'invisible' : 'visible'}`}>
+      <div className={`absolute left-0 top-0 bottom-0 w-full h-screen z-[-11] bg-[#00000033] ${!notifState ? 'invisible' : 'visible'}`}>
         <div className={`bg-white w-[300px] max-w-[90%] min-h-[100px] rounded-lg absolute right-20 top-16 shadow-md p-5 ${notifState ? 'scale-1' : 'scale-0'} transition-transform ease duration-300`}>
           <div className="flex items-center justify-between w-full gap-2">
             <p className="font-semibold">Notifications</p>

@@ -40,7 +40,7 @@ function UserManagementStudent() {
 
   return (
     <div className="w-full h-screen bg-white">
-      <Header headerName="User Management" />
+      {/* <Header headerName="User Management" /> */}
       <div className="relative pt-6 px-12 w-full h-full">
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center gap-3">

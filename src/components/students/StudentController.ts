@@ -80,9 +80,9 @@ const GetAllSubjectsAndGrades = async () => {
 };
 
 
-const GetSingleTopic = async (subject_id: string) => {
+const GetSingleTopic = async (topic_id: any) => {
   try {
-    const res = await fetch(`${baseUrl}/topic/show/${subject_id}`, {
+    const res = await fetch(`${baseUrl}/topic/show/${topic_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

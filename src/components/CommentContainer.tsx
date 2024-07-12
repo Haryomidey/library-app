@@ -15,7 +15,6 @@ const CommentContainer = ({ topic_id }: any) => {
       const fetchComments = async () => {
         try {
           const data = await GetComments(topic_id);
-          console.log('Fetched comments:', topic_id);
           setComments(data.data || []);
         } catch (error) {
           console.error('Error fetching comments:', error);
@@ -44,7 +43,6 @@ const CommentContainer = ({ topic_id }: any) => {
     
       try {
         const data = await PostComment(formData);
-        console.log('Posted comment:', data);
         setComments([...comments, data]);
         setNewComment("");
         setIsReplyingComment(false);
@@ -53,7 +51,8 @@ const CommentContainer = ({ topic_id }: any) => {
       } finally {
         setIsPostingMainComment(false);
       }
-      }
+    }
+
   };
 
   const handleCancelComment = () => {
@@ -168,7 +167,7 @@ const CommentContainer = ({ topic_id }: any) => {
                                 onClick={() => handleReplySubmit(comment.comment_id)}
                                 className="px-5 py-2 rounded-full bg-[#3471E1] text-white"
                               >
-                                {isReplyingComment ? 'Replying...' : 'Reply'}
+                                {!isReplyingComment ? 'Replying...' : 'Reply'}
                               </button>
                             </div>
                           </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { TiArrowDown, TiArrowUp } from "react-icons/ti";
 
@@ -12,18 +12,26 @@ import BooksImage from '../../../img/admin-books.png';
 import Curve from '../../../img//curly.png';
 import LineChartComponent from "./LineChartComponent";
 import ContentDistribution from "./ContentDistribution";
+import { GetATeacherDashboard } from "../TeacherControllers";
 
 
 
 function TeacherDashboard() {
-
+    const [dashboardInfo, setDashboardInfo] = useState<any>();
     const percentage = 50
+    useEffect(() => {
+        const fetchTeacherDashboard = async () => {
+          const data = await GetATeacherDashboard();
+          setDashboardInfo(data)
+        }
+    
+        fetchTeacherDashboard()
+    }, [])
 
   return (
     <>
-        <Header headerName="Overview" />
-        <div className="space-y-10 px-5 lg:px-10 ">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 lg:gap-10 px-10">
+        <div className="w-full px-5 lg:px-10 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 lg:gap-10 px-10  mb-6">
                 <div
                     className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
                 >
@@ -35,11 +43,11 @@ function TeacherDashboard() {
                             <img src={StudentImage} alt="student" />
                         </div>
                     </div>
-                    <b className="block text-xl">200</b>
+                    <b className="block text-xl">{dashboardInfo?.student_count}</b>
                 </div>
                 <div
                     className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
-                    >
+                >
                     <div className="flex justify-between">
                         <h1 className="self-center md:text-lg font-light">
                             Instructors
@@ -48,20 +56,20 @@ function TeacherDashboard() {
                             <img src={TeacherImage} alt="teacher" />
                         </div>
                     </div>
-                    <b className="block text-xl">1000</b>
+                    <b className="block text-xl">{dashboardInfo?.teacher_count}</b>
                 </div>
                 <div
                     className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
                 >
                     <div className="flex justify-between">
-                    <h1 className="self-center md:text-lg font-light">
-                        Files
-                    </h1>
-                    <div className="border-2 rounded-full p-2">
-                        <img src={FilesImage} alt="files" />
+                        <h1 className="self-center md:text-lg font-light">
+                            Files
+                        </h1>
+                        <div className="border-2 rounded-full p-2">
+                            <img src={FilesImage} alt="files" />
+                        </div>
                     </div>
-                    </div>
-                    <b className="block text-xl">100</b>
+                    <b className="block text-xl">{dashboardInfo?.files_count}</b>
                 </div>
                 <div
                     className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
@@ -74,18 +82,18 @@ function TeacherDashboard() {
                             <img src={BooksImage} alt="books" />
                         </div>
                     </div>
-                    <b className="block text-xl">120</b>
+                    <b className="block text-xl">{dashboardInfo?.subject_count}</b>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div className="w-full h-fit py-5 px-20">
-            <h3 className="font-semibold text-lg">User Engagement</h3>
+            <div className="w-full h-fit py-5 px-20">
+                <h3 className="font-semibold text-lg">User Engagement</h3>
 
-            <div className="w-full h-full bg-white rounded-xl p-5 mt-5">
-                <LineChartComponent />
+                <div className="w-full h-full bg-white rounded-xl p-5 mt-5">
+                    <LineChartComponent />
+                </div>
             </div>
-        </div>
 
         <div className="px-5 lg:px-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 py-4">
             <div className="bg-white rounded-xl w-full h-[450px] p-5">

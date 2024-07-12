@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
+import {useParams} from 'react-router-dom';
 import Header from "../../Header";
 import { BiCheckCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { GetAllTopicsUnderSubject } from "../../StudentController";
+import { GetAllTopicsUnderSubject, GetSingleTopic } from "../../StudentController";
 
 function LessonDetails() {
   const route = useNavigate();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const {id} = useParams()
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -22,9 +24,8 @@ function LessonDetails() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetAllTopicsUnderSubject(subjectState?.subject_id);
-          console.log(data)
-          setTopics(data[0]);
+          const data = await GetSingleTopic(id);
+          setTopics(data);
           setLoading(false);
         } catch (error: any) {
           console.error(error.message);

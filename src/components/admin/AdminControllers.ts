@@ -1,5 +1,5 @@
 const { baseUrl } = require("../../config/host");
-const Cookies = require("js-cookie");
+const Cookies = require('js-cookie')
 
 const getToken = () => {
   const token = Cookies.get("token");
@@ -14,7 +14,38 @@ const getToken = () => {
   return '';
 };
 
-const token = getToken();
+const token = getToken()
+
+const LoginUser = async (payload: { email: string; password: string }) => {
+  const res = await fetch(`${baseUrl}/user/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error);
+  }
+  return data;
+};
+
+const VerifyToken = async () => {
+  const res = await fetch(`${baseUrl}/user/verify-token`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
+  return data;
+};
 
 
 const GetSingleTopic = async (topic_id: any) => {
@@ -46,36 +77,7 @@ const GetSubject = async (subjectId: number) => {
   }
   return data;
 };
-const LoginUser = async (payload: { email: string; password: string }) => {
-  const res = await fetch(`${baseUrl}/user/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(payload)
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error);
-  }
-  return data;
-};
 
-const VerifyToken = async () => {
-  const res = await fetch(`${baseUrl}/user/verify-token`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    }
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.message);
-  }
-  return data;
-};
 
 const CreateTopic = async (formData: FormData) => {
   try {
@@ -277,8 +279,8 @@ const GetNotifications =  async () => {
     const res = await fetch(`${baseUrl}/notifications/fetch`, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       }
     })
     const data = await res.json();
@@ -315,11 +317,10 @@ const PostComment =  async (form: any) => {
     let res = await fetch(`${baseUrl}/comments/store`, {
       method: 'POST',
       headers: {
-        // "Content-Type": "application/json",
+        "Content-type": "application/json",
         Authorization: `Bearer ${token}`
       },
       body: form,
-      redirect: 'follow'
     });
     const data = await res.json();
     console.log(data)

@@ -110,7 +110,7 @@ const NewStudent = () => {
 
   return (
     <main className="w-full min-h-screen pb-10 bg-white">
-      <Header headerName="New student" />
+      {/* <Header headerName="New student" /> */}
       <div className="relative pt-6 px-12 w-full min-h-full">
         <h1 className='text-2xl font-semibold'>Add student</h1>
         <div className='mt-6'>

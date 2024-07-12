@@ -11,7 +11,9 @@ function CourseCoverPhoto(content: CourseCoverPhotoProps) {
 
   return (
     <div className="flex flex-col lg:flex-row gap-5">
-      <img src={content.cover ? content.cover : DefaultImage} className='w-[300px] rounded-md max-w-full' alt="Course Cover" />
+      <div className='max-w-[300px] w-full'>
+        <img src={content.cover ? content.cover : DefaultImage} className='w-full rounded-md max-w-full' alt="Course Cover" />
+      </div>
       <div className="space-y-3">
         <h1 className="text-3xl font-semibold">{content.subject_name}</h1>
         <p>Grade {content.grade}</p>

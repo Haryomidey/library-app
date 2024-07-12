@@ -28,7 +28,6 @@ const Communication = () => {
     setLoading(true);
     setErrors({});
   
-    // Validation
     const newErrors: any = {};
     if (!form.title) newErrors.title = ["The title field is required."];
     if (!form.group) newErrors.group = ["The group field is required."];
@@ -67,7 +66,6 @@ const Communication = () => {
         });
         setModalBox(false);
 
-        // Display success message
         Swal.fire({
           icon: 'success',
           title: 'Success',
@@ -95,7 +93,7 @@ const Communication = () => {
       <div className='flex items-center justify-between w-full mt-5'>
         <div className='text-sm'>
           <p>Push Notification Management</p>
-          <p className='text-[gray]'>Schedule & send important messages to your users or review your current push notifications</p>
+          <p className='text-[gray] pr-6'>Schedule & send important messages to your users or review your current push notifications</p>
         </div>
         <div>
           <button

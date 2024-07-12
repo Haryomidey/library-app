@@ -106,7 +106,7 @@ const NewTeacher = () => {
 
   return (
     <main className="w-full min-h-screen pb-10 bg-white">
-      <Header headerName="New teacher" />
+      {/* <Header headerName="New teacher" /> */}
       <div className="relative pt-6 px-12 w-full min-h-full">
         <h1 className='text-2xl font-semibold'>Add teacher</h1>
         <div className='mt-6'>

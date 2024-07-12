@@ -35,10 +35,10 @@ function AdminSettings() {
 
   return (
     <div className="w-full h-screen">
-      <Header headerName="Settings" />
+      {/* <Header headerName="Settings" /> */}
       <div className="relative w-full h-[90%] p-6">
         <div className="w-full h-full grid grid-cols-12 shadow-md rounded-md">
-          <ul className="col-span-2 border-r py-6 pl-5 pr-8 flex flex-col gap-2">
+          <ul className="col-span-3 border-r py-6 pl-5 pr-8 flex flex-col gap-2">
             {
               comps.map((comp, index) => (
                 <li 
@@ -50,7 +50,7 @@ function AdminSettings() {
             }
           </ul>
 
-          <div className="col-span-10 p-5">
+          <div className="col-span-9 p-5">
             {active === 3 && <Communication />}
             {active === 4 && <Notification />}
           </div>

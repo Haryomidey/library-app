@@ -14,7 +14,8 @@ function LessonDetailsAdmin() {
 
   const {id} = useParams();
 
-  console.log(id)
+  const param = useParams()
+  console.log(param)
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");

@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import globalTheme from "./theme";
 import {ContextWrapper} from "./contexts/UserContext";
+import Sidebar from "./components/admin/Sidebar";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

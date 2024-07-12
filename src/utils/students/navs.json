@@ -2,21 +2,25 @@
   {
     "name": "Home",
     "image": "/images/home.png",
+    "active": "/images/home-active.png",
     "path": "/student/"
   },
   {
     "name": "Subjects",
-    "image": "/images/subjects.png",
+    "image": "/images/cap.png",
+    "active": "/images/cap-active.png",
     "path": "/student/subjects"
   },
   {
     "name": "Library",
-    "image": "/images/books.png",
-    "path":"/student/library"
-    },
+    "image": "/images/library.png",
+    "active": "/images/library.png",
+    "path": "/student/library"
+  },
   {
     "name": "Settings",
     "image": "/images/settings.png",
+    "active": "/images/settings-active.png",
     "path": "/student/settings"
   }
 ]

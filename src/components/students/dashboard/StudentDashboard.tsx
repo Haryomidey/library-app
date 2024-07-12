@@ -1,4 +1,4 @@
-import React from "react";
+
 import Header from "../Header";
 import Tasks from "./Tasks";
 import CoverPhotos from "./CoverPhotos";
@@ -7,8 +7,7 @@ import Trending from "./Trending";
 function StudentDashboard() {
   return (
     <>
-      <Header headerName="Dashboard" />
-      <div className="space-y-10 px-5 lg:px-10 ">
+      <div className="px-5 lg:px-10 pt-8">
         <Tasks />
         <CoverPhotos />
         <LibariansPick />
