@@ -99,14 +99,14 @@ function UserManagementTeacher() {
 
         {searchQuery ? (
           filteredTeachers?.length > 0 ? (
-            <ManagementTableTeacher data={filteredTeachers} />
+            <ManagementTableTeacher data={filteredTeachers} fetchAllTeachers={fetchAllTeachers} />
           ) : (
             <p className="mt-8 text-xl text-center text-gray-500">
               Your search does not match any teacher
             </p>
           )
         ) : (
-          <ManagementTableTeacher data={teachers} />
+          <ManagementTableTeacher data={teachers} fetchAllTeachers={fetchAllTeachers} />
         )}
       </div>
     </div>

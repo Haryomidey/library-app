@@ -26,9 +26,10 @@ interface User {
 
 interface UserTableProps {
     data: User[];
+    fetchAllStudents: () => void
 }
 
-const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
+const ManagementTableStudent: React.FC<UserTableProps> = ({ data, fetchAllStudents }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -121,6 +122,7 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
                         'Student has been deleted.',
                         'success'
                     );
+                    fetchAllStudents()
                 } else {
                     Swal.fire(
                         'Error!',
@@ -137,6 +139,8 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data }) => {
     const handleRoute = (id: any) => {
         router(`/admin/user-management/edit-student/${id}`)
     }
+
+    console.log(data)
 
     return (
         <div className="w-full mt-8 pb-5 min-w-full overflow-x-scroll">

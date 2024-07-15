@@ -27,9 +27,10 @@ interface User {
 
 interface UserTableProps {
   data: User[];
+  fetchAllTeachers: () => void
 }
 
-const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
+const ManagementTableTeacher: React.FC<UserTableProps> = ({ data, fetchAllTeachers }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -109,6 +110,7 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
     setIsDeleting(false);
     if (result.success) {
       Swal.fire('Deleted!', 'Teacher has been deleted.', 'success');
+      fetchAllTeachers()
     } else {
       Swal.fire('Error!', 'Failed to delete teacher.', 'error');
     }
@@ -126,6 +128,7 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         handleDelete(teacherId);
+        fetchAllTeachers()
       }
     });
   };
@@ -135,6 +138,8 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data }) => {
   const handleRoute = (id: any) => {
     router(`/admin/user-management/edit-teacher/${id}`)
 }
+
+console.log(data)
 
   return (
     <div className="w-full mt-8 pb-5 overflow-x-scroll min-w-full">

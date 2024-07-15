@@ -102,14 +102,13 @@ const EditTeacher = () => {
     setIsLoading(true);
     try {
       const data = await EditSingleTeacher(formData, teacherId);
-      console.log(data)
       setIsLoading(false);
 
       if (data && data.success) {
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Teacher created successfully.',
+          text: 'Teacher updated successfully.',
         });
         router('/admin/user-management/teacher')
       } else {
@@ -124,19 +123,19 @@ const EditTeacher = () => {
       });
       }
     } catch (error: any) {
-      setIsLoading(false);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.message || 'An unexpected error occurred.',
-      });
+        setIsLoading(false);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'An unexpected error occurred.',
+        });
     }
   };
 
   if(isDataLoading){
     return (
         <div className='h-full w-full absolute top-0 left-0 grid place-items-center bg-[#0000003b] text-white'>
-            <div>
+            <div className='flex items-center justify-center flex-col'>
                 <FaSpinner className='animate-spin text-3xl'/>
                 <p>Loading...</p>
             </div>

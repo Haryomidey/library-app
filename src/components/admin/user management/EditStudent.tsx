@@ -102,7 +102,6 @@ const EditStudent = () => {
     setIsLoading(true);
     try {
       const data = await EditSingleStudent(formData, studentId);
-      console.log(data);
       setIsLoading(false);
 
       if (data && data.success) {
@@ -124,21 +123,20 @@ const EditStudent = () => {
         });
       }
     } catch (error: any) {
-      console.log(error);
-      setIsLoading(false);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.message || 'An unexpected error occurred.',
-      });
+        setIsLoading(false);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'An unexpected error occurred.',
+        });
     }
   };
 
 
     if(isDataLoading){
         return (
-            <div className='h-full w-full absolute top-0 left-0 grid place-items-center bg-[#0000003b] text-white'>
-                <div>
+            <div className='h-full w-full absolute top-0 left-0 grid place-items-center bg-[#000000a6] text-white'>
+                <div className='flex items-center justify-center flex-col'>
                     <FaSpinner className='animate-spin text-3xl'/>
                     <p>Loading...</p>
                 </div>

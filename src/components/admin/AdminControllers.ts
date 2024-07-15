@@ -184,14 +184,16 @@ const GetSingleStudent =  async (studentId: any) => {
 const EditSingleStudent =  async (formData: any, studentId: any) => {
   try{
     const res = await fetch(`${baseUrl}/students/update/${studentId}`, {
-      method: "PUT",
+      method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: formData
     })
     const data = await res.json();
+    console.log(data);
+    
     if (!res.ok){
       throw new Error(data.error);
     }
@@ -243,10 +245,9 @@ const GetSingleTeacher =  async (teacherId: any) => {
 const EditSingleTeacher = async (formData: FormData, teacherId: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/update/${teacherId}`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Accept": "application/json",
-        "Content-type": "application/json",
         "Authorization": `Bearer ${token}`
       },
       body: formData

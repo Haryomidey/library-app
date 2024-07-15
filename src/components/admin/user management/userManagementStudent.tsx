@@ -99,14 +99,14 @@ function UserManagementStudent() {
 
         {searchQuery ? (
           filteredStudents?.length > 0 ? (
-            <ManagementTableStudent data={filteredStudents} />
+            <ManagementTableStudent data={filteredStudents} fetchAllStudents={fetchAllStudents} />
           ) : (
             <p className="mt-8 text-xl text-center text-gray-500">
               Your search does not match any student!!!
             </p>
           )
         ) : (
-          <ManagementTableStudent data={students} />
+          <ManagementTableStudent data={students} fetchAllStudents={fetchAllStudents} />
         )}
       </div>
     </div>
