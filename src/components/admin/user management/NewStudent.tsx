@@ -15,6 +15,7 @@ const NewStudent = () => {
   const [dob, setDob] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [gradeId, setGradeId] = useState('1');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,6 +29,7 @@ const NewStudent = () => {
     dob: '',
     phone: '',
     email: '',
+    password: '',
     gradeId: '',
   });
 
@@ -48,6 +50,7 @@ const NewStudent = () => {
       dob: !dob ? 'Date of birth is required' : '',
       phone: !phone ? 'Phone number is required' : '',
       email: !email ? 'Email is required' : '',
+      password: !password ? 'Password is required' : '',
       gradeId: !gradeId ? 'Grade is required' : '',
     };
 
@@ -71,6 +74,7 @@ const NewStudent = () => {
     formData.append('dob', dob);
     formData.append('phone', phone);
     formData.append('email', email);
+    formData.append('password', password);
     formData.append('grade_id', gradeId);
 
     setIsLoading(true);
@@ -83,7 +87,7 @@ const NewStudent = () => {
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Teacher created successfully.',
+          text: 'Student created successfully.',
         });
         router('/admin/user-management/student')
       } else {
@@ -110,7 +114,7 @@ const NewStudent = () => {
 
   return (
     <main className="w-full min-h-screen pb-10 bg-white">
-      {/* <Header headerName="New student" /> */}
+      <Header headerName="New student" />
       <div className="relative pt-6 px-12 w-full min-h-full">
         <h1 className='text-2xl font-semibold'>Add student</h1>
         <div className='mt-6'>
@@ -122,7 +126,7 @@ const NewStudent = () => {
             ) : (
               <FaUser />
             )}
-            <input type="file" className="hidden" id="imageInput" onChange={handleImageChange} />
+            <input type="file" accept='image/*' className="hidden" id="imageInput" onChange={handleImageChange} />
             <label htmlFor="imageInput" className='absolute right-0 top-[-8px] h-8 w-8 rounded-full grid place-items-center bg-[#667185] text-white cursor-pointer'>
               <FaCamera className='text-sm' />
             </label>
@@ -204,6 +208,18 @@ const NewStudent = () => {
                   {errors.phone && <small className="text-red-600">{errors.phone}</small>}
                 </div>
                 <div className='grid gap-2'>
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    className='p-2 w-full border rounded'
+                    placeholder='Enter your password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {errors.password && <small className="text-red-600">{errors.password}</small>}
+                </div>
+                <div className='grid gap-2'>
                   <label htmlFor="email">Email</label>
                   <input
                     type="email"
@@ -222,6 +238,9 @@ const NewStudent = () => {
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
                   </select>
                   {errors.gradeId && <small className="text-red-600">{errors.gradeId}</small>}
                 </div>

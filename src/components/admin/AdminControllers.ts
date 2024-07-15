@@ -163,6 +163,45 @@ const GetAllStudents =  async () => {
   }
 }
 
+const GetSingleStudent =  async (studentId: any) => {
+  try{
+    const res = await fetch(`${baseUrl}/students/profile/${studentId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    })
+    const data = await res.json();
+    if (!res.ok){
+      throw new Error(data.error);
+    }
+    return data
+  } catch (error){
+    console.error(error)
+  }
+}
+
+const EditSingleStudent =  async (studentId: any, formData: any) => {
+  try{
+    const res = await fetch(`${baseUrl}/students/update/${studentId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    })
+    const data = await res.json();
+    if (!res.ok){
+      throw new Error(data.error);
+    }
+    return data
+  } catch (error){
+    console.error(error)
+  }
+}
+
 const GetAllTeachers =  async () => {
   try{
     const res = await fetch(`${baseUrl}/users/teachers/1`, {
@@ -181,6 +220,51 @@ const GetAllTeachers =  async () => {
     console.error(error)
   }
 }
+
+const GetSingleTeacher =  async (teacherId: any) => {
+  try{
+    const res = await fetch(`${baseUrl}/teachers/profile/${teacherId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    })
+    const data = await res.json();
+    if (!res.ok){
+      throw new Error(data.error);
+    }
+    return data
+  } catch (error){
+    console.error(error)
+  }
+}
+
+const EditSingleTeacher = async (teacherId: any, formData: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/teachers/update/${teacherId}`, {
+      method: "PUT",
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error(data.message || 'Failed to update teacher');
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 
 const RegisterAdmins = async (form: any) => {
   try {
@@ -317,13 +401,12 @@ const PostComment =  async (form: any) => {
     let res = await fetch(`${baseUrl}/comments/store`, {
       method: 'POST',
       headers: {
-        "Content-type": "application/json",
+        "Accept": "application/json",
         Authorization: `Bearer ${token}`
       },
       body: form,
     });
     const data = await res.json();
-    console.log(data)
     if (!res.ok) {
       console.error('Error', data.error);
     }
@@ -384,6 +467,53 @@ const CreateStudent = async (formData: any) => {
   }
 };
 
+const DeleteStudent = async (studentId: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/students/delete/${studentId}`, {
+      method: 'DELETE',
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return errorData;
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+};
+
+const DeleteTeacher = async (teacherId: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/teachers/delete/${teacherId}`, {
+      method: 'DELETE',
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error('Failed to delete:', errorData);
+      return errorData;
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+};
+
 
 export {
   GetSingleTopic,
@@ -392,7 +522,11 @@ export {
   GetSubject,
   GetSubjects,
   GetAllStudents,
+  GetSingleStudent,
+  EditSingleStudent,
   GetAllTeachers,
+  GetSingleTeacher,
+  EditSingleTeacher,
   LoginUser,
   VerifyToken,
   RegisterAdmins,
@@ -403,5 +537,7 @@ export {
   GetComments,
   PostComment,
   CreateTeacher,
-  CreateStudent
+  CreateStudent,
+  DeleteStudent,
+  DeleteTeacher
 };

@@ -110,6 +110,7 @@ const Login = () => {
       Cookies.set("token", JSON.stringify(data.token));
       Cookies.set("user", JSON.stringify(data.user));
       
+      console.log(data)
      
       const token = getToken();
       

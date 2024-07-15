@@ -15,6 +15,7 @@ const NewTeacher = () => {
   const [dob, setDob] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useNavigate()
@@ -27,6 +28,7 @@ const NewTeacher = () => {
     dob: '',
     phone: '',
     email: '',
+    password: ''
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +48,7 @@ const NewTeacher = () => {
       dob: !dob ? 'Date of birth is required' : '',
       phone: !phone ? 'Phone number is required' : '',
       email: !email ? 'Email is required' : '',
+      password: !password ? 'Password is required' : '',
     };
 
     setErrors(newErrors);
@@ -68,6 +71,7 @@ const NewTeacher = () => {
     formData.append('dob', dob);
     formData.append('phone', phone);
     formData.append('email', email);
+    formData.append('password', password);
 
     setIsLoading(true);
     try {
@@ -94,7 +98,6 @@ const NewTeacher = () => {
       });
       }
     } catch (error: any) {
-      console.log(error)
       setIsLoading(false);
       Swal.fire({
         icon: 'error',
@@ -106,7 +109,7 @@ const NewTeacher = () => {
 
   return (
     <main className="w-full min-h-screen pb-10 bg-white">
-      {/* <Header headerName="New teacher" /> */}
+      <Header headerName="New teacher" />
       <div className="relative pt-6 px-12 w-full min-h-full">
         <h1 className='text-2xl font-semibold'>Add teacher</h1>
         <div className='mt-6'>
@@ -118,7 +121,7 @@ const NewTeacher = () => {
             ) : (
               <FaUser />
             )}
-            <input type="file" className="hidden" id="imageInput" onChange={handleImageChange} />
+            <input type="file" accept='image/*' className="hidden" id="imageInput" onChange={handleImageChange} />
             <label htmlFor="imageInput" className='absolute right-0 top-[-8px] h-8 w-8 rounded-full grid place-items-center bg-[#667185] text-white cursor-pointer'>
               <FaCamera className='text-sm' />
             </label>
@@ -210,6 +213,18 @@ const NewTeacher = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   {errors.email && <small className="text-red-600">{errors.email}</small>}
+                </div>
+                <div className='grid gap-2'>
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    className='p-2 w-full border rounded'
+                    placeholder='Enter your password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {errors.password && <small className="text-red-600">{errors.password}</small>}
                 </div>
                 <div className='col-span-2 flex items-center justify-end text-white'>
                   <button type="submit" className='flex items-center gap-2 px-5 py-2 rounded bg-[#2B5BFC]'>

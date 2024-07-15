@@ -6,22 +6,33 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { GetSingleTopic } from "../../AdminControllers";
 
+interface GradeState {
+  grade_id: string | null;
+}
+
 function LessonDetailsAdmin() {
   const route = useNavigate();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedGradeState, setSelectedGradeState] = useState<GradeState>({
+    grade_id: null,
+  });
 
   const {id} = useParams();
 
-  const param = useParams()
-
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
+    const grades = Cookies.get("selectedGrade");
     if (subject) {
       setSubjectState(JSON.parse(subject));
     }
+    if (grades) {
+      setSelectedGradeState(JSON.parse(grades));
+    }
   }, []);
+
+  console.log(selectedGradeState.grade_id)
 
   useEffect(() => {
     const fetchTopicDetails = async () => {
@@ -46,7 +57,7 @@ function LessonDetailsAdmin() {
   };
 
   const handleRoutToSubject = () => {
-    route(`/admin/${subjectState?.subject_name}`)
+    route(`/admin/subjects/${subjectState?.subject_name}/${selectedGradeState.grade_id}`)
   }
 
   const handleDownLoadFile = () => {

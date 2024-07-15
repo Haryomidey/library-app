@@ -36,6 +36,8 @@ import NewTopicContainer from "./components/students/subjects/NewtTopicContainer
 import Sidebar from "./components/admin/Sidebar";
 import Courses from "./components/teachers/courses/Courses";
 import TeacherSettings from "./components/teachers/settings/TeacherSettings";
+import EditTeacher from "./components/admin/user management/EditTeacher";
+import EditStudent from "./components/admin/user management/EditStudent";
 
 const router = createBrowserRouter([
   {
@@ -127,12 +129,20 @@ const router = createBrowserRouter([
             element: <NewTeacher />
           },
           {
+            path: 'edit-teacher/:teacherId',
+            element: <EditTeacher />
+          },
+          {
             path: 'student',
             element: <UserManagementStudent />
           },
           {
             path: 'new-student',
             element: <NewStudent />
+          },
+          {
+            path: 'edit-student/:studentId',
+            element: <EditStudent />
           },
         ]
       },

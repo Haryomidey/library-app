@@ -22,8 +22,6 @@ function CourseContent({ contents, subject_name, subject_id }: Props) {
   useEffect(() => {
     if (contents?.length > 0 || contents?.length === 0) {
       setLoading(false);
-
-      console.log(contents)
     }
   }, [contents]);
 

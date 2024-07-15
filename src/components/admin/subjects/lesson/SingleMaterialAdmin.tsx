@@ -5,22 +5,34 @@ import { GetSingleTopic } from "../../AdminControllers";
 import Cookies from "js-cookie";
 import CommentContainer from "../../../CommentContainer";
 
+interface GradeState {
+  grade_id: string | null;
+}
+
+
 function SingleMaterialAdmin() {
   const route = useNavigate()
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
+  const [selectedGradeState, setSelectedGradeState] = useState<GradeState>({
+    grade_id: null,
+  });
+  
   const {id} = useParams();
-  const param = useParams()
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
+    const grades = Cookies.get("selectedGrade");
     if (subject) {
       setSubjectState(JSON.parse(subject));
+    }
+    if (grades) {
+      setSelectedGradeState(JSON.parse(grades));
     }
   }, []);
 
   const handleRoutToSubject = () => {
-    route(`/student/${subjectState?.subject_name}`)
+    route(`/admin/subjects/${subjectState?.subject_name}/${selectedGradeState.grade_id}`)
   }
   const handleRoutToTopic = () => {
     route(`/admin/${subjectState?.subject_name}/${id}/${topics?.title}`)
