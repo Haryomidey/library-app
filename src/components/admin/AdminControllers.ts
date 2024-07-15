@@ -20,8 +20,7 @@ const LoginUser = async (payload: { email: string; password: string }) => {
   const res = await fetch(`${baseUrl}/user/login`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(payload)
   });
@@ -182,7 +181,7 @@ const GetSingleStudent =  async (studentId: any) => {
   }
 }
 
-const EditSingleStudent =  async (studentId: any, formData: any) => {
+const EditSingleStudent =  async (formData: any, studentId: any) => {
   try{
     const res = await fetch(`${baseUrl}/students/update/${studentId}`, {
       method: "PUT",
@@ -240,12 +239,14 @@ const GetSingleTeacher =  async (teacherId: any) => {
   }
 }
 
-const EditSingleTeacher = async (teacherId: any, formData: any) => {
+
+const EditSingleTeacher = async (formData: FormData, teacherId: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/update/${teacherId}`, {
       method: "PUT",
       headers: {
         "Accept": "application/json",
+        "Content-type": "application/json",
         "Authorization": `Bearer ${token}`
       },
       body: formData

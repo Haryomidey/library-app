@@ -20,7 +20,7 @@ const EditTeacher = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
 
-  const navigate = useNavigate();
+  const router = useNavigate();
 
   const [errors, setErrors] = useState({
     title: '',
@@ -33,29 +33,29 @@ const EditTeacher = () => {
     password: ''
   });
 
-  useEffect(() => {
-    const fetchTeacher = async () => {
-      try {
-        const result = await GetSingleTeacher(teacherId);
-        if (result.success) {
-            setImage(result.data.user.title || '');
-            setTitle(result.data.teacher.title || '');
-            setFirstName(result.data.teacher.first_name || '');
-            setLastName(result.data.teacher.last_name || '');
-            setGender(result.data.teacher.gender || '');
-            setDob(result.data.teacher.dob || '');
-            setPhone(result.data.user.phone || '');
-            setEmail(result.data.teacher.email || '');
-        }
-      } catch (error) {
-        console.error("Error fetching teacher data:", error);
-      } finally {
-        setIsDataLoading(false);
-      }
-    };
+    useEffect(() => {
+        const fetchTeacher = async () => {
+            try {
+                const result = await GetSingleTeacher(teacherId);
+                if (result.success) {
+                    setImage(result.data.user.title || '');
+                    setTitle(result.data.teacher.title || '');
+                    setFirstName(result.data.teacher.first_name || '');
+                    setLastName(result.data.teacher.last_name || '');
+                    setGender(result.data.teacher.gender || '');
+                    setDob(result.data.teacher.dob || '');
+                    setPhone(result.data.user.phone || '');
+                    setEmail(result.data.teacher.email || '');
+                }
+            } catch (error) {
+                console.error("Error fetching teacher data:", error);
+            } finally {
+                setIsDataLoading(false);
+            }
+        };
 
-    fetchTeacher();
-  }, [teacherId]);
+        fetchTeacher();
+    }, [teacherId]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -65,7 +65,7 @@ const EditTeacher = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const newErrors = {
       title: !title ? 'Title is required' : '',
       firstName: !firstName ? 'First Name is required' : '',
@@ -76,9 +76,9 @@ const EditTeacher = () => {
       email: !email ? 'Email is required' : '',
       password: !password ? 'Password is required' : '',
     };
-  
+
     setErrors(newErrors);
-  
+
     if (Object.values(newErrors).some(error => error)) {
       Swal.fire({
         icon: 'error',
@@ -87,7 +87,7 @@ const EditTeacher = () => {
       });
       return;
     }
-  
+
     const formData = new FormData();
     if (image) formData.append('image', image);
     formData.append('title', title);
@@ -98,31 +98,30 @@ const EditTeacher = () => {
     formData.append('phone', phone);
     formData.append('email', email);
     formData.append('password', password);
-  
+
     setIsLoading(true);
     try {
-      const data = await EditSingleTeacher(teacherId, formData);
+      const data = await EditSingleTeacher(formData, teacherId);
+      console.log(data)
       setIsLoading(false);
-  
-      console.log(data);
-  
+
       if (data && data.success) {
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Teacher updated successfully.',
+          text: 'Teacher created successfully.',
         });
-        navigate('/admin/user-management/teacher');
+        router('/admin/user-management/teacher')
       } else {
         const errorMessages = Object.values(data.errors)
-          .flat()
-          .join('\n');
-  
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: errorMessages || 'An error occurred while updating the teacher.',
-        });
+        .flat()
+        .join('\n');
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessages || 'An error occurred while creating the teacher.',
+      });
       }
     } catch (error: any) {
       setIsLoading(false);
@@ -133,26 +132,23 @@ const EditTeacher = () => {
       });
     }
   };
-  
 
-  if (isDataLoading) {
+  if(isDataLoading){
     return (
-      <main className="w-full min-h-screen pb-10 bg-white">
-        <Header headerName="Edit Teacher" />
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="animate-spin text-4xl">
-            <FaSpinner />
-          </div>
+        <div className='h-full w-full absolute top-0 left-0 grid place-items-center bg-[#0000003b] text-white'>
+            <div>
+                <FaSpinner className='animate-spin text-3xl'/>
+                <p>Loading...</p>
+            </div>
         </div>
-      </main>
-    );
-  }
+    )
+}
 
   return (
     <main className="w-full min-h-screen pb-10 bg-white">
-      <Header headerName="Edit Teacher" />
+      <Header headerName="Edit teacher" />
       <div className="relative pt-6 px-12 w-full min-h-full">
-        <h1 className='text-2xl font-semibold'>Edit Teacher</h1>
+        <h1 className='text-2xl font-semibold'>Edit teacher</h1>
         <div className='mt-6'>
           <h2 className='text-xl font-semibold'>Profile Picture</h2>
           <p>We recommend an image of about 500 x 500 and about 10mb</p>

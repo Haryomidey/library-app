@@ -17,6 +17,7 @@ const EditStudent = () => {
   const [password, setPassword] = useState('');
   const [gradeId, setGradeId] = useState('1');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
   const router = useNavigate();
   const { studentId } = useParams();
@@ -34,20 +35,24 @@ const EditStudent = () => {
 
   useEffect(() => {
     const fetchStudentData = async () => {
-      try {
-        const data = await GetSingleStudent(studentId);
-        if (data) {
-          setFirstName(data.first_name);
-          setLastName(data.last_name);
-          setGender(data.gender);
-          setDob(data.dob);
-          setPhone(data.phone);
-          setEmail(data.email);
-          setGradeId(data.grade_id.toString());
+        try {
+            const data = await GetSingleStudent(studentId);
+            console.log(data)
+            if (data.success) {
+                setImage(data.data.image)
+                setFirstName(data.data.student.first_name);
+                setLastName(data.data.student.last_name);
+                setGender(data.data.student.gender);
+                setDob(data.data.student.dob);
+                setPhone(data.data.student.phone);
+                setEmail(data.data.student.email);
+                setGradeId(data.data.student.grade_id.toString());
+            }
+        } catch (error) {
+            console.error("Error fetching student data:", error);
+        } finally {
+            setIsDataLoading(false);
         }
-      } catch (error) {
-        console.error("Error fetching student data:", error);
-      }
     };
     fetchStudentData();
   }, [studentId]);
@@ -96,7 +101,7 @@ const EditStudent = () => {
 
     setIsLoading(true);
     try {
-      const data = await EditSingleStudent(studentId, formData);
+      const data = await EditSingleStudent(formData, studentId);
       console.log(data);
       setIsLoading(false);
 
@@ -128,6 +133,18 @@ const EditStudent = () => {
       });
     }
   };
+
+
+    if(isDataLoading){
+        return (
+            <div className='h-full w-full absolute top-0 left-0 grid place-items-center bg-[#0000003b] text-white'>
+                <div>
+                    <FaSpinner className='animate-spin text-3xl'/>
+                    <p>Loading...</p>
+                </div>
+            </div>
+        )
+    }
 
   return (
     <main className="w-full min-h-screen pb-10 bg-white">
