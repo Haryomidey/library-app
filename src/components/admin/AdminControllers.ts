@@ -384,7 +384,6 @@ const GetComments =  async (id: any) => {
     const res = await fetch(`${baseUrl}/comments/fetch/${id}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
         "Accept": "application/json",
         "Authorization": `Bearer ${token}`
       }
@@ -406,8 +405,7 @@ const PostComment =  async (form: any) => {
       method: 'POST',
       headers: {
         "Accept": "application/json",
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Authorization": `Bearer ${token}`
       },
       body: form,
     });
@@ -520,6 +518,7 @@ const DeleteTeacher = async (teacherId: any) => {
   }
 };
 
+console.log(token)
 
 export {
   GetSingleTopic,
