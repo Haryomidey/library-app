@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   PieChart,
@@ -18,21 +17,21 @@ interface ContentDistributionProps {
   };
 }
 
-const ContentDistribution: React.FC = () => {
+const ContentDistribution: React.FC<ContentDistributionProps> = ({ data }) => {
   const chartData = [
-    { name: "Video", value: 10, color: "#8884d8" },
-    { name: "PDF", value: 15, color: "#ffc658" },
-    { name: "Audio", value: 9, color: "#82ca9d" },
-    { name: "Others", value: 6, color: "#ff8042" }
+    { name: "Video", value: data?.video_count, color: "#8884d8" },
+    { name: "PDF", value: data?.pdf_count, color: "#ffc658" },
+    { name: "Audio", value: data?.audio_count, color: "#82ca9d" },
+    { name: "Others", value: data?.other_count, color: "#ff8042" }
   ];
 
   return (
-    <ResponsiveContainer width={"100%"}>
+    <ResponsiveContainer width="100%" height={400}>
       <PieChart>
         <Pie
           data={chartData}
-          cx={200}
-          cy={200}
+          cx="50%"
+          cy="50%"
           labelLine={false}
           outerRadius={150}
           fill="#8884d8"
@@ -43,7 +42,7 @@ const ContentDistribution: React.FC = () => {
           ))}
         </Pie>
         <Tooltip />
-        <Legend />
+        <Legend layout="horizontal" verticalAlign="bottom" align="center" />
       </PieChart>
     </ResponsiveContainer>
   );

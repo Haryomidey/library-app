@@ -385,10 +385,12 @@ const GetComments =  async (id: any) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
       }
     })
     const data = await res.json();
+    console.log(data)
     if (!res.ok){
       throw new Error(data.error);
     }
@@ -404,11 +406,13 @@ const PostComment =  async (form: any) => {
       method: 'POST',
       headers: {
         "Accept": "application/json",
+        "Content-type": "application/json",
         Authorization: `Bearer ${token}`
       },
       body: form,
     });
     const data = await res.json();
+    console.log(data)
     if (!res.ok) {
       console.error('Error', data.error);
     }

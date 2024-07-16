@@ -33,11 +33,18 @@ import AdminNotifications from "./components/admin/AdminNotifications";
 import StudentNotifications from "./components/students/StudentNotifications";
 import NewStudent from "./components/admin/user management/NewStudent";
 import NewTopicContainer from "./components/students/subjects/NewtTopicContainer";
-import Sidebar from "./components/admin/Sidebar";
-import Courses from "./components/teachers/courses/Courses";
 import TeacherSettings from "./components/teachers/settings/TeacherSettings";
 import EditTeacher from "./components/admin/user management/EditTeacher";
 import EditStudent from "./components/admin/user management/EditStudent";
+import Messages from "./components/teachers/messages/Messages";
+import SubjectForGradeTeacher from "./components/teachers/subjects/SubjectForGradeTeacher";
+import OneSubjectTeacher from "./components/teachers/subjects/OneSubjectTeacher";
+import AddContainerTeacher from "./components/teachers/subjects/AddContainerTeacher";
+import SubjectsDisplayTeacher from "./components/teachers/subjects/SubjectsDisplayTeacher";
+import SubjectsBodyTeacher from "./components/teachers/subjects/SubjectsBodyTeacher";
+import SingleMaterialTeacher from "./components/teachers/subjects/lesson/SingleMaterialTeacher";
+import LessonDetailsTeacher from "./components/teachers/subjects/lesson/LessonDetailsTeacher";
+import NewTopicContainerTeacher from "./components/teachers/subjects/NewTopicContainerTeacher";
 
 const router = createBrowserRouter([
   {
@@ -173,8 +180,65 @@ const router = createBrowserRouter([
         element: <TeacherDashboard />
       },
       {
-        path: 'subjects',
-        element: <Courses />
+        path: ":subject/",
+        children: [
+          {
+            path: "",
+            element: <SingleSubject />
+          },
+          {
+            path: ":id/",
+            children: [
+              {
+                path: ":subject_topic",
+                element: <LessonDetailsTeacher />
+              },
+              {
+                path: ":subject_topic/video",
+                element: <SingleMaterialTeacher />
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: "subjects",
+        element: <SubjectsBodyTeacher element={null} />,
+        children: [
+          {
+            path: "/teacher/subjects/",
+            element: <SubjectsDisplayTeacher />
+          },
+          {
+            path: "new",
+            element: <AddContainerTeacher />
+          },
+          {
+            path: "new-topic/:id",
+            element: <NewTopicContainerTeacher />
+          },
+          {
+            path: "edit-subject/:id",
+            element: <AddContainerTeacher />
+          },
+          {
+            path: ":name",
+            children: [
+              {
+                path: "/teacher/subjects/:name",
+                element: <OneSubjectTeacher />
+              },
+              {
+                path: ":grade",
+                element: <SubjectForGradeTeacher />
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'messages',
+        element: <Messages />
       },
       {
         path: 'settings',

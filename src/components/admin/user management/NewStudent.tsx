@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import Header from '../Header';
 import { FaUser, FaCamera, FaSpinner } from 'react-icons/fa';
 import { IoIosAdd } from "react-icons/io";
-import { CreateStudent, CreateTeacher } from '../AdminControllers';
+import { CreateStudent } from '../AdminControllers';
 import { useNavigate } from 'react-router-dom';
 
 const NewStudent = () => {
@@ -98,7 +98,7 @@ const NewStudent = () => {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: errorMessages || 'An error occurred while creating the teacher.',
+        text: errorMessages || 'An error occurred while creating the student.',
       });
       }
     } catch (error: any) {

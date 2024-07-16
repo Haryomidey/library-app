@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {useNavigate} from 'react-router-dom';
 import DashboardRowTwo from "./DashboardRowTwo";
 import ContentDistribution from "./ContentDistribution";
 import { GetAdminDashboard } from "../AdminControllers";
@@ -19,12 +20,13 @@ import { TiArrowDown, TiArrowUp } from "react-icons/ti";
 function DashboardBody() {
 
   const [dashboardInfo, setDashboardInfo] = useState<any>();
+  const router = useNavigate()
   const percentage = 40
 
   useEffect(() => {
     const fetchAdminDashboard = async () => {
       const data = await GetAdminDashboard();
-      setDashboardInfo(data)
+      data && setDashboardInfo(data)
     }
 
     fetchAdminDashboard()
@@ -35,7 +37,8 @@ function DashboardBody() {
       <div className="w-full min-h-full pt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 lg:gap-10 px-10  mb-6">
           <div
-            className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
+            className="cursor-pointer bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
+            onClick={() => router('/admin/user-management/student')}
           >
             <div className="flex justify-between">
               <h1 className="self-center md:text-lg font-light">
@@ -48,7 +51,8 @@ function DashboardBody() {
             <b className="block text-xl">{dashboardInfo?.student_count}</b>
           </div>
           <div
-            className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
+            className="cursor-pointer bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
+            onClick={() => router('/admin/user-management/teacher')}
           >
             <div className="flex justify-between">
               <h1 className="self-center md:text-lg font-light">
@@ -61,20 +65,8 @@ function DashboardBody() {
             <b className="block text-xl">{dashboardInfo?.teacher_count}</b>
           </div>
           <div
-            className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
-          >
-            <div className="flex justify-between">
-              <h1 className="self-center md:text-lg font-light">
-                Files
-              </h1>
-              <div className="border-2 rounded-full p-2">
-                <img src={FilesImage} alt="files" />
-              </div>
-            </div>
-            <b className="block text-xl">{dashboardInfo?.files_count}</b>
-          </div>
-          <div
-            className=" bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
+            className="cursor-pointer bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
+            onClick={() => router('/admin/subjects')}
           >
             <div className="flex justify-between">
               <h1 className="self-center md:text-lg font-light">
@@ -86,6 +78,19 @@ function DashboardBody() {
             </div>
             <b className="block text-xl">{dashboardInfo?.subject_count}</b>
           </div>
+          <div
+            className="cursor-pointer bg-white/20 border-2 p-5 h-40 flex flex-col justify-between rounded-xl"
+          >
+            <div className="flex justify-between">
+              <h1 className="self-center md:text-lg font-light">
+                Files
+              </h1>
+              <div className="border-2 rounded-full p-2">
+                <img src={FilesImage} alt="files" />
+              </div>
+            </div>
+            <b className="block text-xl">{dashboardInfo?.files_count}</b>
+          </div>
         </div>
         <div className="px-5 lg:px-10">
           <DashboardRowTwo activities={dashboardInfo} />
@@ -94,7 +99,10 @@ function DashboardBody() {
         <div className="bg-white rounded-xl w-full h-[450px]">
           <h3 className="font-semibold text-lg p-5 pt-5">Content Distribution</h3>
           <div className='w-full h-full flex justify-center items-center -mt-14'>
-            <ContentDistribution data={dashboardInfo?.chart} />
+          {dashboardInfo?.chart && Object.keys(dashboardInfo.chart).length > 0 
+          ? <ContentDistribution data={dashboardInfo?.chart} /> 
+          : <p className="text-2xl text-center font-semibold">No data yet!!!</p>
+          }
           </div>
         </div>
 

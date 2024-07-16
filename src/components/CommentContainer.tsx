@@ -32,15 +32,15 @@ const CommentContainer = ({ topic_id }: any) => {
   };
 
   const handleCommentSubmit = async () => {
-      if(newComment !== ""){
-        setIsPostingMainComment(true);
+    if (newComment !== "") {
+      setIsPostingMainComment(true);
       const formData = new FormData();
       formData.append("topic_id", topic_id);
       formData.append("school_id", "1");
       formData.append("type", "main");
       formData.append("comment", newComment);
       formData.append("comment_id", "");
-    
+  
       try {
         const data = await PostComment(formData);
         setComments([...comments, data]);
@@ -52,39 +52,39 @@ const CommentContainer = ({ topic_id }: any) => {
         setIsPostingMainComment(false);
       }
     }
-
   };
+  
 
   const handleCancelComment = () => {
     setNewComment("")
   }
 
   const handleReplySubmit = async (commentId: string) => {
-    if(replyText !== ''){
-      setIsReplyingComment(true)
+    if (replyText !== '') {
+      setIsReplyingComment(true);
       const formData = new FormData();
       formData.append("topic_id", topic_id);
       formData.append("school_id", "1");
       formData.append("type", "reply");
       formData.append("comment", replyText);
       formData.append("comment_id", commentId);
-    
+  
       try {
         const data = await PostComment(formData);
-        console.log('Posted reply:', data);
-        setComments(comments.map(comment => 
-          comment.comment_id === commentId 
+        setComments(comments.map(comment =>
+          comment.comment_id === commentId
             ? { ...comment, replies: [...(comment.replies || []), data] }
             : comment
         ));
         setReplyText("");
         setReplyingCommentId(null);
-        setIsReplyingComment(false)
+        setIsReplyingComment(false);
       } catch (error) {
         console.error("Error posting reply:", error);
       }
     }
   };
+  
 
     return (
         <div className='mt-5'>

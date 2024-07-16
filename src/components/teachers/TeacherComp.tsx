@@ -11,13 +11,11 @@ interface AdminCompProps {
 }
 
 const headers: { [key: string]: string } = {
-  "/teacher/": "Dashboard",
-  "/teacher/user-management/teacher": "Teacher Management",
-  "/teacher/user-management/student": "Student Management",
+  "/teacher/": "Overview",
+  "/teacher/subjects": "Subjects",
   "/teacher/settings": "Settings",
   "/teacher/help-and-support": "Help and Support",
-  "/teacher/library": "Library",
-  "/teacher/subjects": "Subjects"
+  "/teacher/messages": "Messages",
 };
 
 export default function AdminComp({ element }: AdminCompProps) {
@@ -25,7 +23,7 @@ export default function AdminComp({ element }: AdminCompProps) {
   const [isAuthorizationChecked, setIsAuthorizationChecked] = useState(false);
   const route = useNavigate();
   const location = useLocation();
-  const [headerName, setHeaderName] = useState<string>("Dashboard");
+  const [headerName, setHeaderName] = useState<string | null>("Overview");
 
 
   useEffect(() => {
@@ -47,7 +45,7 @@ export default function AdminComp({ element }: AdminCompProps) {
 
   useEffect(() => {
     const path = location.pathname;
-    setHeaderName(headers[path] || "Dashboard");
+    setHeaderName(headers[path] || null);
   }, [location.pathname]);
 
   if (!isAuthorizationChecked) {

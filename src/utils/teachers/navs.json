@@ -1,20 +1,26 @@
 [
     {
       "name": "Home",
-      "image": "/images/home.png",
-      "active": "/images/home-active.png",
+      "image": "/icons/dashboard.svg",
+      "active": "/icons/dashboard-active.svg",
       "path": "/teacher/"
     },
     {
-      "name": "Subjects",
-      "image": "/images/cap.png",
-      "active": "/images/cap-active.png",
+      "name": "Courses",
+      "image": "/icons/teacher-subject.svg",
+      "active": "/icons/teacher-subject-active.svg",
       "path": "/teacher/subjects"
     },
     {
+      "name": "Messages",
+      "image": "/icons/message.svg",
+      "active": "/icons/message.svg",
+      "path": "/teacher/messages"
+    },
+    {
       "name": "Settings",
-      "image": "/images/settings.png",
-      "active": "/images/settings-active.png",
+      "image": "/icons/settings.svg",
+      "active": "/icons/settings.svg",
       "path": "/teacher/settings"
     }
   ]

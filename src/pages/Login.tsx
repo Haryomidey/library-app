@@ -122,6 +122,9 @@ const Login = () => {
       data.user.role === "admin" && route("/admin");
       data.user.role === "teacher" && route("/teacher");
       data.user.role === "student" && route("/student");
+
+
+      console.log(data.user.role)
     } catch (error: any) {
       Swal.fire({
         title: "Login Error",

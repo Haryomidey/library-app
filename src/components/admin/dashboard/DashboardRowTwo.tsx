@@ -20,7 +20,7 @@ function DashboardRowTwo(activities: any) {
       <div className="col-span-2 bg-white h-full rounded-xl p-5">
         <h2 className="font-semibold text-lg ">Recent Activities</h2>
         <div className="md:grid lg:grid-cols-1 grid-cols-2 gap-3 h-full">
-          {acts?.map((activity: any, index: number) => (
+          {acts && acts.length > 0 && acts?.map((activity: any, index: number) => (
             <div className="flex gap-2 py-2" key={index}>
               <img src="/images/ruby.png" className="h-fit" alt="" />
               <div className="space-y-4">
@@ -49,6 +49,8 @@ function DashboardRowTwo(activities: any) {
               </div>
             </div>
           ))}
+
+          {acts && acts.length < 0 && <div className="flex items-center justify-center w-full h-full text-center font-semibold text-2xl">No data yet!!!</div>}
         </div>
       </div>
     </div>

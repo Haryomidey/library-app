@@ -14,6 +14,7 @@ interface GradeType {
   grade_name: string;
 }
 
+
 const NewTopic = ({ subjectId }: NewTopicProps) => {
   const [title, setTitle] = useState("");
   const [loader, setLoader] = useState(false);
@@ -26,7 +27,10 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
   const [grades, setGrades] = useState<GradeType[] | null>(null);
   const uploadedVideo = useRef<HTMLInputElement | null>(null);
   const uploadedFile = useRef<HTMLInputElement | null>(null);
+
+  const [selectedSubject, setSelectedSubject] = useState<string>('');
   const route = useNavigate();
+
 
   const handleTopicSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +71,7 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
       setFile(null);
       setVideo(null);
       setFileName("");
-      route("/admin/subjects");
+      route(`/admin/subjects`);
     } catch (error: any) {
       Swal.fire({
         title: "Topic not Added",
@@ -98,6 +102,7 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
     const fetchSubject = async () => {
       try {
         const data = await GetSubject(subjectId);
+        setSelectedSubject(data[0].subject_name);
         setGrades(data.grade);
       } catch (error) {
         console.error(error);
@@ -105,6 +110,7 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
     };
     fetchSubject();
   }, [subjectId]);
+  
 
   return (
     <div>
