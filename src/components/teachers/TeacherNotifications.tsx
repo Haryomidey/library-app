@@ -5,7 +5,7 @@ import { FaUser } from 'react-icons/fa';
 import { GetNotifications } from '../admin/AdminControllers';
 import useGetToken from '../../utils/useGetToken';
 
-const StudentNotifications = () => {
+const TeacherNotifications = () => {
     const {token} = useGetToken();
     const [notifications, setNotifications] = useState<any[]>([]);
 
@@ -42,4 +42,4 @@ const StudentNotifications = () => {
     )
 }
 
-export default StudentNotifications
+export default TeacherNotifications

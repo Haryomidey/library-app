@@ -45,6 +45,7 @@ import SubjectsBodyTeacher from "./components/teachers/subjects/SubjectsBodyTeac
 import SingleMaterialTeacher from "./components/teachers/subjects/lesson/SingleMaterialTeacher";
 import LessonDetailsTeacher from "./components/teachers/subjects/lesson/LessonDetailsTeacher";
 import NewTopicContainerTeacher from "./components/teachers/subjects/NewTopicContainerTeacher";
+import TeacherNotifications from "./components/teachers/TeacherNotifications";
 
 const router = createBrowserRouter([
   {
@@ -178,6 +179,10 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <TeacherDashboard />
+      },
+      {
+        path: 'all-notifications',
+        element: <TeacherNotifications />
       },
       {
         path: ":subject/",

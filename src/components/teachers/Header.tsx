@@ -167,7 +167,7 @@ function Header({ headerName }: any) {
             </div>
           ))}
 
-          <p className='text-right mt-6 underline cursor-pointer' onClick={() => router('/admin/all-notifications')}>View all notifications</p>
+          <p className='text-right mt-6 underline cursor-pointer' onClick={() => router('/teacher/all-notifications')}>View all notifications</p>
         </div>
       </div>
     </div>
