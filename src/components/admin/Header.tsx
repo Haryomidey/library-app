@@ -29,7 +29,7 @@ function Header({ headerName }: any) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      router(`/student/subjects?q=${searchItems}`);
+      router(`/admin/subjects?q=${searchItems}`);
     }
   };
 
