@@ -518,8 +518,6 @@ const DeleteTeacher = async (teacherId: any) => {
   }
 };
 
-console.log(token)
-
 export {
   GetSingleTopic,
   CreateTopic,
