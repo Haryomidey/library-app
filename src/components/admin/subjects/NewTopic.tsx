@@ -224,7 +224,7 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
               <div className="self-center">
                 <h1>Tap to Upload</h1>
                 <p className="text-[#98A2B3]">
-                  PDF, MP3, DOC, EXCEL | 10MB max.
+                  PDF, DOC, EXCEL | 10MB max.
                 </p>
               </div>
             </div>
