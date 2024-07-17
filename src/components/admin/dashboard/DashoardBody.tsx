@@ -16,21 +16,26 @@ import BooksImage from '../../../img/admin-books.png';
 import Curve from '../../../img//curly.png';
 
 import { TiArrowDown, TiArrowUp } from "react-icons/ti";
+import useGetToken from "../../../utils/useGetToken";
 
 function DashboardBody() {
 
+  const {token} = useGetToken();
   const [dashboardInfo, setDashboardInfo] = useState<any>();
   const router = useNavigate()
   const percentage = 40
 
-  useEffect(() => {
-    const fetchAdminDashboard = async () => {
-      const data = await GetAdminDashboard();
-      data && setDashboardInfo(data)
-    }
 
-    fetchAdminDashboard()
-  }, [])
+
+  useEffect(() => {
+    if(token){
+      const fetchAdminDashboard = async () => {
+        const data = await GetAdminDashboard(token);
+        data && setDashboardInfo(data)
+      }
+      fetchAdminDashboard()
+    }
+  }, [token])
 
   return (
     <>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import NewSubjectHeader from "./NewSubjectHeader";
 import { BiCloudUpload } from "react-icons/bi";
 import { CreateSubject, GetAllTeachers } from "../../admin/AdminControllers";
+import useGetToken from "../../../utils/useGetToken";
 
 interface NewSubjectProps {
   contentUpdate: any;
@@ -9,6 +10,7 @@ interface NewSubjectProps {
 }
 
 function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
+  const {token} = useGetToken();
   const [grade, setGrade] = useState<number[]>([]);
   const [loader, setLoader] = useState(false);
   const [subjectDescription, setSubjectDescription] = useState("");
@@ -39,7 +41,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
         formData.append('cover', selectedCoverPhoto);
       }
 
-      const data = await CreateSubject(formData);
+      const data = await CreateSubject(formData, token);
       console.log(data);
       if (data && data.subject) {
         idUpdate(data.subject.id);
@@ -78,7 +80,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const data = await GetAllTeachers();
+        const data = await GetAllTeachers(token);
         if (data) {
           setTeachers(data);
         }

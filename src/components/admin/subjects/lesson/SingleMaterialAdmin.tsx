@@ -4,6 +4,7 @@ import Header from "../../Header";
 import { GetSingleTopic } from "../../AdminControllers";
 import Cookies from "js-cookie";
 import CommentContainer from "../../../CommentContainer";
+import useGetToken from "../../../../utils/useGetToken";
 
 interface GradeState {
   grade_id: string | null;
@@ -11,6 +12,7 @@ interface GradeState {
 
 
 function SingleMaterialAdmin() {
+  const {token} = useGetToken()
   const route = useNavigate()
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
@@ -42,7 +44,7 @@ function SingleMaterialAdmin() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetSingleTopic(id);
+          const data = await GetSingleTopic(id, token);
           setTopics(data);
         } catch (error: any) {
           console.error(error.message);

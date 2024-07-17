@@ -5,8 +5,10 @@ import { FaUser, FaCamera, FaSpinner } from 'react-icons/fa';
 import { IoIosAdd } from "react-icons/io";
 import { useNavigate, useParams } from 'react-router-dom';
 import { EditSingleTeacher, GetSingleTeacher } from '../AdminControllers';
+import useGetToken from '../../../utils/useGetToken';
 
 const EditTeacher = () => {
+  const {token} = useGetToken();
   const { teacherId } = useParams();
   const [image, setImage] = useState<File | null>(null);
   const [title, setTitle] = useState('Mr');
@@ -34,28 +36,30 @@ const EditTeacher = () => {
   });
 
     useEffect(() => {
+      if(token){
         const fetchTeacher = async () => {
-            try {
-                const result = await GetSingleTeacher(teacherId);
-                if (result.success) {
-                    setImage(result.data.user.title || '');
-                    setTitle(result.data.teacher.title || '');
-                    setFirstName(result.data.teacher.first_name || '');
-                    setLastName(result.data.teacher.last_name || '');
-                    setGender(result.data.teacher.gender || '');
-                    setDob(result.data.teacher.dob || '');
-                    setPhone(result.data.user.phone || '');
-                    setEmail(result.data.teacher.email || '');
-                }
-            } catch (error) {
-                console.error("Error fetching teacher data:", error);
-            } finally {
-                setIsDataLoading(false);
-            }
-        };
+          try {
+              const result = await GetSingleTeacher(teacherId, token);
+              if (result && result.success) {
+                  setImage(result.data.user.title || '');
+                  setTitle(result.data.teacher.title || '');
+                  setFirstName(result.data.teacher.first_name || '');
+                  setLastName(result.data.teacher.last_name || '');
+                  setGender(result.data.teacher.gender || '');
+                  setDob(result.data.teacher.dob || '');
+                  setPhone(result.data.user.phone || '');
+                  setEmail(result.data.teacher.email || '');
+              }
+          } catch (error) {
+              console.error("Error fetching teacher data:", error);
+          } finally {
+              setIsDataLoading(false);
+          }
+      };
 
-        fetchTeacher();
-    }, [teacherId]);
+      fetchTeacher();
+      }
+    }, [teacherId, token]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -101,7 +105,7 @@ const EditTeacher = () => {
 
     setIsLoading(true);
     try {
-      const data = await EditSingleTeacher(formData, teacherId);
+      const data = await EditSingleTeacher(formData, teacherId, token);
       setIsLoading(false);
 
       if (data && data.success) {

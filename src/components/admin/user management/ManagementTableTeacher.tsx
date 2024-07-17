@@ -11,6 +11,7 @@ import MaleAvatar from '../../../icons/male_avatar.svg';
 import FemaleAvatar from '../../../icons/female_avatar.svg';
 import { DeleteTeacher } from '../AdminControllers';
 import { useNavigate } from 'react-router-dom';
+import useGetToken from '../../../utils/useGetToken';
 
 interface User {
   image: string;
@@ -31,6 +32,7 @@ interface UserTableProps {
 }
 
 const ManagementTableTeacher: React.FC<UserTableProps> = ({ data, fetchAllTeachers }) => {
+  const {token} = useGetToken();
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -105,7 +107,7 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data, fetchAllTeache
 
   const handleDelete = async (teacherId: any) => {
     setIsDeleting(true);
-    const result = await DeleteTeacher(teacherId);
+    const result = await DeleteTeacher(teacherId, token);
     console.log(result);
     setIsDeleting(false);
     if (result.success) {
@@ -138,8 +140,6 @@ const ManagementTableTeacher: React.FC<UserTableProps> = ({ data, fetchAllTeache
   const handleRoute = (id: any) => {
     router(`/admin/user-management/edit-teacher/${id}`)
 }
-
-console.log(data)
 
   return (
     <div className="w-full mt-8 pb-5 overflow-x-scroll min-w-full">

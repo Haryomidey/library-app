@@ -4,6 +4,7 @@ import { VerifyToken } from "./AdminControllers";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useUserContext } from "../../contexts/UserContext";
+import useGetToken from "../../utils/useGetToken";
 
 interface AdminCompProps {
   element: ReactNode;
@@ -25,11 +26,12 @@ export default function AdminComp({ element }: AdminCompProps) {
   const route = useNavigate();
   const location = useLocation();
   const [headerName, setHeaderName] = useState<string | null>("Dashboard");
+  const {token} = useGetToken();
 
   useEffect(() => {
     const checkAuthorization = async () => {
-      const token = VerifyToken();
-      if (!token) {
+      const verifyToken = VerifyToken(token);
+      if (!verifyToken) {
         route("/");
         return;
       }

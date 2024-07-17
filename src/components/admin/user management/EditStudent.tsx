@@ -5,8 +5,10 @@ import { FaUser, FaCamera, FaSpinner } from 'react-icons/fa';
 import { IoIosAdd } from "react-icons/io";
 import { EditSingleStudent, GetSingleStudent } from '../AdminControllers';
 import { useNavigate, useParams } from 'react-router-dom';
+import useGetToken from '../../../utils/useGetToken';
 
 const EditStudent = () => {
+  const {token} = useGetToken()
   const [image, setImage] = useState<File | null>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,11 +36,12 @@ const EditStudent = () => {
   });
 
   useEffect(() => {
-    const fetchStudentData = async () => {
+    if(token){
+      const fetchStudentData = async () => {
         try {
-            const data = await GetSingleStudent(studentId);
+            const data = await GetSingleStudent(studentId, token);
             console.log(data)
-            if (data.success) {
+            if (data && data.success) {
                 setImage(data.data.image)
                 setFirstName(data.data.student.first_name);
                 setLastName(data.data.student.last_name);
@@ -55,7 +58,8 @@ const EditStudent = () => {
         }
     };
     fetchStudentData();
-  }, [studentId]);
+    }
+  }, [studentId, token]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -101,7 +105,7 @@ const EditStudent = () => {
 
     setIsLoading(true);
     try {
-      const data = await EditSingleStudent(formData, studentId);
+      const data = await EditSingleStudent(formData, studentId, token);
       setIsLoading(false);
 
       if (data && data.success) {

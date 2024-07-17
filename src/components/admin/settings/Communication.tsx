@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { IoIosAdd, IoIosClose } from 'react-icons/io';
 import { PostNotification } from '../AdminControllers';
+import useGetToken from '../../../utils/useGetToken';
 
 const Communication = () => {
+  const {token} = useGetToken();
+
   const [form, setForm] = useState({
     title: '',
     group: '',
@@ -52,7 +55,7 @@ const Communication = () => {
       formData.append('till', form.till);
       formData.append('message', form.message);
 
-      const data = await PostNotification(formData);
+      const data = await PostNotification(formData, token);
       if (data.errors) {
         setErrors(data.errors);
       } else {

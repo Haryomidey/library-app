@@ -1,20 +1,4 @@
 const { baseUrl } = require("../../config/host");
-const Cookies = require('js-cookie')
-
-const getToken = () => {
-  const token = Cookies.get("token");
-  if (token) {
-    try {
-      return JSON.parse(token);
-    } catch (error) {
-      console.error("Invalid token format:", error);
-      return '';
-    }
-  }
-  return '';
-};
-
-const token = getToken()
 
 const LoginUser = async (payload: { email: string; password: string }) => {
   const res = await fetch(`${baseUrl}/user/login`, {
@@ -31,7 +15,7 @@ const LoginUser = async (payload: { email: string; password: string }) => {
   return data;
 };
 
-const VerifyToken = async () => {
+const VerifyToken = async (token: any) => {
   const res = await fetch(`${baseUrl}/user/verify-token`, {
     method: "GET",
     headers: {
@@ -46,8 +30,7 @@ const VerifyToken = async () => {
   return data;
 };
 
-
-const GetSingleTopic = async (topic_id: any) => {
+const GetSingleTopic = async (topic_id: any, token: any) => {
   const res = await fetch(`${baseUrl}/topic/show/${topic_id}`, {
     method: "GET",
     headers: {
@@ -62,7 +45,7 @@ const GetSingleTopic = async (topic_id: any) => {
   return data;
 };
 
-const GetSubject = async (subjectId: number) => {
+const GetSubject = async (subjectId: number, token: any) => {
   const res = await fetch(`${baseUrl}/subject/show/${subjectId}`, {
     method: "GET",
     headers: {
@@ -77,8 +60,7 @@ const GetSubject = async (subjectId: number) => {
   return data;
 };
 
-
-const CreateTopic = async (formData: FormData) => {
+const CreateTopic = async (formData: FormData, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/topic/store`, {
       method: "POST",
@@ -98,9 +80,7 @@ const CreateTopic = async (formData: FormData) => {
   }
 };
 
-
-
-const GetSubjects = async () => {
+const GetSubjects = async (token: any) => {
   try {
     const res = await fetch(`${baseUrl}/subject/fetch?school_id=1`, {
       method: "GET",
@@ -120,7 +100,7 @@ const GetSubjects = async () => {
   }
 };
 
-const CreateSubject = async (formData: FormData) => {
+const CreateSubject = async (formData: FormData, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/subject/store`, {
       method: "POST",
@@ -141,10 +121,8 @@ const CreateSubject = async (formData: FormData) => {
   }
 };
 
-
-
-const GetAllStudents =  async () => {
-  try{
+const GetAllStudents = async (token: any) => {
+  try {
     const res = await fetch(`${baseUrl}/users/students/1`, {
       method: "GET",
       headers: {
@@ -153,17 +131,17 @@ const GetAllStudents =  async () => {
       }
     })
     const data = await res.json();
-    if (!res.ok){
+    if (!res.ok) {
       throw new Error(data.error);
     }
     return data
-  } catch (error){
+  } catch (error) {
     console.error(error)
   }
 }
 
-const GetSingleStudent =  async (studentId: any) => {
-  try{
+const GetSingleStudent = async (studentId: any, token: any) => {
+  try {
     const res = await fetch(`${baseUrl}/students/profile/${studentId}`, {
       method: "GET",
       headers: {
@@ -172,17 +150,17 @@ const GetSingleStudent =  async (studentId: any) => {
       }
     })
     const data = await res.json();
-    if (!res.ok){
+    if (!res.ok) {
       throw new Error(data.error);
     }
     return data
-  } catch (error){
+  } catch (error) {
     console.error(error)
   }
 }
 
-const EditSingleStudent =  async (formData: any, studentId: any) => {
-  try{
+const EditSingleStudent = async (formData: any, studentId: any, token: any) => {
+  try {
     const res = await fetch(`${baseUrl}/students/update/${studentId}`, {
       method: "POST",
       headers: {
@@ -193,18 +171,18 @@ const EditSingleStudent =  async (formData: any, studentId: any) => {
     })
     const data = await res.json();
     console.log(data);
-    
-    if (!res.ok){
+
+    if (!res.ok) {
       throw new Error(data.error);
     }
     return data
-  } catch (error){
+  } catch (error) {
     console.error(error)
   }
 }
 
-const GetAllTeachers =  async () => {
-  try{
+const GetAllTeachers = async (token: any) => {
+  try {
     const res = await fetch(`${baseUrl}/users/teachers/1`, {
       method: "GET",
       headers: {
@@ -213,17 +191,17 @@ const GetAllTeachers =  async () => {
       }
     })
     const data = await res.json();
-    if (!res.ok){
+    if (!res.ok) {
       throw new Error(data.error);
     }
     return data
-  } catch (error){
+  } catch (error) {
     console.error(error)
   }
 }
 
-const GetSingleTeacher =  async (teacherId: any) => {
-  try{
+const GetSingleTeacher = async (teacherId: any, token: any) => {
+  try {
     const res = await fetch(`${baseUrl}/teachers/profile/${teacherId}`, {
       method: "GET",
       headers: {
@@ -232,17 +210,16 @@ const GetSingleTeacher =  async (teacherId: any) => {
       }
     })
     const data = await res.json();
-    if (!res.ok){
+    if (!res.ok) {
       throw new Error(data.error);
     }
     return data
-  } catch (error){
+  } catch (error) {
     console.error(error)
   }
 }
 
-
-const EditSingleTeacher = async (formData: FormData, teacherId: any) => {
+const EditSingleTeacher = async (formData: FormData, teacherId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/update/${teacherId}`, {
       method: "POST",
@@ -267,13 +244,12 @@ const EditSingleTeacher = async (formData: FormData, teacherId: any) => {
   }
 };
 
-
 const RegisterAdmins = async (form: any) => {
   try {
     let response = await fetch(`${baseUrl}/user/register`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
       },
       body: form,
       redirect: 'follow'
@@ -285,17 +261,12 @@ const RegisterAdmins = async (form: any) => {
     return data;
   } catch (error) {
     console.error(error);
-    throw error; 
+    throw error;
   }
 };
 
-const GetAdminDashboard = async () => {
+const GetAdminDashboard = async (token: any) => {
   try {
-    if (!token) {
-      console.error('Token is not provided');
-      return;
-    }
-
     const res = await fetch(`${baseUrl}/dashboard/admin/1`, {
       method: "GET",
       headers: {
@@ -315,7 +286,7 @@ const GetAdminDashboard = async () => {
   }
 };
 
-const PostNotification = async (form: any) => {
+const PostNotification = async (form: any, token: any) => {
   try {
     let response = await fetch(`${baseUrl}/notifications/store`, {
       method: 'POST',
@@ -333,12 +304,11 @@ const PostNotification = async (form: any) => {
     return data;
   } catch (error) {
     console.error(error);
-    throw error; 
+    throw error;
   }
 }
 
-
-const GetAllTopicsUnderSubject = async (subject_id: string) => {
+const GetAllTopicsUnderSubject = async (subject_id: string, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/topic/fetch/${subject_id}`, {
       method: "GET",
@@ -359,28 +329,46 @@ const GetAllTopicsUnderSubject = async (subject_id: string) => {
   }
 };
 
-
-const GetNotifications =  async () => {
-  try{
+const GetNotifications = async (token: any) => {
+  try {
     const res = await fetch(`${baseUrl}/notifications/fetch`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
       }
     })
     const data = await res.json();
-    if (!res.ok){
-      return data.error;
-    }
     return data
-  } catch (error: any){
-    console.log(error)
+  } catch (error: any) {
+    console.log('')
   }
 }
 
-const GetComments =  async (id: any) => {
-  try{
+// const GetNotifications = async (token: any) => {
+//   try {
+//     const res = await fetch(`${baseUrl}/notifications/fetch`, {
+//       method: "GET",
+//       headers: {
+//         "Accept": "application/json",
+//         "Authorization": `Bearer ${token}`
+//       }
+//     });
+
+//     if (!res.ok) {
+//       throw new Error(`HTTP error! Status: ${res.status}`);
+//     }
+
+//     const data = await res.json();
+//     return data;
+//   } catch (error: any) {
+//     console.error('Failed to fetch notifications:', error);
+//     return null;
+//   }
+// }
+
+const GetComments = async (id: any, token: any) => {
+  try {
     const res = await fetch(`${baseUrl}/comments/fetch/${id}`, {
       method: "GET",
       headers: {
@@ -390,16 +378,16 @@ const GetComments =  async (id: any) => {
     })
     const data = await res.json();
     console.log(data)
-    if (!res.ok){
+    if (!res.ok) {
       throw new Error(data.error);
     }
     return data
-  } catch (error){
+  } catch (error) {
     console.error(error)
   }
 }
 
-const PostComment =  async (form: any) => {
+const PostComment = async (form: any, token: any) => {
   try {
     let res = await fetch(`${baseUrl}/comments/store`, {
       method: 'POST',
@@ -417,11 +405,11 @@ const PostComment =  async (form: any) => {
     return data;
   } catch (error) {
     console.error(error);
-    throw error; 
+    throw error;
   }
 }
 
-const CreateTeacher = async (formData: any) => {
+const CreateTeacher = async (formData: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/create`, {
       method: 'POST',
@@ -432,7 +420,6 @@ const CreateTeacher = async (formData: any) => {
       body: formData,
     });
 
-
     if (!res.ok) {
       const errorData = await res.json();
       return errorData
@@ -446,7 +433,7 @@ const CreateTeacher = async (formData: any) => {
   }
 };
 
-const CreateStudent = async (formData: any) => {
+const CreateStudent = async (formData: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/students/create`, {
       method: 'POST',
@@ -457,7 +444,6 @@ const CreateStudent = async (formData: any) => {
       body: formData,
     });
 
-
     if (!res.ok) {
       const errorData = await res.json();
       return errorData
@@ -471,7 +457,7 @@ const CreateStudent = async (formData: any) => {
   }
 };
 
-const DeleteStudent = async (studentId: any) => {
+const DeleteStudent = async (studentId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/students/delete/${studentId}`, {
       method: 'DELETE',
@@ -494,7 +480,7 @@ const DeleteStudent = async (studentId: any) => {
   }
 };
 
-const DeleteTeacher = async (teacherId: any) => {
+const DeleteTeacher = async (teacherId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/delete/${teacherId}`, {
       method: 'DELETE',

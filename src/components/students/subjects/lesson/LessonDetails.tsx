@@ -5,8 +5,10 @@ import { BiCheckCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { GetSingleTopic } from "../../StudentController";
+import useGetToken from "../../../../utils/useGetToken";
 
 function LessonDetails() {
+  const {token} = useGetToken();
   const route = useNavigate();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
@@ -24,7 +26,7 @@ function LessonDetails() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetSingleTopic(id);
+          const data = await GetSingleTopic(id, token);
           setTopics(data);
           setLoading(false);
         } catch (error: any) {

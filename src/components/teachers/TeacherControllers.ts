@@ -1,29 +1,8 @@
 const { baseUrl } = require("../../config/host");
-const Cookies = require("js-cookie");
-
-const getToken = () => {
-  const token = Cookies.get("token");
-  if (token) {
-    try {
-      return JSON.parse(token);
-    } catch (error) {
-      console.error("Invalid token format:", error);
-      return '';
-    }
-  }
-  return '';
-};
-
-const token = getToken()
 
 
-const GetATeacherDashboard = async () => {
+const GetTeacherDashboard = async (token: any) => {
   try {
-    if (!token) {
-      console.error('Token is not provided');
-      return;
-    }
-
     const res = await fetch(`${baseUrl}/dashboard/admin/1`, {
       method: "GET",
       headers: {
@@ -45,5 +24,5 @@ const GetATeacherDashboard = async () => {
 
 
 export {
-  GetATeacherDashboard
+  GetTeacherDashboard
 }

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { GetComments, PostComment } from './admin/AdminControllers';
 import timeAgo from '../utils/time-converter';
 import { FaUser } from 'react-icons/fa';
+import useGetToken from '../utils/useGetToken';
 
 const CommentContainer = ({ topic_id }: any) => {
+  const {token} = useGetToken();
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState<string>("");
   const [isPostingMainComment, setIsPostingMainComment] = useState<boolean>(false);
@@ -14,7 +16,7 @@ const CommentContainer = ({ topic_id }: any) => {
   useEffect(() => {
       const fetchComments = async () => {
         try {
-          const data = await GetComments(topic_id);
+          const data = await GetComments(topic_id, token);
           setComments(data.data || []);
         } catch (error) {
           console.error('Error fetching comments:', error);
@@ -42,7 +44,7 @@ const CommentContainer = ({ topic_id }: any) => {
       formData.append("comment_id", "");
   
       try {
-        const data = await PostComment(formData);
+        const data = await PostComment(formData, token);
         setComments([...comments, data]);
         setNewComment("");
         setIsReplyingComment(false);
@@ -70,7 +72,7 @@ const CommentContainer = ({ topic_id }: any) => {
       formData.append("comment_id", commentId);
   
       try {
-        const data = await PostComment(formData);
+        const data = await PostComment(formData, token);
         setComments(comments.map(comment =>
           comment.comment_id === commentId
             ? { ...comment, replies: [...(comment.replies || []), data] }

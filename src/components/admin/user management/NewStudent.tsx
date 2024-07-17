@@ -5,8 +5,10 @@ import { FaUser, FaCamera, FaSpinner } from 'react-icons/fa';
 import { IoIosAdd } from "react-icons/io";
 import { CreateStudent } from '../AdminControllers';
 import { useNavigate } from 'react-router-dom';
+import useGetToken from '../../../utils/useGetToken';
 
 const NewStudent = () => {
+  const {token} = useGetToken()
   const [image, setImage] = useState<File | null>(null);
 //   const [title, setTitle] = useState('Mr');
   const [firstName, setFirstName] = useState('');
@@ -79,7 +81,7 @@ const NewStudent = () => {
 
     setIsLoading(true);
     try {
-      const data = await CreateStudent(formData);
+      const data = await CreateStudent(formData, token);
       console.log(data)
       setIsLoading(false);
 

@@ -4,6 +4,7 @@ import { BiCloudUpload } from "react-icons/bi";
 import { CreateTopic, GetSubject } from "../../admin/AdminControllers";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom"; 
+import useGetToken from "../../../utils/useGetToken";
 
 interface NewTopicProps {
   subjectId: number;
@@ -15,6 +16,7 @@ interface GradeType {
 }
 
 const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
+  const {token} = useGetToken();
   const [title, setTitle] = useState("");
   const [loader, setLoader] = useState(false);
   const [week, setWeek] = useState(1);
@@ -58,7 +60,7 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
       if (file) {
         formData.append("file", file);
       }
-      await CreateTopic(formData);
+      await CreateTopic(formData, token);
       Swal.fire({
         title: "Topic Added Successfully",
         icon: "success",
@@ -99,7 +101,7 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
   useEffect(() => {
     const fetchSubject = async () => {
       try {
-        const data = await GetSubject(subjectId);
+        const data = await GetSubject(subjectId, token);
         setSelectedSubject(data[0].subject_name);
         setGrades(data.grade);
       } catch (error) {

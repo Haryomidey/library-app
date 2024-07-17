@@ -102,48 +102,54 @@ const Login = () => {
     }
   });
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setLoader(true);
-    try {
-      const data = await LoginUser({ email, password });
+
+  let token = null;
+
+const handleSubmit = async (e: { preventDefault: () => void }) => {
+  e.preventDefault();
+  setLoader(true);
+  try {
+    const data = await LoginUser({ email, password });
+    if (data) {
       Cookies.set("token", JSON.stringify(data.token));
       Cookies.set("user", JSON.stringify(data.user));
-      
-      console.log(data)
-     
-      const token = getToken();
-      
-      Swal.fire({
-        title: "Login Successful",
-        icon: "success",
-        timer: 4000
-      });
-      data.user.role === "admin" && route("/admin");
-      data.user.role === "teacher" && route("/teacher/");
-      data.user.role === "student" && route("/student");
 
+      token = getToken()
 
-      console.log(data.user.role)
-    } catch (error: any) {
-      Swal.fire({
-        title: "Login Error",
-        icon: "error",
-        text: error.message,
-        timer: 4000
-      });
+      if (token) {
+        Swal.fire({
+          title: "Login Successful",
+          icon: "success",
+          timer: 4000
+        });
+        data.user.role === "admin" && route("/admin");
+        data.user.role === "teacher" && route("/teacher/");
+        data.user.role === "student" && route("/student");
+      }
     }
-    setLoader(false);
-  };
-  
-  const getToken = () => {
-    const token = Cookies.get('token');
-    if (token) {
+  } catch (error: any) {
+    Swal.fire({
+      title: "Login Error",
+      icon: "error",
+      text: error.message,
+      timer: 4000
+    });
+  }
+  setLoader(false);
+};
+
+const getToken = () => {
+  const token = Cookies.get("token");
+  if (token) {
+    try {
       return JSON.parse(token);
-    } else {
+    } catch (error) {
+      console.error("Invalid token format:", error);
       return '';
     }
-  };
+  }
+  return token;
+};
   
 
   return (

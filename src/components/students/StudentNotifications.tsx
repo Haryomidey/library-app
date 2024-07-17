@@ -3,13 +3,15 @@ import Header from './Header';
 import timeAgo from '../../utils/time-converter';
 import { FaUser } from 'react-icons/fa';
 import { GetNotifications } from '../admin/AdminControllers';
+import useGetToken from '../../utils/useGetToken';
 
 const StudentNotifications = () => {
+    const {token} = useGetToken();
     const [notifications, setNotifications] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
-          const data = await GetNotifications();
+          const data = await GetNotifications(token);
           console.log(data)
           if (data?.success) {
             const sortedNotifications = data.data.sort((a: any, b: any) => b.notification_id - a.notification_id);
@@ -17,7 +19,7 @@ const StudentNotifications = () => {
           }
         };
         fetchData();
-      }, []);
+      }, [token]);
 
     return (
         <div>

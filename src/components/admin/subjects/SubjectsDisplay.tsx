@@ -6,8 +6,10 @@ import { GetSubjects } from "../AdminControllers";
 import Cookies from "js-cookie";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
+import useGetToken from "../../../utils/useGetToken";
 
 function SubjectsDisplay() {
+  const {token} = useGetToken()
   const [searchParams] = useSearchParams();
   const queryParam = searchParams.get('q');
   const route = useNavigate();
@@ -23,18 +25,20 @@ function SubjectsDisplay() {
   };
 
   useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const data = await GetSubjects();
-        setSubjects(data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-      }
-    };
-    fetchSubjects();
-  }, []);
+    if(token){
+      const fetchSubjects = async () => {
+        try {
+          const data = await GetSubjects(token);
+          setSubjects(data);
+          setLoading(false);
+        } catch (error) {
+          console.error(error);
+          setLoading(false);
+        }
+      };
+      fetchSubjects();
+    }
+  }, [token]);
 
   useEffect(() => {
     if (queryParam) {

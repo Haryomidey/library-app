@@ -4,8 +4,10 @@ import Header from "../../Header";
 import Cookies from "js-cookie";
 import CommentContainer from "../../../CommentContainer";
 import { GetSingleTopic } from "../../StudentController";
+import useGetToken from "../../../../utils/useGetToken";
 
 function SingleMaterial() {
+  const {token} = useGetToken();
   const route = useNavigate();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
@@ -30,7 +32,7 @@ function SingleMaterial() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetSingleTopic(id);
+          const data = await GetSingleTopic(id, token);
           setTopics(data);
         } catch (error: any) {
           console.error(error.message);

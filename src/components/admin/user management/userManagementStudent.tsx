@@ -8,15 +8,17 @@ import { LuUploadCloud } from "react-icons/lu";
 import ManagementTableStudent from "./ManagementTableStudent";
 import { useEffect, useState } from "react";
 import { GetAllStudents } from "../AdminControllers";
+import useGetToken from "../../../utils/useGetToken";
 
 function UserManagementStudent() {
+  const {token} = useGetToken()
   const [students, setStudents] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const router = useNavigate();
 
   const fetchAllStudents = async () => {
     try {
-      const response = await GetAllStudents();
+      const response = await GetAllStudents(token);
       setStudents(response);
     } catch (err: any) {
       console.error(err.message);
@@ -24,8 +26,10 @@ function UserManagementStudent() {
   };
 
   useEffect(() => {
-    fetchAllStudents();
-  }, []);
+    if(token){
+      fetchAllStudents();
+    }
+  }, [token]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);

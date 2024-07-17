@@ -4,6 +4,7 @@ import CourseContent from "./CourseContent";
 import CourseCoverPhoto from "./CourseCoverPhoto";
 import Cookies from "js-cookie";
 import { GetAllTopicsUnderSubject } from "../StudentController";
+import useGetToken from "../../../utils/useGetToken";
 
 interface GradeState {
   grade_id: string | null;
@@ -17,6 +18,7 @@ interface CourseCoverPhotoProps {
 }
 
 function SingleSubject() {
+  const {token} = useGetToken();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const [selectedGradeState, setSelectedGradeState] = useState<GradeState>({
@@ -42,7 +44,7 @@ function SingleSubject() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetAllTopicsUnderSubject(subjectState.subject_id);
+          const data = await GetAllTopicsUnderSubject(subjectState.subject_id, token);
           setTopics(data);
           
           

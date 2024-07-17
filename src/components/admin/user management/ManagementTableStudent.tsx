@@ -10,6 +10,7 @@ import MaleAvatar from '../../../icons/male_avatar.svg';
 import FemaleAvatar from '../../../icons/female_avatar.svg';
 import { DeleteStudent } from '../AdminControllers';
 import { useNavigate } from 'react-router-dom';
+import useGetToken from '../../../utils/useGetToken';
 
 interface User {
     image: string;
@@ -30,6 +31,7 @@ interface UserTableProps {
 }
 
 const ManagementTableStudent: React.FC<UserTableProps> = ({ data, fetchAllStudents }) => {
+    const {token} = useGetToken()
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -114,7 +116,7 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data, fetchAllStuden
         }).then(async (result) => {
             if (result.isConfirmed) {
                 setIsDeleting(true);
-                const deleteResult = await DeleteStudent(studentId);
+                const deleteResult = await DeleteStudent(studentId, token);
                 setIsDeleting(false);
                 if (deleteResult.success) {
                     Swal.fire(
@@ -140,7 +142,6 @@ const ManagementTableStudent: React.FC<UserTableProps> = ({ data, fetchAllStuden
         router(`/admin/user-management/edit-student/${id}`)
     }
 
-    console.log(data)
 
     return (
         <div className="w-full mt-8 pb-5 min-w-full overflow-x-scroll">

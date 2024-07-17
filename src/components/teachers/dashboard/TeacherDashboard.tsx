@@ -2,34 +2,33 @@ import React, { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { TiArrowDown, TiArrowUp } from "react-icons/ti";
 
-import Header from "../Header";
-
 // Images import
 import StudentImage from '../../../img/student.png';
 import TeacherImage from '../../../img/instructor.png';
 import FilesImage from '../../../img/folder.png';
 import BooksImage from '../../../img/admin-books.png';
 import Curve from '../../../img//curly.png';
-import LineChartComponent from "./LineChartComponent";
 import ContentDistribution from "./ContentDistribution";
-import { GetATeacherDashboard } from "../TeacherControllers";
+import { GetTeacherDashboard } from "../TeacherControllers";
 import DashboardRowTwo from "./DashboardRowTwo";
+import useGetToken from "../../../utils/useGetToken";
 
 
 
 function TeacherDashboard() {
+  const {token} = useGetToken();
     const [dashboardInfo, setDashboardInfo] = useState<any>();
     const percentage = 50
     useEffect(() => {
+      if(token){
         const fetchTeacherDashboard = async () => {
-          const data = await GetATeacherDashboard();
+          const data = await GetTeacherDashboard(token);
           setDashboardInfo(data)
         }
     
         fetchTeacherDashboard()
-    }, [])
-
-    console.log(dashboardInfo)
+      }
+    }, [token])
 
   return (
     <>

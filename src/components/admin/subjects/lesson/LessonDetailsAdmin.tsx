@@ -5,12 +5,14 @@ import { BiCheckCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { GetSingleTopic } from "../../AdminControllers";
+import useGetToken from "../../../../utils/useGetToken";
 
 interface GradeState {
   grade_id: string | null;
 }
 
 function LessonDetailsAdmin() {
+  const {token} = useGetToken();
   const route = useNavigate();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
@@ -38,7 +40,7 @@ function LessonDetailsAdmin() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetSingleTopic(id);
+          const data = await GetSingleTopic(id, token);
           setTopics(data);
           setLoading(false);
         } catch (error: any) {
@@ -75,7 +77,7 @@ function LessonDetailsAdmin() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="w-full h-screen flex items-center justify-center">Loading...</div>;
   }
 
   return (

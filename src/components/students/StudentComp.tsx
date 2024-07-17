@@ -4,6 +4,7 @@ import Header from "./Header";
 import { VerifyToken } from "../admin/AdminControllers";
 import Sidebar from "./SideBar";
 import { useUserContext } from "../../contexts/UserContext";
+import useGetToken from "../../utils/useGetToken";
 
 interface StudentCompProps {
   element: ReactNode;
@@ -17,6 +18,7 @@ const headers: { [key: string]: string } = {
 };
 
 export default function StudentComp({ element }: StudentCompProps) {
+  const {token} = useGetToken()
   const {isAdminSearchBarOpen} = useUserContext()
   const [isAuthorizationChecked, setIsAuthorizationChecked] = useState(false);
   const route = useNavigate();
@@ -25,8 +27,8 @@ export default function StudentComp({ element }: StudentCompProps) {
 
   useEffect(() => {
     const checkAuthorization = async () => {
-      const token = VerifyToken();
-      if (!token) {
+      const verifyToken = VerifyToken(token);
+      if (!verifyToken) {
         route("/");
         return;
       }

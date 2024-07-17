@@ -7,8 +7,10 @@ import DefaultImage from '../../../img/default-image.png';
 import { GetAllSubjects } from "../StudentController";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
+import useGetToken from "../../../utils/useGetToken";
 
 function AllSubjects() {
+  const {token} = useGetToken();
   const [subjects, setSubjects] = useState<any[]>([]);
   const [filteredSubjects, setFilteredSubjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,34 +30,36 @@ function AllSubjects() {
   };
 
   const fetchStudentSubjects = async () => {
-    try {
-      const response = await GetAllSubjects();
-      if (response) {
-        setSubjects(response);
-        if (queryParam) {
-          const filtered = response.filter((subject: any) =>
-            subject?.subject_name.toLowerCase().includes(queryParam.toLowerCase())
-          );
-          setFilteredSubjects(filtered);
+    if(token){
+      try {
+        const response = await GetAllSubjects(token);
+        if (response) {
+          setSubjects(response);
+          if (queryParam) {
+            const filtered = response.filter((subject: any) =>
+              subject?.subject_name.toLowerCase().includes(queryParam.toLowerCase())
+            );
+            setFilteredSubjects(filtered);
+          } else {
+            setFilteredSubjects(response);
+          }
         } else {
-          setFilteredSubjects(response);
+          setSubjects([]);
+          setFilteredSubjects([]);
         }
-      } else {
+      } catch (err: any) {
+        console.error(err.message);
         setSubjects([]);
         setFilteredSubjects([]);
+      } finally {
+        setLoading(false);
       }
-    } catch (err: any) {
-      console.error(err.message);
-      setSubjects([]);
-      setFilteredSubjects([]);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchStudentSubjects();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (queryParam) {

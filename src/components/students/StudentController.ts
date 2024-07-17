@@ -1,29 +1,15 @@
 const { baseUrl } = require("../../config/host");
 const Cookies = require("js-cookie");
 
-const getToken = () => {
-  const token = Cookies.get("token");
-  if (token) {
-    try {
-      return JSON.parse(token);
-    } catch (error) {
-      console.error("Invalid token format:", error);
-      return '';
-    }
-  }
-  return '';
-};
-
-const token = getToken();
 
 
-const GetAllSubjects = async () => {
+const GetAllSubjects = async (token: any) => {
   try {
     const res = await fetch(`${baseUrl}/subject/fetch?school_id=1`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : ''
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -38,7 +24,7 @@ const GetAllSubjects = async () => {
   }
 };
 
-const GetAllTopicsUnderSubject = async (subject_id: string) => {
+const GetAllTopicsUnderSubject = async (subject_id: string, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/topic/fetch/${subject_id}`, {
       method: "GET",
@@ -59,7 +45,7 @@ const GetAllTopicsUnderSubject = async (subject_id: string) => {
   }
 };
 
-const GetAllSubjectsAndGrades = async () => {
+const GetAllSubjectsAndGrades = async (token: any) => {
   try {
     const res = await fetch(`${baseUrl}/subject/fetch?school_id=1`, {
       method: "GET",
@@ -80,7 +66,7 @@ const GetAllSubjectsAndGrades = async () => {
 };
 
 
-const GetSingleTopic = async (topic_id: any) => {
+const GetSingleTopic = async (topic_id: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/topic/show/${topic_id}`, {
       method: "GET",

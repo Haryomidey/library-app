@@ -8,8 +8,10 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { GetNotifications } from "./AdminControllers";
 import timeAgo from "../../utils/time-converter";
 import { useUserContext } from "../../contexts/UserContext";
+import useGetToken from "../../utils/useGetToken";
 
 function Header({ headerName }: any) {
+  const {token} = useGetToken();
   const {isAdminSearchBarOpen, setAdminSearchBarOpen} = useUserContext()
   const [userState, setUserState] = useState<any>(null);
   const [searchState, setSearchState] = useState(false);
@@ -71,7 +73,7 @@ function Header({ headerName }: any) {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const data = await GetNotifications();
+        const data = await GetNotifications(token);
         if (data?.success) {
           const sortedNotifications = data.data.sort((a: any, b: any) => b.notification_id - a.notification_id);
           setNotifications(sortedNotifications.slice(0, 3));
@@ -87,7 +89,7 @@ function Header({ headerName }: any) {
     if (userState) {
       fetchNotifications();
     }
-  }, [userState]);
+  }, [userState, token]);
 
   return (
     <div className="w-full flex flex-col justify-center sticky top-0 z-[1111]">
