@@ -245,6 +245,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
           <textarea
             className="rounded-md min-h-36 p-3 focus:outline-none"
             onChange={(e) => setSubjectDescription(e.target.value)}
+            placeholder="Describe your subject in few words"
           />
           {errors.subjectDescription && <p className="text-red-500">{errors.subjectDescription}</p>}
         </div>
