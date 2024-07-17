@@ -73,7 +73,23 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   const handleSelectionDisplay = () => {
     const file = coverPhoto.current.files[0];
     if (file) {
-      setSelectedCoverPhoto(file);
+      const img = new Image();
+      img.onload = () => {
+        if (img.width > 800 || img.height > 400) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            coverPhoto: "Cover photo must be at most 800x400px.",
+          }));
+          setSelectedCoverPhoto(null);
+        } else {
+          setSelectedCoverPhoto(file);
+          setErrors((prevErrors) => {
+            const { coverPhoto, ...rest } = prevErrors;
+            return rest;
+          });
+        }
+      };
+      img.src = URL.createObjectURL(file);
     }
   };
 

@@ -16,7 +16,7 @@ interface GradeType {
 }
 
 const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
-  const {token} = useGetToken();
+  const { token } = useGetToken();
   const [title, setTitle] = useState("");
   const [loader, setLoader] = useState(false);
   const [week, setWeek] = useState(1);
@@ -86,6 +86,15 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
   const handleVideoSelectionDisplay = () => {
     const file = uploadedVideo.current?.files?.[0];
     if (file) {
+      if (file.size > 100 * 1024 * 1024) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "Video size should not exceed 100MB",
+          timer: 4000
+        });
+        return;
+      }
       setVideo(file);
     }
   };
@@ -93,6 +102,25 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
   const handleFileSelectionDisplay = () => {
     const file = uploadedFile.current?.files?.[0];
     if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "File size should not exceed 10MB",
+          timer: 4000
+        });
+        return;
+      }
+      const allowedTypes = ["application/pdf", "application/msword", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+      if (!allowedTypes.includes(file.type)) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "Only PDF, DOC, and EXCEL files are allowed",
+          timer: 4000
+        });
+        return;
+      }
       setFile(file);
       setFileName(file.name);
     }
@@ -195,7 +223,7 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
               <div className="self-center">
                 <h1>Tap to Upload</h1>
                 <p className="text-[#98A2B3]">
-                  JPG, PDF, MP3, DOC, EXCEL | 10MB max.
+                  PDF, DOC, EXCEL | 10MB max.
                 </p>
               </div>
             </div>
@@ -213,6 +241,7 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
               ref={uploadedFile}
               className="hidden"
               onChange={handleFileSelectionDisplay}
+              accept=".pdf,.doc,.docx,.xls,.xlsx"
             />
             <h1>{fileName}</h1>
           </div>

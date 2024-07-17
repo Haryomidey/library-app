@@ -15,9 +15,8 @@ interface GradeType {
   grade_name: string;
 }
 
-
 const NewTopic = ({ subjectId }: NewTopicProps) => {
-  const {token} = useGetToken()
+  const { token } = useGetToken();
   const [title, setTitle] = useState("");
   const [loader, setLoader] = useState(false);
   const [week, setWeek] = useState(1);
@@ -32,7 +31,6 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
 
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const route = useNavigate();
-
 
   const handleTopicSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,6 +86,15 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
   const handleVideoSelectionDisplay = () => {
     const file = uploadedVideo.current?.files?.[0];
     if (file) {
+      if (file.size > 100 * 1024 * 1024) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "Video file size must be less than 100MB",
+          timer: 4000
+        });
+        return;
+      }
       setVideo(file);
     }
   };
@@ -95,6 +102,25 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
   const handleFileSelectionDisplay = () => {
     const file = uploadedFile.current?.files?.[0];
     if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "File size must be less than 10MB",
+          timer: 4000
+        });
+        return;
+      }
+      const validTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+      if (!validTypes.includes(file.type)) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "Invalid file type. Only PDF, DOCX, and Excel files are allowed.",
+          timer: 4000
+        });
+        return;
+      }
       setFile(file);
       setFileName(file.name);
     }
@@ -198,7 +224,7 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
               <div className="self-center">
                 <h1>Tap to Upload</h1>
                 <p className="text-[#98A2B3]">
-                  JPG, PDF, MP3, DOC, EXCEL | 10MB max.
+                  PDF, MP3, DOC, EXCEL | 10MB max.
                 </p>
               </div>
             </div>
@@ -213,6 +239,7 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
             </button>
             <input
               type="file"
+              accept=".pdf,.docx,.xlsx"
               ref={uploadedFile}
               className="hidden"
               onChange={handleFileSelectionDisplay}
