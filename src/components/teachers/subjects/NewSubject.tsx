@@ -78,19 +78,21 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   };
 
   useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const data = await GetAllTeachers(token);
-        if (data) {
-          setTeachers(data);
+    if(token){
+      const fetchTeachers = async () => {
+        try {
+          const data = await GetAllTeachers(token);
+          if (data) {
+            setTeachers(data);
+          }
+        } catch (error) {
+          console.error("Error fetching teachers:", error);
         }
-      } catch (error) {
-        console.error("Error fetching teachers:", error);
-      }
-    };
-
-    fetchTeachers();
-  }, []);
+      };
+  
+      fetchTeachers();
+    }
+  }, [token]);
 
   return (
     <div>
