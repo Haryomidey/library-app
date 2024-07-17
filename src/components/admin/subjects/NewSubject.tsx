@@ -159,6 +159,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
             ref={coverPhoto}
             onChange={handleSelectionDisplay}
             className="hidden"
+            accept='image/*'
           />
           {errors.coverPhoto && <p className="text-red-500">{errors.coverPhoto}</p>}
         </div>
