@@ -14,7 +14,8 @@ const headers: { [key: string]: string } = {
   "/student": "Dashboard",
   "/student/settings": "Settings",
   "/student/library": "Library",
-  "/student/subjects": "Subjects"
+  "/student/subjects": "Subjects",
+  "/student/all-notifications": "Notifications",
 };
 
 export default function StudentComp({ element }: StudentCompProps) {

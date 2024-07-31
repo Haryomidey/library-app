@@ -149,7 +149,7 @@ function Header({ headerName }: any) {
       </ul>
 
       <div className={`absolute left-0 top-0 bottom-0 w-full h-screen z-[-11] bg-[#00000033] ${!notifState ? 'invisible' : 'visible'}`}>
-        <div className={`bg-white w-[300px] max-w-[90%] min-h-[100px] rounded-lg absolute right-20 top-16 shadow-md p-5 ${notifState ? 'scale-1' : 'scale-0'} transition-transform ease duration-300`}>
+        <div className={`bg-white w-[300px] max-w-[90%] min-h-[100px] rounded-lg absolute right-0 sm:right-20 top-16 shadow-md p-5 ${notifState ? 'scale-1' : 'scale-0'} transition-transform ease duration-300`}>
           <div className="flex items-center justify-between w-full gap-2">
             <p className="font-semibold">Notifications</p>
             <p className="text-sm text-[#5689E6]">Mark as read</p>

@@ -23,10 +23,9 @@ const StudentNotifications = () => {
 
     return (
         <div>
-            <Header headerName="Notifications" />
             <div className='w-full h-full flex flex-col justify-center items-center'>
                 <div className='w-full max-w-[700px] px-5'>
-                    {notifications.map((notification) => (
+                    {notifications.length > 0 && notifications.map((notification) => (
                         <div key={notification.notification_id} className="mt-5 w-full flex gap-3 border-b pb-3">
                             <p className="min-w-12 h-12 rounded-full bg-[#FFECE5] grid place-items-center"><FaUser /></p>
                             <div>
@@ -35,7 +34,10 @@ const StudentNotifications = () => {
                             </div>
                         </div>
                     ))}
-                    
+                    {notifications.length <= 0 && <div className='text-center pt-9 text-2xl font-semibold'>
+                        No Notifications!!!
+                    </div>
+                    }
                 </div>
             </div>
         </div>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Header from "../Header";
 import { FaAngleDown } from "react-icons/fa";
 import Cookies from "js-cookie";
 import DefaultImage from '../../../img/default-image.png';
