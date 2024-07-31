@@ -26,7 +26,7 @@ function CoverPhotos({ subjects, justViewed }: CoverPhotosProps) {
   };
 
   return (
-    <div className="grid lg:grid-cols-2 gap-10">
+    <div className="grid lg:grid-cols-2 gap-10 mb-4">
       {recentlyViewed ? (
         <div className="relative rounded-xl bg-[#FAFAFA] cursor-pointer" onClick={() => handleRouting(recentlyViewed)}>
           <img
@@ -34,9 +34,9 @@ function CoverPhotos({ subjects, justViewed }: CoverPhotosProps) {
             className="w-full object-cover h-72 rounded-lg"
             alt={recentlyViewed.subject_name}
           />
-          <div className="absolute text-white bottom-0 flex flex-col p-6 rounded-lg space-y-3">
-            <span className="font-semibold text-xl bg-blue-500 px-3 py-1 rounded-md">{recentlyViewed?.subject_name}</span>
-            <span className="font-light bg-blue-500 px-3 py-1 rounded-md">{recentlyViewed?.teacher_name}</span>
+          <div className="absolute text-black bottom-0 flex flex-col p-6 rounded-lg space-y-3">
+            <span className="font-semibold text-xl bg-[white] px-4 py-1 rounded-md">{recentlyViewed?.subject_name}</span>
+            <span className="font-light bg-[white] px-3 py-1 rounded-md w-[fit-content]">{recentlyViewed?.teacher_name}</span>
           </div>
         </div>
       ) : (
@@ -51,9 +51,9 @@ function CoverPhotos({ subjects, justViewed }: CoverPhotosProps) {
             className="w-full object-cover h-72 rounded-lg"
             alt={recentlyUploaded.subject_name}
           />
-          <div className="absolute text-white bottom-0 flex flex-col p-6 rounded-lg space-y-3">
-            <span className="font-semibold text-xl bg-blue-500 px-3 py-1 rounded-md">{recentlyUploaded?.subject_name}</span>
-            <span className="font-light bg-blue-500 px-3 py-1 rounded-md">{recentlyUploaded?.teacher_name}</span>
+          <div className="absolute text-black bottom-0 flex flex-col p-6 rounded-lg space-y-3">
+            <span className="font-semibold text-xl bg-[white] px-4 py-1 rounded-md">{recentlyUploaded?.subject_name}</span>
+            <span className="font-light bg-[white] px-3 py-1 rounded-md w-[fit-content]">{recentlyUploaded?.teacher_name}</span>
           </div>
         </div>
       ) : (
