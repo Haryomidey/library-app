@@ -37,7 +37,7 @@ const RecentlyViewed = ({ subjects }: RecentlyViewedProps ) => {
 
   return (
     <div>
-      <div className="gap-4">
+      <div className="gap-4 mt-7">
         <h3 className="font-semibold text-lg">Recently Viewed</h3>
         <p>These are some of the subjects you recently viewed</p>
       </div>

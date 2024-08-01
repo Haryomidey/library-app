@@ -35,8 +35,8 @@ function CoverPhotos({ subjects, justViewed }: CoverPhotosProps) {
             alt={recentlyViewed.subject_name}
           />
           <div className="absolute text-black bottom-0 flex flex-col p-6 rounded-lg space-y-3">
-            <span className="font-semibold text-xl bg-[white] px-4 py-1 rounded-md">{recentlyViewed?.subject_name}</span>
-            <span className="font-light bg-[white] px-3 py-1 rounded-md w-[fit-content]">{recentlyViewed?.teacher_name}</span>
+            <span className="font-semibold text-xl bg-[white] px-4 py-1 rounded-md shadow-sm">{recentlyViewed?.subject_name}</span>
+            <span className="font-light bg-[white] px-3 py-1 rounded-md w-[fit-content] shadow-sm">{recentlyViewed?.teacher_name}</span>
           </div>
         </div>
       ) : (
@@ -52,8 +52,8 @@ function CoverPhotos({ subjects, justViewed }: CoverPhotosProps) {
             alt={recentlyUploaded.subject_name}
           />
           <div className="absolute text-black bottom-0 flex flex-col p-6 rounded-lg space-y-3">
-            <span className="font-semibold text-xl bg-[white] px-4 py-1 rounded-md">{recentlyUploaded?.subject_name}</span>
-            <span className="font-light bg-[white] px-3 py-1 rounded-md w-[fit-content]">{recentlyUploaded?.teacher_name}</span>
+            <span className="font-semibold text-xl bg-[white] px-4 py-1 rounded-md shadow-sm">{recentlyUploaded?.subject_name}</span>
+            <span className="font-light bg-[white] px-3 py-1 rounded-md w-[fit-content] shadow-sm">{recentlyUploaded?.teacher_name}</span>
           </div>
         </div>
       ) : (

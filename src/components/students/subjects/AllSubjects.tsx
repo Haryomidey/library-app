@@ -99,7 +99,7 @@ function AllSubjects() {
       {loading ? (
         <div className="p-5 lg:p-10">
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {Array.from({ length: skeletonLength }).map((_, index) => (
                 <div
                   className="bg-white p-4 h-[250px] rounded-lg space-y-5 w-full"
@@ -132,7 +132,7 @@ function AllSubjects() {
           <p className="text-center text-xl text-gray-500">Your search does not yield any result!!!</p>
         </div>
       ) : viewMode === 'grid' ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-5 lg:p-10 py-4">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-5 lg:p-10 py-4">
           {filteredSubjects?.length > 0 && filteredSubjects?.map((subject, index) => (
             <div
               className="bg-white p-4 h-full max-h-[300px] rounded-lg space-y-5 w-full cursor-pointer"

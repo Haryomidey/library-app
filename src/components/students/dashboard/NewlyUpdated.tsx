@@ -37,7 +37,7 @@ const NewlyUpdated = ({ subjects }: NewlyUpdatedProps) => {
 
   return (
     <div>
-      <div className="gap-4">
+      <div className="gap-4 mt-5">
         <h3 className="font-semibold text-lg">Newly uploaded</h3>
         <p>Some of the newly uploaded subjects</p>
       </div>

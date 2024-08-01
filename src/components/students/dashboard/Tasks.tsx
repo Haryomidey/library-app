@@ -35,12 +35,13 @@ function Tasks({ subjects }: any) {
       </div>
       <div className="bg-[#FAFAFA] p-4 rounded-xl border-2">
         <h1 className="font-semibold text-lg">Announcements</h1>
-        {notifications.slice(0, 2).map((notification, index) => (
+        {notifications && notifications?.length > 0 && notifications.slice(0, 2).map((notification, index) => (
           <li className="flex gap-2 [&>*]:self-center p-3 border-b-2 cursor-pointer" onClick={() => route('/student/all-notifications')} key={index}>
             <FaCircle className={`text-xs ${index % 2 === 0 ? 'text-[#F5C451]' : 'text-[#4E0D76]'}`} />
             <span>{notification.message}</span>
           </li>
         ))}
+        {notifications && notifications?.length <= 0 && <p className='text-center text-xl font-semibold pt-4'>No Announcement yet!!</p>}
       </div>
     </div>
   );
