@@ -65,7 +65,7 @@ const CreateTopic = async (formData: FormData, token: any) => {
     const res = await fetch(`${baseUrl}/topic/store`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
       body: formData
     });
@@ -92,11 +92,11 @@ const GetSubjects = async (token: any) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.error)
+      console.log(data.error);
     }
     return data;
   } catch (error) {
-    console.error('Error', error);
+    console.error("Error", error);
   }
 };
 
@@ -105,11 +105,11 @@ const CreateSubject = async (formData: FormData, token: any) => {
     const res = await fetch(`${baseUrl}/subject/store`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
       body: formData
     });
-    console.log(res)
+    console.log(res);
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.error);
@@ -129,16 +129,16 @@ const GetAllStudents = async (token: any) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       }
-    })
+    });
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.error);
     }
-    return data
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 const GetSingleStudent = async (studentId: any, token: any) => {
   try {
@@ -148,38 +148,38 @@ const GetSingleStudent = async (studentId: any, token: any) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       }
-    })
+    });
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.error);
     }
-    return data
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 const EditSingleStudent = async (formData: any, studentId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/students/update/${studentId}`, {
       method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: formData
-    })
+    });
     const data = await res.json();
     console.log(data);
 
     if (!res.ok) {
       throw new Error(data.error);
     }
-    return data
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 const GetAllTeachers = async (token: any) => {
   try {
@@ -189,16 +189,16 @@ const GetAllTeachers = async (token: any) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       }
-    })
+    });
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.error);
     }
-    return data
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 const GetSingleTeacher = async (teacherId: any, token: any) => {
   try {
@@ -208,24 +208,28 @@ const GetSingleTeacher = async (teacherId: any, token: any) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       }
-    })
+    });
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.error);
     }
-    return data
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
-const EditSingleTeacher = async (formData: FormData, teacherId: any, token: any) => {
+const EditSingleTeacher = async (
+  formData: FormData,
+  teacherId: any,
+  token: any
+) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/update/${teacherId}`, {
       method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: formData
     });
@@ -234,7 +238,7 @@ const EditSingleTeacher = async (formData: FormData, teacherId: any, token: any)
     console.log(data);
 
     if (!res.ok) {
-      throw new Error(data.message || 'Failed to update teacher');
+      throw new Error(data.message || "Failed to update teacher");
     }
 
     return data;
@@ -247,12 +251,12 @@ const EditSingleTeacher = async (formData: FormData, teacherId: any, token: any)
 const RegisterAdmins = async (form: any) => {
   try {
     let response = await fetch(`${baseUrl}/user/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Accept': 'application/json',
+        Accept: "application/json"
       },
       body: form,
-      redirect: 'follow'
+      redirect: "follow"
     });
     const data = await response.json();
     if (!response.ok) {
@@ -270,8 +274,8 @@ const GetAdminDashboard = async (token: any) => {
     const res = await fetch(`${baseUrl}/dashboard/admin/1`, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -282,20 +286,20 @@ const GetAdminDashboard = async (token: any) => {
     }
     return data;
   } catch (error: any) {
-    console.error('Error:', error.message);
+    console.error("Error:", error.message);
   }
 };
 
 const PostNotification = async (form: any, token: any) => {
   try {
     let response = await fetch(`${baseUrl}/notifications/store`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Accept': 'application/json',
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: form,
-      redirect: 'follow'
+      redirect: "follow"
     });
     const data = await response.json();
     if (!response.ok) {
@@ -306,7 +310,7 @@ const PostNotification = async (form: any, token: any) => {
     console.error(error);
     throw error;
   }
-}
+};
 
 const GetAllTopicsUnderSubject = async (subject_id: string, token: any) => {
   try {
@@ -314,7 +318,7 @@ const GetAllTopicsUnderSubject = async (subject_id: string, token: any) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : ''
+        Authorization: token ? `Bearer ${token}` : ""
       }
     });
 
@@ -334,16 +338,16 @@ const GetNotifications = async (token: any) => {
     const res = await fetch(`${baseUrl}/notifications/fetch`, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       }
-    })
+    });
     const data = await res.json();
-    return data
+    return data;
   } catch (error: any) {
-    console.log('')
+    console.log("");
   }
-}
+};
 
 // const GetNotifications = async (token: any) => {
 //   try {
@@ -372,63 +376,63 @@ const GetComments = async (id: any, token: any) => {
     const res = await fetch(`${baseUrl}/comments/fetch/${id}`, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       }
-    })
+    });
     const data = await res.json();
-    console.log(data)
+    console.log(data);
     if (!res.ok) {
       throw new Error(data.error);
     }
-    return data
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 const PostComment = async (form: any, token: any) => {
   try {
     let res = await fetch(`${baseUrl}/comments/store`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       },
-      body: form,
+      body: form
     });
     const data = await res.json();
-    console.log(data)
+    console.log(data);
     if (!res.ok) {
-      console.error('Error', data.error);
+      console.error("Error", data.error);
     }
     return data;
   } catch (error) {
     console.error(error);
     throw error;
   }
-}
+};
 
 const CreateTeacher = async (formData: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/create`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       },
-      body: formData,
+      body: formData
     });
 
     if (!res.ok) {
       const errorData = await res.json();
-      return errorData
+      return errorData;
     }
 
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return null;
   }
 };
@@ -436,23 +440,23 @@ const CreateTeacher = async (formData: any, token: any) => {
 const CreateStudent = async (formData: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/students/create`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       },
-      body: formData,
+      body: formData
     });
 
     if (!res.ok) {
       const errorData = await res.json();
-      return errorData
+      return errorData;
     }
 
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return null;
   }
 };
@@ -460,10 +464,10 @@ const CreateStudent = async (formData: any, token: any) => {
 const DeleteStudent = async (studentId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/students/delete/${studentId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -475,7 +479,7 @@ const DeleteStudent = async (studentId: any, token: any) => {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return null;
   }
 };
@@ -483,23 +487,23 @@ const DeleteStudent = async (studentId: any, token: any) => {
 const DeleteTeacher = async (teacherId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/delete/${teacherId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       }
     });
 
     if (!res.ok) {
       const errorData = await res.json();
-      console.error('Failed to delete:', errorData);
+      console.error("Failed to delete:", errorData);
       return errorData;
     }
 
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return null;
   }
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../Header";
 import ClassGrades from "./ClassGrades";
 import { BiEdit } from "react-icons/bi";
@@ -7,11 +7,15 @@ import Cookies from "js-cookie";
 function OneSubject() {
   const { name } = useParams();
   const [subjectDetails, setSubjectDetails] = useState<any>(null);
+  const route = useNavigate();
   useEffect(() => {
     let selectedSubject = Cookies.get("selectedSubject");
     selectedSubject && setSubjectDetails(JSON.parse(selectedSubject));
   }, []);
 
+  const handleRouteToEdit = () => {
+    route(`/admin/subjects/edit-subject/${subjectDetails.subject_id}`);
+  };
   return (
     <div>
       <Header headerName="Edit Subject" />
@@ -33,7 +37,10 @@ function OneSubject() {
           <div className="relative px-10 py-5">
             <div className="flex justify-between">
               <h1 className="font-semibold text-lg text-white">{name}</h1>
-              <button className="bg-[#F3F4F6] hover:bg-white hover:text-[#58A942]  text-[#BFBFBF] p-2 px-4 rounded-md inline-flex gap-2 [&>*]:self-center">
+              <button
+                onClick={handleRouteToEdit}
+                className="bg-[#F3F4F6] hover:bg-white hover:text-[#58A942]  text-[#BFBFBF] p-2 px-4 rounded-md inline-flex gap-2 [&>*]:self-center"
+              >
                 <BiEdit />
                 <span className="text-sm">Edit Subject</span>
               </button>

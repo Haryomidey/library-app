@@ -5,13 +5,13 @@ import TaskBar from "./TaskBar";
 import { GetSubjects } from "../AdminControllers";
 import Cookies from "js-cookie";
 import Skeleton from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css';
+import "react-loading-skeleton/dist/skeleton.css";
 import useGetToken from "../../../utils/useGetToken";
 
 function SubjectsDisplay() {
-  const {token} = useGetToken()
+  const { token } = useGetToken();
   const [searchParams] = useSearchParams();
-  const queryParam = searchParams.get('q');
+  const queryParam = searchParams.get("q");
   const route = useNavigate();
 
   const [subjects, setSubjects] = useState<any[]>([]);
@@ -25,7 +25,7 @@ function SubjectsDisplay() {
   };
 
   useEffect(() => {
-    if(token){
+    if (token) {
       const fetchSubjects = async () => {
         try {
           const data = await GetSubjects(token);
@@ -42,9 +42,14 @@ function SubjectsDisplay() {
 
   useEffect(() => {
     if (queryParam) {
-      const filtered = subjects.filter(subject =>
-        subject?.subject_name.toLowerCase().includes(queryParam.toLowerCase()) ||
-        subject?.subject_description.toLowerCase().includes(queryParam.toLowerCase())
+      const filtered = subjects.filter(
+        (subject) =>
+          subject?.subject_name
+            .toLowerCase()
+            .includes(queryParam.toLowerCase()) ||
+          subject?.subject_description
+            .toLowerCase()
+            .includes(queryParam.toLowerCase())
       );
       setFilteredSubjects(filtered);
     } else {
@@ -75,42 +80,48 @@ function SubjectsDisplay() {
               </div>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredSubjects?.length > 0 && filteredSubjects?.map(
-                  (subject: {
-                    id: number;
-                    subject_name: string;
-                    cover: string | null;
-                    subject_description: string;
-                    department: string;
-                  }, index: number) => (
-                    <div
-                      className="bg-white p-2 h-80 rounded-lg cursor-pointer"
-                      key={index}
-                      onClick={() => handleRouter(subject)}
-                    >
-                      {subject.cover ? (
-                        <img
-                          src={subject?.cover}
-                          alt={subject?.subject_name}
-                          className="object-cover rounded-lg w-full h-3/5"
-                        />
-                      ) : (
-                        <div className="bg-[#58A942] rounded-lg h-3/5"></div>
-                      )}
-                      <div className="h-2/5 p-4 flex flex-col gap-5">
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <h3 className="font-medium">{subject?.subject_name}</h3>
-                            <label className="px-4 py-1 rounded-2xl h-fit bg-[#58A942]/20 text-green-500 ">
-                              Active
-                            </label>
+                {filteredSubjects?.length > 0 &&
+                  filteredSubjects?.map(
+                    (
+                      subject: {
+                        subject_id: number;
+                        subject_name: string;
+                        cover: string | null;
+                        subject_description: string;
+                        department: string;
+                      },
+                      index: number
+                    ) => (
+                      <div
+                        className="bg-white p-2 h-80 rounded-lg cursor-pointer"
+                        key={index}
+                        onClick={() => handleRouter(subject)}
+                      >
+                        {subject.cover ? (
+                          <img
+                            src={subject?.cover}
+                            alt={subject?.subject_name}
+                            className="object-cover rounded-lg w-full h-3/5"
+                          />
+                        ) : (
+                          <div className="bg-[#58A942] rounded-lg h-3/5"></div>
+                        )}
+                        <div className="h-2/5 p-4 flex flex-col gap-5">
+                          <div className="space-y-3">
+                            <div className="flex justify-between">
+                              <h3 className="font-medium">
+                                {subject?.subject_name}
+                              </h3>
+                              <label className="px-4 py-1 rounded-2xl h-fit bg-[#58A942]/20 text-green-500 ">
+                                Active
+                              </label>
+                            </div>
+                            <p>{subject?.subject_description}</p>
                           </div>
-                          <p>{subject?.subject_description}</p>
                         </div>
                       </div>
-                    </div>
-                  )
-                )}
+                    )
+                  )}
               </div>
             )}
           </>
