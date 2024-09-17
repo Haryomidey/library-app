@@ -46,6 +46,7 @@ import SingleMaterialTeacher from "./components/teachers/subjects/lesson/SingleM
 import LessonDetailsTeacher from "./components/teachers/subjects/lesson/LessonDetailsTeacher";
 import NewTopicContainerTeacher from "./components/teachers/subjects/NewTopicContainerTeacher";
 import TeacherNotifications from "./components/teachers/TeacherNotifications";
+import EditContainer from "./components/admin/subjects/EditContainer";
 
 const router = createBrowserRouter([
   {
@@ -65,7 +66,7 @@ const router = createBrowserRouter([
         element: <DashboardBody />
       },
       {
-        path: 'all-notifications',
+        path: "all-notifications",
         element: <AdminNotifications />
       },
       {
@@ -108,7 +109,7 @@ const router = createBrowserRouter([
           },
           {
             path: "edit-subject/:id",
-            element: <AddContainer />
+            element: <EditContainer />
           },
           {
             path: ":name",
@@ -129,29 +130,29 @@ const router = createBrowserRouter([
         path: "user-management/",
         children: [
           {
-            path: 'teacher',
+            path: "teacher",
             element: <UserManagementTeacher />
           },
           {
-            path: 'new-teacher',
+            path: "new-teacher",
             element: <NewTeacher />
           },
           {
-            path: 'edit-teacher/:teacherId',
+            path: "edit-teacher/:teacherId",
             element: <EditTeacher />
           },
           {
-            path: 'student',
+            path: "student",
             element: <UserManagementStudent />
           },
           {
-            path: 'new-student',
+            path: "new-student",
             element: <NewStudent />
           },
           {
-            path: 'edit-student/:studentId',
+            path: "edit-student/:studentId",
             element: <EditStudent />
-          },
+          }
         ]
       },
       {
@@ -173,15 +174,15 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/teacher/',
+    path: "/teacher/",
     element: <TeacherComp element={null} />,
     children: [
       {
-        path: '',
+        path: "",
         element: <TeacherDashboard />
       },
       {
-        path: 'all-notifications',
+        path: "all-notifications",
         element: <TeacherNotifications />
       },
       {
@@ -242,11 +243,11 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'messages',
+        path: "messages",
         element: <Messages />
       },
       {
-        path: 'settings',
+        path: "settings",
         element: <TeacherSettings />
       }
     ]
@@ -260,7 +261,7 @@ const router = createBrowserRouter([
         element: <StudentDashboard />
       },
       {
-        path: 'all-notifications',
+        path: "all-notifications",
         element: <StudentNotifications />
       },
       {
@@ -312,9 +313,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return (
-    <RouterProvider router={router} />
-  )
+  return <RouterProvider router={router} />;
 }
 
 export default App;
