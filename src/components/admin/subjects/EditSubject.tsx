@@ -48,7 +48,9 @@ function EditSubjectComp({
       const formData = new FormData();
       formData.append("school_id", "1");
       formData.append("teacher_id", teacherId.toString());
-      grade.forEach((g) => formData.append("grade_ids[]", g.grade_id.toString()));
+      grade.forEach((g) =>
+        formData.append("grade_ids[]", g.grade_id.toString())
+      );
       formData.append("subject_name", subjectName);
       formData.append("subject_description", subjectDescription);
       formData.append("department", department);
