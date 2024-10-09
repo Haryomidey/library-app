@@ -102,10 +102,11 @@ const GetSubjects = async (token: any) => {
 
 const EditSubject = async (formData: any, subjectId: any, token: any) => {
   try {
-    const res = await fetch(`${baseUrl}/subject/update/1/${subjectId}`, {
-      method: "PUT",
+    const res = await fetch(`${baseUrl}/subject/update/${subjectId}`, {
+      method: "POST",
       headers: {
-        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        accept: "application/json",
         Authorization: `Bearer ${token}`
       },
       body: formData
