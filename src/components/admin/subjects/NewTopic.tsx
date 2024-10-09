@@ -3,9 +3,8 @@ import NewSubjectHeader from "./NewSubjectHeader";
 import { BiCloudUpload } from "react-icons/bi";
 import { CreateTopic, GetSubject } from "../AdminControllers";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import useGetToken from "../../../utils/useGetToken";
-
 interface NewTopicProps {
   subjectId: number;
 }
@@ -24,19 +23,17 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
-  const [selectedGrade, setSelectedGrade] = useState<number | null>(1);
-  const [grades, setGrades] = useState<GradeType[] | null>(null);
   const uploadedVideo = useRef<HTMLInputElement | null>(null);
   const uploadedFile = useRef<HTMLInputElement | null>(null);
 
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
   const route = useNavigate();
 
   const handleTopicSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validation check
-    if (!title || !introduction || !selectedGrade) {
+    if (!title || !introduction) {
       Swal.fire({
         title: "Error",
         icon: "error",
@@ -50,7 +47,6 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
     try {
       const formData = new FormData();
       formData.append("subject_id", subjectId.toString());
-      formData.append("grade_id", selectedGrade?.toString() || "");
       formData.append("week", week.toString());
       formData.append("title", title);
       formData.append("introduction", introduction);
@@ -111,7 +107,11 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
         });
         return;
       }
-      const validTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+      const validTypes = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ];
       if (!validTypes.includes(file.type)) {
         Swal.fire({
           title: "Error",
@@ -131,14 +131,12 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
       try {
         const data = await GetSubject(subjectId, token);
         setSelectedSubject(data[0].subject_name);
-        setGrades(data.grade);
       } catch (error) {
         console.error(error);
       }
     };
     fetchSubject();
   }, [subjectId]);
-  
 
   return (
     <div>
@@ -155,16 +153,8 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
             className="px-3 py-2 rounded-md border border-[#E4E4E7]]"
           >
             {[1, 2, 3, 4, 5].map((weekNum) => (
-              <option key={weekNum} value={weekNum}>Week {weekNum}</option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedGrade(Number(e.target.value))}
-            className="px-3 py-2 rounded-md border border-[#E4E4E7]]"
-          >
-            {grades?.map((grade) => (
-              <option key={grade.grade_id} value={grade.grade_id}>
-                {grade.grade_name}
+              <option key={weekNum} value={weekNum}>
+                Week {weekNum}
               </option>
             ))}
           </select>
@@ -223,9 +213,7 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
               </div>
               <div className="self-center">
                 <h1>Tap to Upload</h1>
-                <p className="text-[#98A2B3]">
-                  PDF, DOC, EXCEL | 10MB max.
-                </p>
+                <p className="text-[#98A2B3]">PDF, DOC, EXCEL | 10MB max.</p>
               </div>
             </div>
             <button

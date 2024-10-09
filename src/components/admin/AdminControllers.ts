@@ -100,11 +100,32 @@ const GetSubjects = async (token: any) => {
   }
 };
 
-
 const EditSubject = async (formData: any, subjectId: any, token: any) => {
   try {
-    const res = await fetch(`${baseUrl}/admin/update/${subjectId}`, {
-      method: "POST",
+    const res = await fetch(`${baseUrl}/subject/update/1/${subjectId}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    });
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error(data.error);
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const EditTopic = async (formData: any, topicId: any, token: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/topic/update/${topicId}`, {
+      method: "PUT",
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`
@@ -537,6 +558,7 @@ export {
   CreateSubject,
   GetSubject,
   GetSubjects,
+  EditTopic,
   EditSubject,
   GetAllStudents,
   GetSingleStudent,

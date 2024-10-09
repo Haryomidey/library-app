@@ -5,21 +5,22 @@ import { GetSubject, EditSubject, GetAllTeachers } from "../AdminControllers";
 import useGetToken from "../../../utils/useGetToken";
 import { useParams } from "react-router-dom";
 import Loading from "../../Loading";
+import gradesList from "../../../utils/grades.json";
 
 export interface gradeInterface {
-  grade_id: string;
-  grade_name: number;
+  grade_id: number;
+  grade_name: string;
 }
 function EditSubjectComp({
   contentUpdate,
   gradeUpdate
 }: {
   contentUpdate: (form: string) => void;
-  gradeUpdate: (grade: gradeInterface[] | null) => void;
+  gradeUpdate: (grade: gradeInterface[]) => void;
 }) {
   const { id } = useParams();
   const { token } = useGetToken();
-  const [grades, setGrades] = useState<gradeInterface[] | null>(null);
+  const [grade, setGrade] = useState<gradeInterface[]>([]);
   const [loader, setLoader] = useState(false);
   const [subjectDescription, setSubjectDescription] = useState("");
   const [pageLoader, setPageLoader] = useState(true);
@@ -58,7 +59,7 @@ function EditSubjectComp({
       console.log(data);
       if (data) {
         contentUpdate("topic");
-        gradeUpdate(grades);
+        gradeUpdate(grade);
       } else {
         console.error("Unexpected response structure:", data);
       }
@@ -75,8 +76,8 @@ function EditSubjectComp({
     if (!teacherId) newErrors.teacherId = "Teacher is required.";
     if (!subjectDescription)
       newErrors.subjectDescription = "Description is required.";
-    if (grades?.length === 0)
-      newErrors.grades = "At least one grade must be selected.";
+    if (grade?.length === 0)
+      newErrors.grade = "At least one grade must be selected.";
     if (
       selectedCoverPhoto &&
       !["image/jpeg", "image/png", "image/gif"].includes(
@@ -106,7 +107,7 @@ function EditSubjectComp({
           console.log(data);
           setSubjectName(data[0].subject_name);
           setDepartment(data[0].department);
-          setGrades(data[0].grades);
+          setGrade(data[0].grades);
           setSubjectDescription(data[0].subject_description);
           setTeacherId(data[0].teacher_id);
           setCover(data[0].cover);
@@ -196,34 +197,29 @@ function EditSubjectComp({
         <div className="space-y-3">
           <label className="font-semibold">Class Grade</label>
           <div className="flex flex-wrap gap-3">
-            {["JSS1", "JSS2", "JSS 3", "SS1", "SS2", "SS3"].map(
-              (grade: string, index: number) => (
-                <div key={index}>
-                  <input
-                    type="checkbox"
-                    checked={grades?.some(
-                      (selectedGrade) => selectedGrade.grade_id === grade
-                    )}
-                    name="grade"
-                    onChange={(e) => {
-                      const value = {
-                        grade_id: e.target.value,
-                        grade_name: index + 1
-                      };
-                      setGrades((prevGrade) => {
-                        if (!prevGrade) return [value];
-                        if (prevGrade.includes(value)) {
-                          return prevGrade.filter((item) => item !== value);
-                        } else {
-                          return [...prevGrade, value];
-                        }
-                      });
-                    }}
-                  />
-                  <label>{grade}</label>
-                </div>
-              )
-            )}
+            {gradesList.map((gradeLabel, index) => (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  checked={grade?.some(
+                    (selectedGrade) =>
+                      selectedGrade.grade_id === gradeLabel.grade_id
+                  )}
+                  value={gradeLabel.grade_id}
+                  name="grade"
+                  onChange={(e) => {
+                    setGrade((prevGrade) => {
+                      if (prevGrade.includes(gradeLabel)) {
+                        return prevGrade.filter((item) => item !== gradeLabel);
+                      } else {
+                        return [...prevGrade, gradeLabel];
+                      }
+                    });
+                  }}
+                />
+                <label>{gradeLabel.grade_name}</label>
+              </div>
+            ))}
           </div>
           {errors.grade && <p className="text-red-500">{errors.grade}</p>}
         </div>

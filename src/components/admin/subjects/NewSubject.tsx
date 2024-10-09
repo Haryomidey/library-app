@@ -3,6 +3,8 @@ import NewSubjectHeader from "./NewSubjectHeader";
 import { BiCloudUpload } from "react-icons/bi";
 import { CreateSubject, GetAllTeachers } from "../AdminControllers";
 import useGetToken from "../../../utils/useGetToken";
+import gradesList from "../../../utils/grades.json";
+import { gradeInterface } from "./EditSubject";
 
 interface NewSubjectProps {
   contentUpdate: any;
@@ -11,7 +13,7 @@ interface NewSubjectProps {
 
 function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   const { token } = useGetToken();
-  const [grade, setGrade] = useState<number[]>([]);
+  const [grade, setGrade] = useState<gradeInterface[]>([]);
   const [loader, setLoader] = useState(false);
   const [subjectDescription, setSubjectDescription] = useState("");
   const [department, setDepartment] = useState("");
@@ -37,7 +39,9 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
       const formData = new FormData();
       formData.append("school_id", "1");
       formData.append("teacher_id", teacherId || "");
-      grade.forEach((g) => formData.append("grade_ids[]", g.toString()));
+      grade.forEach((g) =>
+        formData.append("grade_ids[]", g.grade_id.toString())
+      );
       formData.append("subject_name", subjectName);
       formData.append("subject_description", subjectDescription);
       formData.append("department", department);
@@ -180,28 +184,25 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
         <div className="space-y-3">
           <label className="font-semibold">Class Grade</label>
           <div className="flex flex-wrap gap-3">
-            {["JSS1", "JSS2", "JSS3", "SS1", "SS2", "SS3"].map(
-              (gradeLabel, index) => (
-                <div key={index}>
-                  <input
-                    type="checkbox"
-                    value={index + 1}
-                    name="grade"
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      setGrade((prevGrade) => {
-                        if (prevGrade.includes(value)) {
-                          return prevGrade.filter((item) => item !== value);
-                        } else {
-                          return [...prevGrade, value];
-                        }
-                      });
-                    }}
-                  />
-                  <label>{gradeLabel}</label>
-                </div>
-              )
-            )}
+            {gradesList.map((gradeLabel, index) => (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  value={gradeLabel.grade_id}
+                  name="grade"
+                  onChange={(e) => {
+                    setGrade((prevGrade) => {
+                      if (prevGrade.includes(gradeLabel)) {
+                        return prevGrade.filter((item) => item !== gradeLabel);
+                      } else {
+                        return [...prevGrade, gradeLabel];
+                      }
+                    });
+                  }}
+                />
+                <label>{gradeLabel.grade_name}</label>
+              </div>
+            ))}
           </div>
           {errors.grade && <p className="text-red-500">{errors.grade}</p>}
         </div>

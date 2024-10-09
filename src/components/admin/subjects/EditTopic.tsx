@@ -3,11 +3,10 @@ import NewSubjectHeader from "./NewSubjectHeader";
 import { gradeInterface } from "./EditSubject";
 import { BiCloudUpload } from "react-icons/bi";
 
-const EditTopic = ({ gradesProp }: { gradesProp: gradeInterface[] | null }) => {
+const EditTopic = () => {
   const [loader] = useState(false);
   const [week, setWeek] = useState<number>();
   const [selectedGrade, setSelectedGrade] = useState<number>();
-  const [grades, setGrades] = useState<gradeInterface[] | null>(gradesProp);
   const [title, setTitle] = useState<string>();
   const [introduction, setIntroduction] = useState<string>();
   const [video, setVideo] = useState<File>();
@@ -35,16 +34,6 @@ const EditTopic = ({ gradesProp }: { gradesProp: gradeInterface[] | null }) => {
             {[1, 2, 3, 4, 5].map((weekNum) => (
               <option key={weekNum} value={weekNum}>
                 Week {weekNum}
-              </option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedGrade(Number(e.target.value))}
-            className="px-3 py-2 rounded-md border border-[#E4E4E7]]"
-          >
-            {grades?.map((grade) => (
-              <option key={grade.grade_id} value={grade.grade_id}>
-                {grade.grade_name}
               </option>
             ))}
           </select>

@@ -1,0 +1,26 @@
+[
+  {
+    "grade_id": 1,
+    "grade_name": "JSS 1"
+  },
+  {
+    "grade_id": 2,
+    "grade_name": "JSS 2"
+  },
+  {
+    "grade_id": 3,
+    "grade_name": "JSS 3"
+  },
+  {
+    "grade_id": 4,
+    "grade_name": "SS 1"
+  },
+  {
+    "grade_id": 5,
+    "grade_name": "SS 2"
+  },
+  {
+    "grade_id": 6,
+    "grade_name": "SS 3"
+  }
+]
