@@ -34,11 +34,12 @@ const GetSingleTopic = async (topic_id: any, token: any) => {
   const res = await fetch(`${baseUrl}/topic/show/${topic_id}`, {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
+      "Content-type": "application/json",
       Authorization: `Bearer ${token}`
     }
   });
   const data = await res.json();
+  console.log(res)
   if (!res.ok) {
     throw new Error(data.error);
   }
@@ -105,9 +106,8 @@ const EditSubject = async (formData: any, subjectId: any, token: any) => {
     const res = await fetch(`${baseUrl}/subject/update/${subjectId}`, {
       method: "POST",
       headers: {
-        "Content-Type": "multipart/form-data",
-        accept: "application/json",
-        Authorization: `Bearer ${token}`
+        "Accept": "multipart/form-data",
+        "Authorization": `Bearer ${token}`
       },
       body: formData
     });
@@ -126,7 +126,7 @@ const EditSubject = async (formData: any, subjectId: any, token: any) => {
 const EditTopic = async (formData: any, topicId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/topic/update/${topicId}`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`

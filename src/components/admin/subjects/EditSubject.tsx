@@ -141,7 +141,7 @@ function EditSubjectComp({
     <div>
       <NewSubjectHeader
         headerName="Edit Subject"
-        handleSubmit={handleSubjectEdit}
+        handleSubmit={handleSubjectEdit}  
         actionButtonName="Update"
         loader={loader}
       />
