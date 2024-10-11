@@ -158,7 +158,7 @@ const EditTopic = ({ name }: { name: string }) => {
           onChange={(e) => setTitle(e.target.value)}
         />
         {!video ? (
-          <div className="bg-white h-64 rounded-lg flex cursor-pointer">
+          <div className="bg-white h-64 rounded-lg flex flex-col justify-center gap-5 px-5 text-center">
             {!videoUrl ? (
               <div className="self-center mx-auto py-5">
                 <div className="bg-[#F9FAFB] p-6 mx-auto w-fit rounded-full">
@@ -180,11 +180,16 @@ const EditTopic = ({ name }: { name: string }) => {
                 <p className="text-[#98A2B3] text-center">(max. 100mb)</p>
               </div>
             ) : (
-              <a href={videoUrl}>{videoUrl}</a>
+              <a href={videoUrl} className="text-blue-500">
+                {videoUrl}
+              </a>
             )}
             <button
-              onClick={() => uploadedVideo.current?.click()}
-              className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8"
+              onClick={(e) => {
+                e.preventDefault();
+                uploadedVideo.current?.click();
+              }}
+              className="bg-blue-500 flex mx-auto w-fit [&>*]:self-center gap-2 text-white rounded-md py-2 px-8"
             >
               Upload
             </button>
@@ -215,7 +220,9 @@ const EditTopic = ({ name }: { name: string }) => {
                   <p className="text-[#98A2B3]">PDF, DOC, EXCEL | 10MB max.</p>
                 </div>
               ) : (
-                <a href={fileUrl}>{fileUrl}</a>
+                <a href={fileUrl} className="text-blue-500">
+                  {fileUrl}
+                </a>
               )}
             </div>
             <button
