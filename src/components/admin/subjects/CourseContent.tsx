@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaTrash } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { DeleteTopic } from "../AdminControllers";
+import useGetToken from "../../../utils/useGetToken";
 
 interface CourseContentProps {
   week: string;
@@ -12,12 +15,13 @@ interface CourseContentProps {
 interface Props {
   contents: CourseContentProps[];
   subject_name: string | undefined;
-  subject_id: any
+  subject_id: any;
 }
 
 function CourseContent({ contents, subject_name, subject_id }: Props) {
   const [loading, setLoading] = useState(true);
   const router = useNavigate();
+  const { token } = useGetToken();
 
   useEffect(() => {
     if (contents?.length > 0 || contents?.length === 0) {
@@ -25,14 +29,32 @@ function CourseContent({ contents, subject_name, subject_id }: Props) {
     }
   }, [contents]);
 
+  const handleTopicDelete = async (topic_id: any) => {
+    const deleteTopic = await DeleteTopic(topic_id, token);
+    if (deleteTopic) {
+      // subjects.filter((subject) => subject_id !== subject.subject_id);
+      Swal.fire({
+        title: "Deleted Successfully",
+        icon: "success",
+        timer: 2000
+      });
+      router(0);
+    } else {
+      Swal.fire({
+        title: "Oops!",
+        icon: "error",
+        text: deleteTopic.error,
+        timer: 2000
+      });
+    }
+  };
   const handleRouting = (id: string, title: string) => {
     router(`/admin/${subject_name}/${id}/${title}`);
   };
 
   const handleNewTopicRoute = () => {
-    router(`/admin/subjects/new-topic/${subject_id}`)
-  }
-
+    router(`/admin/subjects/new-topic/${subject_id}`);
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -40,9 +62,14 @@ function CourseContent({ contents, subject_name, subject_id }: Props) {
 
   return (
     <div>
-      <div className='w-full flex items-center justify-between py-2'>
-        <h1 className="hidden lg:block text-lg font-semibold">Course Content</h1>
-        <button className='flex items-center gap-3 text-[#2B5BFC]' onClick={handleNewTopicRoute}>
+      <div className="w-full flex items-center justify-between py-2">
+        <h1 className="hidden lg:block text-lg font-semibold">
+          Course Content
+        </h1>
+        <button
+          className="flex items-center gap-3 text-[#2B5BFC]"
+          onClick={handleNewTopicRoute}
+        >
           <IoMdAdd />
           Add new topic
         </button>
@@ -51,14 +78,28 @@ function CourseContent({ contents, subject_name, subject_id }: Props) {
         contents.map((content, index: number) => (
           <div
             key={index}
-            onClick={() => handleRouting(content.id, content.title)}
-            className="cursor-pointer hover:bg-slate-200 bg-white p-6 flex justify-between border-b-2"
+            className="hover:bg-slate-200 bg-white p-6 flex justify-between border-b-2"
           >
-            <div className="flex gap-5 text-sm lg:text-md">
+            <div
+              className="flex gap-5 text-sm lg:text-md cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                handleRouting(content.id, content.title);
+              }}
+            >
               <p>Week {content.week}</p>
-              <h3>{content.title}</h3>
+              <div className="flex gap-2 [&>*]:self-center">
+                <h3>{content.title}</h3>
+                <FaAngleRight className="self-center" />
+              </div>
             </div>
-            <FaAngleRight className="self-center" />
+            <FaTrash
+              onClick={(e) => {
+                e.preventDefault();
+                handleTopicDelete(content.id);
+              }}
+              className="self-center text-red-500 cursor-pointer"
+            />
           </div>
         ))
       ) : (

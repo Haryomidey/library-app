@@ -550,6 +550,28 @@ const DeleteSubject = async (subjectId: any, token: any) => {
     console.error("Error:", error);
     return null;
   }
+};const DeleteTopic = async (topicId: any, token: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/topic/delete/${topicId}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Failed to delete:", errorData);
+      return errorData;
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
 };
 const DeleteTeacher = async (teacherId: any, token: any) => {
   try {
@@ -602,5 +624,6 @@ export {
   CreateStudent,
   DeleteStudent,
   DeleteSubject,
+  DeleteTopic,
   DeleteTeacher
 };
