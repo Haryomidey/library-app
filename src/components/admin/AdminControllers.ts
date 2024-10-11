@@ -39,7 +39,7 @@ const GetSingleTopic = async (topic_id: any, token: any) => {
     }
   });
   const data = await res.json();
-  console.log(res)
+  console.log(res);
   if (!res.ok) {
     throw new Error(data.error);
   }
@@ -106,8 +106,8 @@ const EditSubject = async (formData: any, subjectId: any, token: any) => {
     const res = await fetch(`${baseUrl}/subject/update/${subjectId}`, {
       method: "POST",
       headers: {
-        "Accept": "multipart/form-data",
-        "Authorization": `Bearer ${token}`
+        Accept: "multipart/form-data",
+        Authorization: `Bearer ${token}`
       },
       body: formData
     });

@@ -4,24 +4,24 @@ import EditSubject, { gradeInterface } from "./EditSubject";
 
 function EditContainer() {
   const [content, setContent] = useState("subject");
-  const [grades, setGrades] = useState<gradeInterface[]>([]);
+  const [title, setTitle] = useState<string>("");
 
   const handleContentChange = (form: string) => {
     setContent(form);
   };
 
-  const handleGradeChange = (grade: gradeInterface[]) => {
-    setGrades(grade);
+  const handleNameChange = (name: string) => {
+    setTitle(name);
   };
   return (
     <>
       {content === "subject" ? (
         <EditSubject
           contentUpdate={handleContentChange}
-          gradeUpdate={handleGradeChange}
+          nameUpdate={handleNameChange}
         />
       ) : (
-        <EditTopic />
+        <EditTopic name={title} />
       )}
     </>
   );
