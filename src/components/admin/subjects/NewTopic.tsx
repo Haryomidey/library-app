@@ -5,21 +5,19 @@ import { CreateTopic, GetSubject } from "../AdminControllers";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import useGetToken from "../../../utils/useGetToken";
+import { gradeInterface } from "./EditSubject";
 interface NewTopicProps {
   subjectId: number;
+  gradesForTopic: gradeInterface[];
 }
 
-interface GradeType {
-  grade_id: number;
-  grade_name: string;
-}
-
-const NewTopic = ({ subjectId }: NewTopicProps) => {
+const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
   const { token } = useGetToken();
   const [title, setTitle] = useState("");
   const [loader, setLoader] = useState(false);
   const [week, setWeek] = useState(1);
   const [introduction, setIntroduction] = useState("");
+  const [grade, setGrade] = useState<gradeInterface[]>(gradesForTopic);
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
@@ -31,8 +29,6 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
 
   const handleTopicSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validation check
     if (!title || !introduction) {
       Swal.fire({
         title: "Error",
@@ -48,6 +44,9 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
       const formData = new FormData();
       formData.append("subject_id", subjectId.toString());
       formData.append("week", week.toString());
+      grade.forEach((g) =>
+        formData.append("grade_ids[]", g.grade_id.toString())
+      );
       formData.append("title", title);
       formData.append("introduction", introduction);
       if (video) {
@@ -56,18 +55,26 @@ const NewTopic = ({ subjectId }: NewTopicProps) => {
       if (file) {
         formData.append("file", file);
       }
-      await CreateTopic(formData, token);
-      Swal.fire({
-        title: "Topic Added Successfully",
-        icon: "success",
-        timer: 4000
-      });
-      setTitle("");
-      setIntroduction("");
-      setFile(null);
-      setVideo(null);
-      setFileName("");
-      route(`/admin/subjects`);
+      const topicCreation = await CreateTopic(formData, token);
+      if (topicCreation) {
+        Swal.fire({
+          title: "Topic Added Successfully",
+          icon: "success",
+          timer: 4000
+        });
+        setTitle("");
+        setIntroduction("");
+        setFile(null);
+        setVideo(null);
+        setFileName("");
+        route(`/admin/subjects`);
+      } else {
+        Swal.fire({
+          title: "Topic not Added",
+          icon: "error",
+          timer: 4000
+        });
+      }
     } catch (error: any) {
       Swal.fire({
         title: "Topic not Added",

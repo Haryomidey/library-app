@@ -9,9 +9,14 @@ import { gradeInterface } from "./EditSubject";
 interface NewSubjectProps {
   contentUpdate: any;
   idUpdate: any;
+  gradesUpdate: any;
 }
 
-function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
+function NewSubject({
+  idUpdate,
+  contentUpdate,
+  gradesUpdate
+}: NewSubjectProps) {
   const { token } = useGetToken();
   const [grade, setGrade] = useState<gradeInterface[]>([]);
   const [loader, setLoader] = useState(false);
@@ -53,6 +58,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
       console.log(data);
       if (data && data.subject) {
         idUpdate(data.subject.id);
+        gradesUpdate(grade);
         contentUpdate("topic");
       } else {
         console.error("Unexpected response structure:", data);

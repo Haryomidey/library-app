@@ -1,11 +1,15 @@
-import NewTopic from "../../admin/subjects/NewTopic"
-import { useParams } from "react-router-dom"
-
+import NewTopic from "../../admin/subjects/NewTopic";
+import { useParams } from "react-router-dom";
 
 const NewtTopicContainer = () => {
-    const {id} = useParams();
+  const { id } = useParams();
 
-    return <NewTopic subjectId={Number(id)} />
-}
+  return (
+    <NewTopic
+      gradesForTopic={[{ grade_id: 1, grade_name: "JSS1" }]}
+      subjectId={Number(id)}
+    />
+  );
+};
 
-export default NewtTopicContainer
+export default NewtTopicContainer;

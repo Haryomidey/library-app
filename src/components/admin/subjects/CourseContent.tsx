@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { DeleteTopic } from "../AdminControllers";
 import useGetToken from "../../../utils/useGetToken";
-
+import NewTopic from "./NewTopic";
+import GradeList from "./../../../utils/grades.json";
+import { gradeInterface } from "./EditSubject";
 interface CourseContentProps {
   week: string;
   title: string;
@@ -16,10 +18,12 @@ interface Props {
   contents: CourseContentProps[];
   subject_name: string | undefined;
   subject_id: any;
+  grade: string | undefined;
 }
 
-function CourseContent({ contents, subject_name, subject_id }: Props) {
+function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
   const [loading, setLoading] = useState(true);
+  const [isNewTopic, setIsNewTopic] = useState(false);
   const router = useNavigate();
   const { token } = useGetToken();
 
@@ -33,7 +37,7 @@ function CourseContent({ contents, subject_name, subject_id }: Props) {
     Swal.fire({
       title: "Do you want to delete this topic? ",
       showCancelButton: true,
-      confirmButtonText: "Delete",
+      confirmButtonText: "Delete"
     }).then(async (result) => {
       if (result.isConfirmed) {
         const deleteTopic = await DeleteTopic(topic_id, token);
@@ -55,18 +59,31 @@ function CourseContent({ contents, subject_name, subject_id }: Props) {
         }
       }
     });
-    
   };
+
   const handleRouting = (id: string, title: string) => {
     router(`/admin/${subject_name}/${id}/${title}`);
   };
 
   const handleNewTopicRoute = () => {
-    router(`/admin/subjects/new-topic/${subject_id}`);
+    setIsNewTopic(true);
   };
 
   if (loading) {
     return <p>Loading...</p>;
+  }
+
+  if (isNewTopic) {
+    if (!grade) return null;
+    let gradeObject;
+    GradeList.map((gradeLabel: gradeInterface) => {
+      if (gradeLabel.grade_id === Number(grade)) {
+        gradeObject = gradeLabel;
+      }
+      return 0;
+    });
+    if (!gradeObject) return null;
+    return <NewTopic subjectId={subject_id} gradesForTopic={[gradeObject]} />;
   }
 
   return (

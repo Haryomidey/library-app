@@ -66,6 +66,7 @@ const CreateTopic = async (formData: FormData, token: any) => {
     const res = await fetch(`${baseUrl}/topic/store`, {
       method: "POST",
       headers: {
+        Accept: "application/json",
         Authorization: `Bearer ${token}`
       },
       body: formData
