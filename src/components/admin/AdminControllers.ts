@@ -528,7 +528,29 @@ const DeleteStudent = async (studentId: any, token: any) => {
     return null;
   }
 };
+const DeleteSubject = async (subjectId: any, token: any) => {
+  try {
+    const res = await fetch(`${baseUrl}/subject/delete/${subjectId}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    });
 
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Failed to delete:", errorData);
+      return errorData;
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+};
 const DeleteTeacher = async (teacherId: any, token: any) => {
   try {
     const res = await fetch(`${baseUrl}/teachers/delete/${teacherId}`, {
@@ -579,5 +601,6 @@ export {
   CreateTeacher,
   CreateStudent,
   DeleteStudent,
+  DeleteSubject,
   DeleteTeacher
 };
