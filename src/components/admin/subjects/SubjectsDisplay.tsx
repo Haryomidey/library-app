@@ -20,24 +20,32 @@ function SubjectsDisplay() {
   const [filteredSubjects, setFilteredSubjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const handleDelete = async (subject_id: any) => {
-    const deleteSubject = await DeleteSubject(subject_id, token);
-    if (deleteSubject) {
-      // subjects.filter((subject) => subject_id !== subject.subject_id);
-      Swal.fire({
-        title: "Deleted Successfully",
-        icon: "success",
-        timer: 2000
-      });
-      route(0);
-    } else {
-      Swal.fire({
-        title: "Oops!",
-        icon: "error",
-        text: deleteSubject.error,
-        timer: 2000
-      });
-    }
+  const handleDelete = (subject_id: any) => {
+    Swal.fire({
+      title: "Do you want to delete this Subject? ",
+      showCancelButton: true,
+      confirmButtonText: "Delete"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const deleteSubject = await DeleteSubject(subject_id, token);
+        if (deleteSubject) {
+          // subjects.filter((subject) => subject_id !== subject.subject_id);
+          Swal.fire({
+            title: "Deleted Successfully",
+            icon: "success",
+            timer: 2000
+          });
+          route(0);
+        } else {
+          Swal.fire({
+            title: "Oops!",
+            icon: "error",
+            text: deleteSubject.error,
+            timer: 2000
+          });
+        }
+      }
+    });
   };
   const handleRouter = (subject: any) => {
     route(`/admin/subjects/${subject?.subject_name}`);

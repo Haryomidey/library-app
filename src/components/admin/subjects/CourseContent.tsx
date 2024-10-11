@@ -29,24 +29,33 @@ function CourseContent({ contents, subject_name, subject_id }: Props) {
     }
   }, [contents]);
 
-  const handleTopicDelete = async (topic_id: any) => {
-    const deleteTopic = await DeleteTopic(topic_id, token);
-    if (deleteTopic) {
-      // subjects.filter((subject) => subject_id !== subject.subject_id);
-      Swal.fire({
-        title: "Deleted Successfully",
-        icon: "success",
-        timer: 2000
-      });
-      router(0);
-    } else {
-      Swal.fire({
-        title: "Oops!",
-        icon: "error",
-        text: deleteTopic.error,
-        timer: 2000
-      });
-    }
+  const handleTopicDelete = (topic_id: any) => {
+    Swal.fire({
+      title: "Do you want to delete this topic? ",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const deleteTopic = await DeleteTopic(topic_id, token);
+        if (deleteTopic) {
+          // subjects.filter((subject) => subject_id !== subject.subject_id);
+          Swal.fire({
+            title: "Deleted Successfully",
+            icon: "success",
+            timer: 2000
+          });
+          router(0);
+        } else {
+          Swal.fire({
+            title: "Oops!",
+            icon: "error",
+            text: deleteTopic.error,
+            timer: 2000
+          });
+        }
+      }
+    });
+    
   };
   const handleRouting = (id: string, title: string) => {
     router(`/admin/${subject_name}/${id}/${title}`);
