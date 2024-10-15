@@ -1,7 +1,7 @@
 import NewTopic from "../../admin/subjects/NewTopic";
 import { useParams } from "react-router-dom";
 
-const NewtTopicContainer = () => {
+const NewTopicContainer = () => {
   const { id } = useParams();
 
   return (
@@ -12,4 +12,4 @@ const NewtTopicContainer = () => {
   );
 };
 
-export default NewtTopicContainer;
+export default NewTopicContainer;

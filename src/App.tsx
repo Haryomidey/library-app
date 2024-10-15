@@ -32,7 +32,7 @@ import SingleMaterialAdmin from "./components/admin/subjects/lesson/SingleMateri
 import AdminNotifications from "./components/admin/AdminNotifications";
 import StudentNotifications from "./components/students/StudentNotifications";
 import NewStudent from "./components/admin/user management/NewStudent";
-import NewTopicContainer from "./components/students/subjects/NewtTopicContainer";
+import NewTopicContainer from "./components/students/subjects/NewTopicContainer";
 import TeacherSettings from "./components/teachers/settings/TeacherSettings";
 import EditTeacher from "./components/admin/user management/EditTeacher";
 import EditStudent from "./components/admin/user management/EditStudent";
@@ -44,9 +44,9 @@ import SubjectsDisplayTeacher from "./components/teachers/subjects/SubjectsDispl
 import SubjectsBodyTeacher from "./components/teachers/subjects/SubjectsBodyTeacher";
 import SingleMaterialTeacher from "./components/teachers/subjects/lesson/SingleMaterialTeacher";
 import LessonDetailsTeacher from "./components/teachers/subjects/lesson/LessonDetailsTeacher";
-import NewTopicContainerTeacher from "./components/teachers/subjects/NewTopicContainerTeacher";
 import TeacherNotifications from "./components/teachers/TeacherNotifications";
 import EditContainer from "./components/admin/subjects/EditContainer";
+import EditContainerTeacher from "./components/teachers/subjects/EditContainerTeacher";
 
 const router = createBrowserRouter([
   {
@@ -220,12 +220,8 @@ const router = createBrowserRouter([
             element: <AddContainerTeacher />
           },
           {
-            path: "new-topic/:id",
-            element: <NewTopicContainerTeacher />
-          },
-          {
             path: "edit-subject/:id",
-            element: <AddContainerTeacher />
+            element: <EditContainerTeacher />
           },
           {
             path: ":name",

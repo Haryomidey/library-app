@@ -34,7 +34,7 @@ const NewTeacher = () => {
       setImage(e.target.files[0]);
     }
   };
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

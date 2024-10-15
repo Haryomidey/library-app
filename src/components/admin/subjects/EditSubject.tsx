@@ -211,8 +211,13 @@ function EditSubjectComp({
                   name="grade"
                   onChange={(e) => {
                     setGrade((prevGrade) => {
-                      if (prevGrade.includes(gradeLabel)) {
-                        return prevGrade.filter((item) => item !== gradeLabel);
+                      let exisitingGrade = prevGrade.filter(
+                        (item) => item.grade_id === gradeLabel.grade_id
+                      );
+                      if (exisitingGrade) {
+                        return prevGrade.filter(
+                          (item) => item.grade_id !== gradeLabel.grade_id
+                        );
                       } else {
                         return [...prevGrade, gradeLabel];
                       }
