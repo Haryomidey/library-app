@@ -6,7 +6,7 @@ import useGetToken from "../../../utils/useGetToken";
 import {
   EditTopic as EditTopicAPI,
   GetAllTopicsUnderSubject
-} from "../AdminControllers";
+} from "../../admin/AdminControllers";
 import Swal from "sweetalert2";
 
 export interface topicInterface {
@@ -19,7 +19,7 @@ export interface topicInterface {
   video: string | undefined | null;
   file: string | undefined | null;
 }
-const EditTopic = ({ name }: { name: string }) => {
+const EditTopicTeacher = ({ name }: { name: string }) => {
   const { token } = useGetToken();
   const { id } = useParams();
   const [loader, setLoader] = useState(false);
@@ -75,13 +75,12 @@ const EditTopic = ({ name }: { name: string }) => {
 
       const data = await EditTopicAPI(formData, topicId, token);
       if (data) {
-        console.log("Topic updated successfully:", data);
         Swal.fire({
           title: "Update Successful",
           icon: "success",
           timer: 2000
         });
-        route(`/admin/subjects/`);
+        route(`/teacher/subjects/${name}`);
       } else {
         Swal.fire({
           title: "Oops!",
@@ -249,4 +248,4 @@ const EditTopic = ({ name }: { name: string }) => {
   );
 };
 
-export default EditTopic;
+export default EditTopicTeacher;

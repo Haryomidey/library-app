@@ -13,10 +13,10 @@ export interface gradeInterface {
 }
 function EditSubjectComp({
   contentUpdate,
-  gradeUpdate
+  nameUpdate
 }: {
   contentUpdate: (form: string) => void;
-  gradeUpdate: (grade: gradeInterface[]) => void;
+  nameUpdate: (name: string) => void;
 }) {
   const { id } = useParams();
   const { token } = useGetToken();
@@ -61,7 +61,7 @@ function EditSubjectComp({
       console.log(data);
       if (data) {
         contentUpdate("topic");
-        gradeUpdate(grade);
+        nameUpdate(subjectName);
       } else {
         console.error("Unexpected response structure:", data);
       }
@@ -141,7 +141,7 @@ function EditSubjectComp({
     <div>
       <NewSubjectHeader
         headerName="Edit Subject"
-        handleSubmit={handleSubjectEdit}  
+        handleSubmit={handleSubjectEdit}
         actionButtonName="Update"
         loader={loader}
       />
@@ -211,8 +211,13 @@ function EditSubjectComp({
                   name="grade"
                   onChange={(e) => {
                     setGrade((prevGrade) => {
-                      if (prevGrade.includes(gradeLabel)) {
-                        return prevGrade.filter((item) => item !== gradeLabel);
+                      let exisitingGrade = prevGrade.filter(
+                        (item) => item.grade_id === gradeLabel.grade_id
+                      );
+                      if (exisitingGrade) {
+                        return prevGrade.filter(
+                          (item) => item.grade_id !== gradeLabel.grade_id
+                        );
                       } else {
                         return [...prevGrade, gradeLabel];
                       }

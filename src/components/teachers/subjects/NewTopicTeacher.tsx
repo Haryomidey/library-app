@@ -5,38 +5,32 @@ import { CreateTopic, GetSubject } from "../../admin/AdminControllers";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom"; 
 import useGetToken from "../../../utils/useGetToken";
+import { gradeInterface } from "./EditSubjectTeacher";
 
 interface NewTopicProps {
   subjectId: number;
+  gradesForTopic: gradeInterface[];
 }
 
-interface GradeType {
-  grade_id: number;
-  grade_name: string;
-}
-
-const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
+const NewTopicTeacher = ({ subjectId, gradesForTopic }: NewTopicProps) => {
   const { token } = useGetToken();
   const [title, setTitle] = useState("");
   const [loader, setLoader] = useState(false);
   const [week, setWeek] = useState(1);
   const [introduction, setIntroduction] = useState("");
+  const [grade, setGrade] = useState<gradeInterface[]>(gradesForTopic);
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
-  const [selectedGrade, setSelectedGrade] = useState<number | null>(1);
-  const [grades, setGrades] = useState<GradeType[] | null>(null);
   const uploadedVideo = useRef<HTMLInputElement | null>(null);
   const uploadedFile = useRef<HTMLInputElement | null>(null);
 
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
   const route = useNavigate();
 
   const handleTopicSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validation check
-    if (!title || !introduction || !selectedGrade) {
+    if (!title || !introduction) {
       Swal.fire({
         title: "Error",
         icon: "error",
@@ -50,8 +44,10 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
     try {
       const formData = new FormData();
       formData.append("subject_id", subjectId.toString());
-      formData.append("grade_id", selectedGrade?.toString() || "");
       formData.append("week", week.toString());
+      grade.forEach((g) =>
+        formData.append("grade_ids[]", g.grade_id.toString())
+      );
       formData.append("title", title);
       formData.append("introduction", introduction);
       if (video) {
@@ -60,18 +56,26 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
       if (file) {
         formData.append("file", file);
       }
-      await CreateTopic(formData, token);
-      Swal.fire({
-        title: "Topic Added Successfully",
-        icon: "success",
-        timer: 4000
-      });
-      setTitle("");
-      setIntroduction("");
-      setFile(null);
-      setVideo(null);
-      setFileName("");
-      route(`/teacher/subjects`);
+      const topicCreation = await CreateTopic(formData, token);
+      if (topicCreation) {
+        Swal.fire({
+          title: "Topic Added Successfully",
+          icon: "success",
+          timer: 4000
+        });
+        setTitle("");
+        setIntroduction("");
+        setFile(null);
+        setVideo(null);
+        setFileName("");
+        route(`/teacher/subjects`);
+      } else {
+        Swal.fire({
+          title: "Topic not Added",
+          icon: "error",
+          timer: 4000
+        });
+      }
     } catch (error: any) {
       Swal.fire({
         title: "Topic not Added",
@@ -90,7 +94,7 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
         Swal.fire({
           title: "Error",
           icon: "error",
-          text: "Video size should not exceed 100MB",
+          text: "Video file size must be less than 100MB",
           timer: 4000
         });
         return;
@@ -106,17 +110,21 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
         Swal.fire({
           title: "Error",
           icon: "error",
-          text: "File size should not exceed 10MB",
+          text: "File size must be less than 10MB",
           timer: 4000
         });
         return;
       }
-      const allowedTypes = ["application/pdf", "application/msword", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
-      if (!allowedTypes.includes(file.type)) {
+      const validTypes = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ];
+      if (!validTypes.includes(file.type)) {
         Swal.fire({
           title: "Error",
           icon: "error",
-          text: "Only PDF, DOC, and EXCEL files are allowed",
+          text: "Invalid file type. Only PDF, DOCX, and Excel files are allowed.",
           timer: 4000
         });
         return;
@@ -131,7 +139,6 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
       try {
         const data = await GetSubject(subjectId, token);
         setSelectedSubject(data[0].subject_name);
-        setGrades(data.grade);
       } catch (error) {
         console.error(error);
       }
@@ -154,16 +161,8 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
             className="px-3 py-2 rounded-md border border-[#E4E4E7]]"
           >
             {[1, 2, 3, 4, 5].map((weekNum) => (
-              <option key={weekNum} value={weekNum}>Week {weekNum}</option>
-            ))}
-          </select>
-          <select
-            onChange={(e) => setSelectedGrade(Number(e.target.value))}
-            className="px-3 py-2 rounded-md border border-[#E4E4E7]]"
-          >
-            {grades?.map((grade) => (
-              <option key={grade.grade_id} value={grade.grade_id}>
-                {grade.grade_name}
+              <option key={weekNum} value={weekNum}>
+                Week {weekNum}
               </option>
             ))}
           </select>
@@ -222,9 +221,7 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
               </div>
               <div className="self-center">
                 <h1>Tap to Upload</h1>
-                <p className="text-[#98A2B3]">
-                  PDF, DOC, EXCEL | 10MB max.
-                </p>
+                <p className="text-[#98A2B3]">PDF, DOC, EXCEL | 10MB max.</p>
               </div>
             </div>
             <button
@@ -238,10 +235,10 @@ const NewTopicTeacher = ({ subjectId }: NewTopicProps) => {
             </button>
             <input
               type="file"
+              accept=".pdf,.docx,.xlsx"
               ref={uploadedFile}
               className="hidden"
               onChange={handleFileSelectionDisplay}
-              accept=".pdf,.doc,.docx,.xls,.xlsx"
             />
             <h1>{fileName}</h1>
           </div>

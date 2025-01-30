@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../Header";
-import CourseContent from "./CourseContent";
+import CourseContentTeacher from "./CourseContentTeacher";
 import CourseCoverPhoto from "./CourseCoverPhoto";
 import Cookies from "js-cookie";
 import { GetAllTopicsUnderSubject } from "../../admin/AdminControllers";
@@ -70,11 +70,14 @@ function SubjectForGradeTeacher() {
     <div>
       <Header headerName="Course" />
       <div className="px-5 lg:px-10 py-5 space-y-5">
-        {courseCoverPhotoContent && <CourseCoverPhoto {...courseCoverPhotoContent} />}
-        <CourseContent 
-          contents={topics} 
-          subject_name={courseCoverPhotoContent?.subject_name} 
-          subject_id={courseCoverPhotoContent?.subject_id}  
+        {courseCoverPhotoContent && (
+          <CourseCoverPhoto {...courseCoverPhotoContent} />
+        )}
+        <CourseContentTeacher
+          contents={topics}
+          subject_name={courseCoverPhotoContent?.subject_name}
+          grade={courseCoverPhotoContent?.grade}
+          subject_id={courseCoverPhotoContent?.subject_id}
         />
       </div>
     </div>

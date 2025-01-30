@@ -102,69 +102,65 @@ const Login = () => {
     }
   });
 
-
   let token = null;
 
-const handleSubmit = async (e: { preventDefault: () => void }) => {
-  e.preventDefault();
-  setLoader(true);
-  try {
-    const data = await LoginUser({ email, password });
-    if (data) {
-      Cookies.set("token", JSON.stringify(data.token));
-      Cookies.set("user", JSON.stringify(data.user));
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setLoader(true);
+    try {
+      const data = await LoginUser({ email, password });
+      if (data) {
+        Cookies.set("token", JSON.stringify(data.token));
+        Cookies.set("user", JSON.stringify(data.user));
+        token = getToken();
 
-      token = getToken()
+        if (token) {
+          Swal.fire({
+            title: "Login Successful",
+            icon: "success",
+            timer: 4000
+          });
+          data.user.role === "admin" && route("/admin");
+          data.user.role === "teacher" && route("/teacher/");
+          data.user.role === "student" && route("/student");
+        }
+      }
+    } catch (error: any) {
+      Swal.fire({
+        title: "Login Error",
+        icon: "error",
+        text: error.message,
+        timer: 4000
+      });
+    }
+    setLoader(false);
+  };
 
-      if (token) {
-        Swal.fire({
-          title: "Login Successful",
-          icon: "success",
-          timer: 4000
-        });
-        data.user.role === "admin" && route("/admin");
-        data.user.role === "teacher" && route("/teacher/");
-        data.user.role === "student" && route("/student");
+  const getToken = () => {
+    const token = Cookies.get("token");
+    if (token) {
+      try {
+        return JSON.parse(token);
+      } catch (error) {
+        console.error("Invalid token format:", error);
+        return "";
       }
     }
-  } catch (error: any) {
-    Swal.fire({
-      title: "Login Error",
-      icon: "error",
-      text: error.message,
-      timer: 4000
-    });
-  }
-  setLoader(false);
-};
-
-const getToken = () => {
-  const token = Cookies.get("token");
-  if (token) {
-    try {
-      return JSON.parse(token);
-    } catch (error) {
-      console.error("Invalid token format:", error);
-      return '';
-    }
-  }
-  return token;
-};
-  
+    return token;
+  };
 
   return (
     <>
       <Box position={"relative"} width={"100%"} height={"100vh"}>
-        
         <BackgroundImageWrapper />
-        
+
         <Box
           position={"absolute"}
           top={"50%"}
           className="transform"
           left={"50%"}
           zIndex={"2"}
-          px={'10px'}
+          px={"10px"}
         >
           <Flex justifyContent={"center"}>
             <Image width={"140px"} src={loginlogo} />

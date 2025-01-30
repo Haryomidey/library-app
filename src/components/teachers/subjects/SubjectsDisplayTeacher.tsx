@@ -2,21 +2,54 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../Header";
 import TaskBar from "./TaskBar";
-import { GetSubjects } from "../../admin/AdminControllers";
+import { DeleteSubject, GetSubjects } from "../../admin/AdminControllers";
 import Cookies from "js-cookie";
 import Skeleton from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css';
+import "react-loading-skeleton/dist/skeleton.css";
 import useGetToken from "../../../utils/useGetToken";
+import Swal from "sweetalert2";
+import { FaTrash } from "react-icons/fa6";
 
 function SubjectsDisplayTeacher() {
-  const {token} = useGetToken();
+  const { token } = useGetToken();
   const [searchParams] = useSearchParams();
-  const queryParam = searchParams.get('q');
+  const queryParam = searchParams.get("q");
   const route = useNavigate();
-
   const [subjects, setSubjects] = useState<any[]>([]);
   const [filteredSubjects, setFilteredSubjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+   const handleDelete = (subject_id: any) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const deleteSubject = await DeleteSubject(subject_id, token);
+        if (deleteSubject) {
+          // subjects.filter((subject) => subject_id !== subject.subject_id);
+          Swal.fire({
+            title: "Deleted Successfully",
+            icon: "success",
+            timer: 2000
+          });
+          route(0);
+        } else {
+          Swal.fire({
+            title: "Oops!",
+            icon: "error",
+            text: deleteSubject.error,
+            timer: 2000
+          });
+        }
+      }
+    });
+  };
 
   const handleRouter = (subject: any) => {
     route(`/teacher/subjects/${subject?.subject_name}`);
@@ -25,11 +58,17 @@ function SubjectsDisplayTeacher() {
   };
 
   useEffect(() => {
-    if(token){
+    if (token) {
       const fetchSubjects = async () => {
         try {
+          let teacher = Cookies.get("user");
+          if (!teacher) return;
+          let parsedTeacher = teacher && JSON.parse(teacher);
           const data = await GetSubjects(token);
-          setSubjects(data);
+          const filteredData = data.filter((subject: any) => {
+            return subject.teacher_id === parsedTeacher.teacher_id;
+          });
+          setSubjects(filteredData);
           setLoading(false);
         } catch (error) {
           console.error(error);
@@ -42,9 +81,14 @@ function SubjectsDisplayTeacher() {
 
   useEffect(() => {
     if (queryParam) {
-      const filtered = subjects.filter(subject =>
-        subject?.subject_name.toLowerCase().includes(queryParam.toLowerCase()) ||
-        subject?.subject_description.toLowerCase().includes(queryParam.toLowerCase())
+      const filtered = subjects.filter(
+        (subject) =>
+          subject?.subject_name
+            .toLowerCase()
+            .includes(queryParam.toLowerCase()) ||
+          subject?.subject_description
+            .toLowerCase()
+            .includes(queryParam.toLowerCase())
       );
       setFilteredSubjects(filtered);
     } else {
@@ -75,42 +119,58 @@ function SubjectsDisplayTeacher() {
               </div>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredSubjects?.length > 0 && filteredSubjects?.map(
-                  (subject: {
-                    id: number;
-                    subject_name: string;
-                    cover: string | null;
-                    subject_description: string;
-                    department: string;
-                  }, index: number) => (
-                    <div
-                      className="bg-white p-2 h-80 rounded-lg cursor-pointer"
-                      key={index}
-                      onClick={() => handleRouter(subject)}
-                    >
-                      {subject.cover ? (
-                        <img
-                          src={subject?.cover}
-                          alt={subject?.subject_name}
-                          className="object-cover rounded-lg w-full h-3/5"
-                        />
-                      ) : (
-                        <div className="bg-[#58A942] rounded-lg h-3/5"></div>
-                      )}
-                      <div className="h-2/5 p-4 flex flex-col gap-5">
-                        <div className="space-y-3">
+                {filteredSubjects?.length > 0 &&
+                  filteredSubjects?.map(
+                    (
+                      subject: {
+                        subject_id: number;
+                        subject_name: string;
+                        cover: string | null;
+                        subject_description: string;
+                        department: string;
+                      },
+                      index: number
+                    ) => (
+                      <div
+                        className="bg-white p-2 h-80 rounded-lg cursor-pointer"
+                        key={index}
+                      >
+                        {subject.cover ? (
+                          <img
+                            src={subject?.cover}
+                            onClick={() => handleRouter(subject)}
+                            alt={subject?.subject_name}
+                            className="object-cover rounded-lg w-full h-2/5"
+                          />
+                        ) : (
+                          <div
+                            className="bg-[#58A942] rounded-lg h-2/5"
+                            onClick={() => handleRouter(subject)}
+                          ></div>
+                        )}
+                        <div className="h-3/5 p-4 flex flex-col gap-5">
                           <div className="flex justify-between">
-                            <h3 className="font-medium">{subject?.subject_name}</h3>
+                            <h3 className="font-medium">
+                              {subject?.subject_name}
+                            </h3>
                             <label className="px-4 py-1 rounded-2xl h-fit bg-[#58A942]/20 text-green-500 ">
                               Active
                             </label>
                           </div>
-                          <p>{subject?.subject_description}</p>
+                          <p className="text-sm">
+                            {subject?.subject_description}
+                          </p>
+                          <FaTrash
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDelete(subject.subject_id);
+                            }}
+                            className="text-red-500 cursor-pointer text-lg self-end"
+                          />
                         </div>
                       </div>
-                    </div>
-                  )
-                )}
+                    )
+                  )}
               </div>
             )}
           </>

@@ -73,6 +73,7 @@ function SingleSubject() {
         {courseCoverPhotoContent && <CourseCoverPhoto {...courseCoverPhotoContent} />}
         <CourseContent 
           contents={topics} 
+          grade={courseCoverPhotoContent?.grade}
           subject_name={courseCoverPhotoContent?.subject_name} 
           subject_id={courseCoverPhotoContent?.subject_id}  
         />

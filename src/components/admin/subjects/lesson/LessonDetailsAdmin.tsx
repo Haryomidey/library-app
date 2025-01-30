@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../../Header";
 import { BiCheckCircle, BiXCircle } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { GetSingleTopic } from "../../AdminControllers";
 import useGetToken from "../../../../utils/useGetToken";
@@ -18,7 +17,7 @@ function LessonDetailsAdmin() {
   const [topics, setTopics] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedGradeState, setSelectedGradeState] = useState<GradeState>({
-    grade_id: null
+    grade_id: null,
   });
 
   const { id } = useParams();
@@ -33,8 +32,6 @@ function LessonDetailsAdmin() {
       setSelectedGradeState(JSON.parse(grades));
     }
   }, []);
-
-  console.log(selectedGradeState.grade_id);
 
   useEffect(() => {
     const fetchTopicDetails = async () => {
@@ -64,18 +61,11 @@ function LessonDetailsAdmin() {
     );
   };
 
-  const handleDownLoadFile = () => {
-    const blobUrl = topics?.file;
-    const fileName = blobUrl?.split("/").pop();
-    const link = document.createElement("a");
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.href = blobUrl;
-    link.download = fileName;
-    link.setAttribute("target", "_blank");
-    link.click();
-    window.URL.revokeObjectURL(blobUrl);
-    document.body.removeChild(link);
+  const handleViewFile = () => {
+    const fileUrl = topics?.file;
+    if (fileUrl) {
+      route(`/file-viewer?file_url=${fileUrl}`);
+    }
   };
 
   if (loading) {
@@ -97,7 +87,6 @@ function LessonDetailsAdmin() {
           <li className="text-black">
             Week {topics?.week} - {topics?.title} &gt;&nbsp;
           </li>
-          {/* <li className="text-black">Module</li> */}
         </div>
         <div className="py-5 space-y-3">
           <h3 className="font-semibold">Module Details</h3>
@@ -147,7 +136,7 @@ function LessonDetailsAdmin() {
             {topics?.file ? (
               <h3
                 className="text-blue-500 cursor-pointer"
-                onClick={handleDownLoadFile}
+                onClick={handleViewFile}
               >
                 File - {topics?.file?.split("/").pop()}
               </h3>

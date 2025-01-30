@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import EditTopic from "./EditTopic";
-import EditSubject, { gradeInterface } from "./EditSubject";
+import EditTopicTeacher from "./EditTopicTeacher";
+import EditSubjectTeacher from "./EditSubjectTeacher";
 
-function EditContainer() {
+function EditContainerTeacher() {
   const [content, setContent] = useState("subject");
   const [title, setTitle] = useState<string>("");
 
@@ -16,15 +16,15 @@ function EditContainer() {
   return (
     <>
       {content === "subject" ? (
-        <EditSubject
+        <EditSubjectTeacher
           contentUpdate={handleContentChange}
           nameUpdate={handleNameChange}
         />
       ) : (
-        <EditTopic name={title} />
+        <EditTopicTeacher name={title} />
       )}
     </>
   );
 }
 
-export default EditContainer;
+export default EditContainerTeacher;

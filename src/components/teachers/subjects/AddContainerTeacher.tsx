@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import NewTopic from "./NewTopicTeacher";
-import NewSubject from "./NewSubject";
+import NewTopicTeacher from "./NewTopicTeacher";
+import NewSubjectTeacher from "./NewSubjectTeacher";
+import { gradeInterface } from "./EditSubjectTeacher";
 
 function AddContainerTeacher() {
   const [content, setContent] = useState("subject");
+  const [grades, setGrades] = useState<gradeInterface[]>([]);
   const [subjectId, setSubjectId] = useState(0);
   const handleContentChange = (form: string) => {
     setContent(form);
@@ -11,16 +13,20 @@ function AddContainerTeacher() {
   const handleSubjectIdChange = (id: number) => {
     setSubjectId(id);
   };
-  
+  const handleGradesChange = (selectedGrades: gradeInterface[]) => {
+    setGrades(selectedGrades);
+  };
+
   return (
     <>
       {content === "subject" ? (
-        <NewSubject
+        <NewSubjectTeacher
           contentUpdate={handleContentChange}
           idUpdate={handleSubjectIdChange}
+          gradesUpdate={handleGradesChange}
         />
       ) : (
-        <NewTopic subjectId={subjectId} />
+        <NewTopicTeacher subjectId={subjectId} gradesForTopic={grades} />
       )}
     </>
   );

@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import NewSubjectHeader from "./NewSubjectHeader";
 import { BiCloudUpload } from "react-icons/bi";
-import { CreateSubject, GetAllTeachers } from "../../../components/admin/AdminControllers";
+import { CreateSubject, GetAllTeachers } from "../../admin/AdminControllers";
 import useGetToken from "../../../utils/useGetToken";
 
 interface NewSubjectProps {
   contentUpdate: any;
   idUpdate: any;
+  gradesUpdate:any;
 }
 
-function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
+function NewSubjectTeacher({ idUpdate, contentUpdate,gradesUpdate }: NewSubjectProps) {
   const {token} = useGetToken();
   const [grade, setGrade] = useState<number[]>([]);
   const [loader, setLoader] = useState(false);
@@ -46,6 +47,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
       if (data && data.subject) {
         idUpdate(data.subject.id);
         contentUpdate("topic");
+        gradesUpdate(grade)
       } else {
         console.error("Unexpected response structure:", data);
       }
@@ -73,31 +75,49 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   const handleSelectionDisplay = () => {
     const file = coverPhoto.current.files[0];
     if (file) {
-      setSelectedCoverPhoto(file);
+      const img = new Image();
+      img.onload = () => {
+        if (img.width > 800 || img.height > 400) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            coverPhoto: "Cover photo must be at most 800x400px.",
+          }));
+          setSelectedCoverPhoto(null);
+        } else {
+          setSelectedCoverPhoto(file);
+          setErrors((prevErrors) => {
+            const { coverPhoto, ...rest } = prevErrors;
+            return rest;
+          });
+        }
+      };
+      img.src = URL.createObjectURL(file);
     }
   };
 
   useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const data = await GetAllTeachers(token);
-        if (data) {
-          setTeachers(data);
+    if(token){
+      const fetchTeachers = async () => {
+        try {
+          const data = await GetAllTeachers(token);
+          if (data) {
+            setTeachers(data);
+          }
+        } catch (error) {
+          console.error("Error fetching teachers:", error);
         }
-      } catch (error) {
-        console.error("Error fetching teachers:", error);
-      }
-    };
-
-    fetchTeachers();
-  }, []);
+      };
+  
+      fetchTeachers();
+    }
+  }, [token]);
 
   return (
     <div>
       <NewSubjectHeader
-        headerName="Edit a New Subject"
+        headerName="Add a New Subject"
         handleSubmit={handleSubjectSubmission}
-        actionButtonName="Update"
+        actionButtonName="Next"
         loader={loader}
       />
 
@@ -141,6 +161,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
             ref={coverPhoto}
             onChange={handleSelectionDisplay}
             className="hidden"
+            accept='image/*'
           />
           {errors.coverPhoto && <p className="text-red-500">{errors.coverPhoto}</p>}
         </div>
@@ -226,6 +247,7 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
           <textarea
             className="rounded-md min-h-36 p-3 focus:outline-none"
             onChange={(e) => setSubjectDescription(e.target.value)}
+            placeholder="Describe your subject in few words"
           />
           {errors.subjectDescription && <p className="text-red-500">{errors.subjectDescription}</p>}
         </div>
@@ -234,4 +256,4 @@ function NewSubject({ idUpdate, contentUpdate }: NewSubjectProps) {
   );
 }
 
-export default NewSubject;
+export default NewSubjectTeacher;

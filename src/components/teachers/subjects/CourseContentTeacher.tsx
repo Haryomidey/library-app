@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { FaAngleRight, FaTrash } from "react-icons/fa";
+import { FaAngleRight } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { DeleteTopic } from "../../admin/AdminControllers";
 import Swal from "sweetalert2";
-import { DeleteTopic } from "../AdminControllers";
 import useGetToken from "../../../utils/useGetToken";
-import NewTopic from "./NewTopic";
+import NewTopicTeacher from "./NewTopicTeacher";
 import GradeList from "./../../../utils/grades.json";
-import { gradeInterface } from "./EditSubject";
+import { gradeInterface } from "./EditSubjectTeacher";
+
 interface CourseContentProps {
   week: string;
   title: string;
@@ -21,7 +23,12 @@ interface Props {
   grade: string | undefined;
 }
 
-function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
+function CourseContentTeacher({
+  contents,
+  subject_name,
+  subject_id,
+  grade
+}: Props) {
   const [loading, setLoading] = useState(true);
   const [isNewTopic, setIsNewTopic] = useState(false);
   const router = useNavigate();
@@ -66,16 +73,12 @@ function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
   };
 
   const handleRouting = (id: string, title: string) => {
-    router(`/admin/${subject_name}/${id}/${title}`);
+    router(`/teacher/${subject_name}/${id}/${title}`);
   };
 
   const handleNewTopicRoute = () => {
     setIsNewTopic(true);
   };
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   if (isNewTopic) {
     if (!grade) return null;
@@ -87,9 +90,14 @@ function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
       return 0;
     });
     if (!gradeObject) return null;
-    return <NewTopic subjectId={subject_id} gradesForTopic={[gradeObject]} />;
+    return (
+      <NewTopicTeacher subjectId={subject_id} gradesForTopic={[gradeObject]} />
+    );
   }
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <div>
       <div className="w-full flex items-center justify-between py-2">
@@ -139,4 +147,4 @@ function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
   );
 }
 
-export default CourseContent;
+export default CourseContentTeacher;
