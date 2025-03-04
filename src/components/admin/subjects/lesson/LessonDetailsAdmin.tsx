@@ -14,13 +14,13 @@ function LessonDetailsAdmin() {
   const { token } = useGetToken();
   const route = useNavigate();
   const [subjectState, setSubjectState] = useState<any>(null);
-  const [topics, setTopics] = useState<any>(null);
+  const [topic, setTopic] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedGradeState, setSelectedGradeState] = useState<GradeState>({
-    grade_id: null,
+    grade_id: null
   });
 
-  const { id } = useParams();
+  const { subjectId, grade, topicId } = useParams();
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -35,34 +35,24 @@ function LessonDetailsAdmin() {
 
   useEffect(() => {
     const fetchTopicDetails = async () => {
-      if (subjectState?.subject_id) {
-        try {
-          const data = await GetSingleTopic(id, token);
-          setTopics(data);
-          setLoading(false);
-        } catch (error: any) {
-          console.error(error.message);
-          setLoading(false);
-        }
+      try {
+        const data = await GetSingleTopic(topicId, token);
+        setTopic(data);
+        setLoading(false);
+      } catch (error: any) {
+        console.error(error.message);
+        setLoading(false);
       }
     };
-    if (subjectState) {
-      fetchTopicDetails();
-    }
-  }, [subjectState]);
+    fetchTopicDetails();
+  }, [token, topicId]);
 
-  const handleRouting = (subject_name: any, id: any, title: any) => {
-    route(`/admin/${subject_name}/${id}/${title}/video`);
-  };
-
-  const handleRoutToSubject = () => {
-    route(
-      `/admin/subjects/${subjectState?.subject_name}/${selectedGradeState.grade_id}`
-    );
+  const handleRouting = () => {
+    route(`/admin/subjects/${subjectId}/${grade}/${topicId}/video`);
   };
 
   const handleViewFile = () => {
-    const fileUrl = topics?.file;
+    const fileUrl = topic?.file;
     if (fileUrl) {
       route(`/file-viewer?file_url=${fileUrl}`);
     }
@@ -78,54 +68,50 @@ function LessonDetailsAdmin() {
 
   return (
     <div>
-      <Header headerName={`Week ${topics?.week} - ${topics?.title}`} />
+      <Header headerName={`${topic?.title}`} />
       <div className="lg:px-10 px-5 py-5">
         <div className="flex flex-wrap gap-2 text-blue-500 text-sm list-none [&>*]:self-center">
-          <li onClick={handleRoutToSubject} className="cursor-pointer">
+          <li
+            onClick={() => {
+              route(`/admin/subjects/${subjectId}/`);
+            }}
+            className="cursor-pointer"
+          >
             {subjectState?.subject_name} &gt;&nbsp;
           </li>
-          <li className="text-black">
-            Week {topics?.week} - {topics?.title} &gt;&nbsp;
+          <li
+            className="cursor-pointer"
+            onClick={() => {
+              route(`/admin/subjects/${subjectId}/${grade}`);
+            }}
+          >
+            Grade {grade} &gt;&nbsp;
           </li>
+          <li className="text-black">{topic?.title}</li>
         </div>
         <div className="py-5 space-y-3">
           <h3 className="font-semibold">Module Details</h3>
           <p className="text-sm lg:text-md lg:leading-[2rem]">
-            {topics?.introduction}
+            {topic?.introduction}
           </p>
         </div>
         <div className="py-5 space-y-4">
           <h3 className="font-semibold">Module Materials</h3>
           <div className="space-y-5">
-            {topics?.video ? (
+            {topic?.video ? (
               <div className="flex gap-3 [&>*]:self-center ">
                 <BiCheckCircle className="text-2xl" />
                 <h3
                   className="text-blue-500 cursor-pointer"
-                  onClick={() =>
-                    handleRouting(
-                      subjectState?.subject_name,
-                      topics?.id,
-                      topics?.title
-                    )
-                  }
+                  onClick={() => handleRouting()}
                 >
-                  Video - {topics?.title}
+                  Video - {topic?.title}
                 </h3>
               </div>
             ) : (
               <div className="flex gap-3 [&>*]:self-center ">
                 <BiXCircle className="text-2xl" />
-                <h3
-                  className="text-red-500 cursor-pointer"
-                  onClick={() =>
-                    handleRouting(
-                      subjectState?.subject_name,
-                      topics?.id,
-                      topics?.title
-                    )
-                  }
-                >
+                <h3 className="text-red-500 cursor-pointer">
                   No Video Attached
                 </h3>
               </div>
@@ -133,15 +119,15 @@ function LessonDetailsAdmin() {
           </div>
           <div className="flex gap-3 [&>*]:self-center ">
             <BiCheckCircle className="text-2xl" />
-            {topics?.file ? (
+            {topic?.file ? (
               <h3
                 className="text-blue-500 cursor-pointer"
                 onClick={handleViewFile}
               >
-                File - {topics?.file?.split("/").pop()}
+                File - {topic?.file?.split("/").pop()}
               </h3>
             ) : (
-              <h3 className="text-blue-500">No File Attached</h3>
+              <h3 className="text-red-500">No File Attached</h3>
             )}
           </div>
         </div>

@@ -32,7 +32,6 @@ import SingleMaterialAdmin from "./components/admin/subjects/lesson/SingleMateri
 import AdminNotifications from "./components/admin/AdminNotifications";
 import StudentNotifications from "./components/students/StudentNotifications";
 import NewStudent from "./components/admin/user management/NewStudent";
-import NewTopicContainer from "./components/students/subjects/NewTopicContainer";
 import TeacherSettings from "./components/teachers/settings/TeacherSettings";
 import EditTeacher from "./components/admin/user management/EditTeacher";
 import EditStudent from "./components/admin/user management/EditStudent";
@@ -71,28 +70,6 @@ const router = createBrowserRouter([
         element: <AdminNotifications />
       },
       {
-        path: ":subject/",
-        children: [
-          {
-            path: "",
-            element: <SingleSubject />
-          },
-          {
-            path: ":id/",
-            children: [
-              {
-                path: ":subject_topic",
-                element: <LessonDetailsAdmin />
-              },
-              {
-                path: ":subject_topic/video",
-                element: <SingleMaterialAdmin />
-              }
-            ]
-          }
-        ]
-      },
-      {
         path: "subjects",
         element: <SubjectsBody element={null} />,
         children: [
@@ -102,26 +79,48 @@ const router = createBrowserRouter([
           },
           {
             path: "new",
-            element: <AddContainer />
+            element: <AddContainer content="subject" />
           },
           {
-            path: "new-topic/:id",
-            element: <NewTopicContainer />
+            path: "new-topic/:subjectId",
+            element: <AddContainer content="topic" />
           },
           {
-            path: "edit-subject/:id",
-            element: <EditContainer />
+            path: "edit-subject/:subjectId",
+            element: <EditContainer content="subject" />
           },
           {
-            path: ":name",
+            path: ":subjectId",
             children: [
               {
-                path: "/admin/subjects/:name",
+                path: "/admin/subjects/:subjectId",
                 element: <OneSubject />
               },
               {
                 path: ":grade",
-                element: <SubjectForGrade />
+                children: [
+                  {
+                    path: "/admin/subjects/:subjectId/:grade",
+                    element: <SubjectForGrade />
+                  },
+                  {
+                    path: "edit/:topicId",
+                    element: <EditContainer content="topic" />
+                  },
+                  {
+                    path: ":topicId",
+                    children: [
+                      {
+                        path: "/admin/subjects/:subjectId/:grade/:topicId",
+                        element: <LessonDetailsAdmin />
+                      },
+                      {
+                        path: "video",
+                        element: <SingleMaterialAdmin />
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }
@@ -309,7 +308,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/file-viewer",
-    element: <FileViewer />,
+    element: <FileViewer />
   }
 ]);
 

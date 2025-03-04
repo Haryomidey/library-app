@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaAngleRight, FaTrash } from "react-icons/fa";
+import { FaAngleDown, FaAngleRight, FaEdit, FaTrash } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -8,24 +8,26 @@ import useGetToken from "../../../utils/useGetToken";
 import NewTopic from "./NewTopic";
 import GradeList from "./../../../utils/grades.json";
 import { gradeInterface } from "./EditSubject";
+import { FaAngleUp } from "react-icons/fa6";
 interface CourseContentProps {
-  week: string;
+  term_id: string;
+  cover: string;
   title: string;
   id: string;
 }
 
 interface Props {
   contents: CourseContentProps[];
-  subject_name: string | undefined;
   subject_id: any;
   grade: string | undefined;
 }
 
-function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
+function CourseContent({ contents, subject_id, grade }: Props) {
   const [loading, setLoading] = useState(true);
   const [isNewTopic, setIsNewTopic] = useState(false);
   const router = useNavigate();
   const { token } = useGetToken();
+  const [termsToShow, setTermsToShow] = useState<string[]>(["1"]);
 
   useEffect(() => {
     if (contents?.length > 0 || contents?.length === 0) {
@@ -66,7 +68,7 @@ function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
   };
 
   const handleRouting = (id: string, title: string) => {
-    router(`/admin/${subject_name}/${id}/${title}`);
+    router(`/admin/subjects/${subject_id}/${grade}/${id}`);
   };
 
   const handleNewTopicRoute = () => {
@@ -78,16 +80,7 @@ function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
   }
 
   if (isNewTopic) {
-    if (!grade) return null;
-    let gradeObject;
-    GradeList.map((gradeLabel: gradeInterface) => {
-      if (gradeLabel.grade_id === Number(grade)) {
-        gradeObject = gradeLabel;
-      }
-      return 0;
-    });
-    if (!gradeObject) return null;
-    return <NewTopic subjectId={subject_id} gradesForTopic={[gradeObject]} />;
+    return <NewTopic />;
   }
 
   return (
@@ -104,37 +97,278 @@ function CourseContent({ contents, subject_name, subject_id, grade }: Props) {
           Add new topic
         </button>
       </div>
-      {contents?.length > 0 ? (
-        contents.map((content, index: number) => (
+      <div className="[&>*]:space-y-4 py-6 flex flex-col gap-8">
+        <div>
           <div
-            key={index}
-            className="hover:bg-slate-200 bg-white p-6 flex justify-between border-b-2"
+            className="flex gap-2 [&>*]:self-end"
+            onClick={() =>
+              setTermsToShow((prev) => {
+                if (prev.includes("1")) {
+                  return prev.filter((term) => term !== "1");
+                } else {
+                  return [...prev, "1"];
+                }
+              })
+            }
           >
-            <div
-              className="flex gap-5 text-sm lg:text-md cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                handleRouting(content.id, content.title);
-              }}
-            >
-              <p>Week {content.week}</p>
-              <div className="flex gap-2 [&>*]:self-center">
-                <h3>{content.title}</h3>
-                <FaAngleRight className="self-center" />
-              </div>
-            </div>
-            <FaTrash
-              onClick={(e) => {
-                e.preventDefault();
-                handleTopicDelete(content.id);
-              }}
-              className="self-center text-red-500 cursor-pointer"
-            />
+            <h1 className="font-semibold text-3xl">1st Term</h1>
+            {termsToShow.includes("1") && (
+              <FaAngleDown className="text-xl cursor-pointer " />
+            )}
+            {!termsToShow.includes("1") && (
+              <FaAngleUp className="text-xl cursor-pointer" />
+            )}
           </div>
-        ))
-      ) : (
-        <p className="text-red-500">No topic assigned to this subject</p>
-      )}
+          <div
+            className={`${
+              !termsToShow.includes("1") ? "h-0" : "h-fit"
+            } overflow-y-hidden grid grid-cols-3 gap-10`}
+          >
+            {contents?.length > 0 ? (
+              contents.map((content, index: number) => {
+                return (
+                  content.term_id === "1" && (
+                    <div
+                      className="bg-white h-72 p-2 rounded-lg cursor-pointer"
+                      key={index}
+                    >
+                      {content.cover ? (
+                        <img
+                          src={content?.cover}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRouting(content.id, content.title);
+                          }}
+                          alt={content.title}
+                          className="object-cover rounded-lg w-full h-1/2"
+                        />
+                      ) : (
+                        <div
+                          className="bg-[#58A942] rounded-lg h-1/2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRouting(content.id, content.title);
+                          }}
+                        ></div>
+                      )}
+                      <div className="h-fit p-4 flex flex-col gap-5">
+                        <div className="flex justify-between">
+                          <h3 className="font-medium">{content.title}</h3>
+                          <label className="px-4 py-1 rounded-2xl h-fit bg-[#58A942]/20 text-green-500 ">
+                            Active
+                          </label>
+                        </div>
+                        <div className="flex gap-3 self-end">
+                          <FaEdit
+                            onClick={() => {
+                              router(
+                                `/admin/subjects/${subject_id}/${grade}/edit/${content.id}`
+                              );
+                            }}
+                            className="self-center text-yellow-500 cursor-pointer"
+                          />
+                          <FaTrash
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleTopicDelete(content.id);
+                            }}
+                            className="text-red-500 cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+              })
+            ) : (
+              <p className="text-red-500 col-span-3">
+                No topic assigned to this subject
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <div
+            className="flex gap-2 [&>*]:self-end"
+            onClick={() =>
+              setTermsToShow((prev) => {
+                if (prev.includes("2")) {
+                  return prev.filter((term) => term !== "2");
+                } else {
+                  return [...prev, "2"];
+                }
+              })
+            }
+          >
+            <h1 className="font-semibold text-3xl">2nd Term</h1>
+            {termsToShow.includes("2") && (
+              <FaAngleDown className="text-xl cursor-pointer" />
+            )}
+            {!termsToShow.includes("2") && (
+              <FaAngleUp className="text-xl cursor-pointer" />
+            )}
+          </div>
+          <div
+            className={`${
+              !termsToShow.includes("2") ? "h-0" : "h-fit"
+            } overflow-y-hidden grid grid-cols-3 gap-10`}
+          >
+            {" "}
+            {contents?.length > 0 ? (
+              contents.map((content, index: number) => {
+                return (
+                  content.term_id === "2" && (
+                    <div
+                      className="bg-white h-72 p-2 rounded-lg cursor-pointer"
+                      key={index}
+                    >
+                      {content.cover ? (
+                        <img
+                          src={content?.cover}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRouting(content.id, content.title);
+                          }}
+                          alt={content.title}
+                          className="object-cover rounded-lg w-full h-1/2"
+                        />
+                      ) : (
+                        <div
+                          className="bg-[#58A942] rounded-lg h-1/2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRouting(content.id, content.title);
+                          }}
+                        ></div>
+                      )}
+                      <div className="h-fit p-4 flex flex-col gap-5">
+                        <div className="flex justify-between">
+                          <h3 className="font-medium">{content.title}</h3>
+                          <label className="px-4 py-1 rounded-2xl h-fit bg-[#58A942]/20 text-green-500 ">
+                            Active
+                          </label>
+                        </div>
+                        <div className="flex gap-3 self-end">
+                          <FaEdit
+                            onClick={() => {
+                              router(
+                                `/admin/subjects/${subject_id}/${grade}/edit/${content.id}`
+                              );
+                            }}
+                            className="self-center text-yellow-500 cursor-pointer"
+                          />
+                          <FaTrash
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleTopicDelete(content.id);
+                            }}
+                            className="text-red-500 cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+              })
+            ) : (
+              <p className="text-red-500 col-span-3">
+                No topic assigned to this subject
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <div
+            className="flex gap-2 [&>*]:self-end"
+            onClick={() =>
+              setTermsToShow((prev) => {
+                if (prev.includes("3")) {
+                  return prev.filter((term) => term !== "3");
+                } else {
+                  return [...prev, "3"];
+                }
+              })
+            }
+          >
+            <h1 className="font-semibold text-3xl">3rd Term</h1>
+            {termsToShow.includes("3") && (
+              <FaAngleDown className="text-xl cursor-pointer" />
+            )}
+            {!termsToShow.includes("3") && (
+              <FaAngleUp className="text-xl cursor-pointer" />
+            )}
+          </div>
+          <div
+            className={`${
+              !termsToShow.includes("3") ? "h-0" : "h-fit"
+            } overflow-y-hidden grid grid-cols-3 gap-10`}
+          >
+            {contents?.length > 0 ? (
+              contents.map((content, index: number) => {
+                return (
+                  content.term_id === "3" && (
+                    <div
+                      className="bg-white h-72 p-2 rounded-lg cursor-pointer"
+                      key={index}
+                    >
+                      {content.cover ? (
+                        <img
+                          src={content?.cover}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRouting(content.id, content.title);
+                          }}
+                          alt={content.title}
+                          className="object-cover rounded-lg w-full h-1/2"
+                        />
+                      ) : (
+                        <div
+                          className="bg-[#58A942] rounded-lg h-1/2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRouting(content.id, content.title);
+                          }}
+                        ></div>
+                      )}
+                      <div className="h-fit p-4 flex flex-col gap-5">
+                        <div className="flex justify-between">
+                          <h3 className="font-medium">{content.title}</h3>
+                          <label className="px-4 py-1 rounded-2xl h-fit bg-[#58A942]/20 text-green-500 ">
+                            Active
+                          </label>
+                        </div>
+                        <div className="flex gap-3 self-end">
+                          <FaEdit
+                            onClick={() => {
+                              router(
+                                `/admin/subjects/${subject_id}/${grade}/edit/${content.id}`
+                              );
+                            }}
+                            className="self-center text-yellow-500 cursor-pointer"
+                          />
+                          <FaTrash
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleTopicDelete(content.id);
+                            }}
+                            className="text-red-500 cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+              })
+            ) : (
+              <p className="text-red-500 col-span-3">
+                No topic assigned to this subject
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

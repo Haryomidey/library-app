@@ -12,11 +12,7 @@ interface NewSubjectProps {
   gradesUpdate: any;
 }
 
-function NewSubject({
-  idUpdate,
-  contentUpdate,
-  gradesUpdate
-}: NewSubjectProps) {
+function NewSubject() {
   const { token } = useGetToken();
   const [grade, setGrade] = useState<gradeInterface[]>([]);
   const [loader, setLoader] = useState(false);
@@ -57,9 +53,14 @@ function NewSubject({
       const data = await CreateSubject(formData, token);
       console.log(data);
       if (data && data.subject) {
-        idUpdate(data.subject.id);
-        gradesUpdate(grade);
-        contentUpdate("topic");
+        setSubjectName("");
+        setSubjectDescription("");
+        setDepartment("");
+        setTeacherId("");
+        setGrade([]);
+        setSelectedCoverPhoto(null);
+        coverPhoto.current.value = "";
+        window.location.href = `/admin/subjects/${data.subject.id}`;
       } else {
         console.error("Unexpected response structure:", data);
       }
@@ -150,7 +151,6 @@ function NewSubject({
                   >
                     Click to upload &nbsp;
                   </span>
-                  or drag and drop
                 </p>
                 <p className="text-[#98A2B3]">
                   SVG, PNG, JPG or GIF (max. 800x400px)

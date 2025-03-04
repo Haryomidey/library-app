@@ -19,7 +19,6 @@ function SubjectsDisplay() {
   const [subjects, setSubjects] = useState<any[]>([]);
   const [filteredSubjects, setFilteredSubjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
   const handleDelete = (subject_id: any) => {
     Swal.fire({
       title: "Are you sure?",
@@ -52,7 +51,7 @@ function SubjectsDisplay() {
     });
   };
   const handleRouter = (subject: any) => {
-    route(`/admin/subjects/${subject?.subject_name}`);
+    route(`/admin/subjects/${subject?.subject_id}`);
     Cookies.set("selectedSubject", JSON.stringify(subject));
     Cookies.set("grades", JSON.stringify(subject?.grades));
   };
@@ -112,7 +111,7 @@ function SubjectsDisplay() {
                 Your search does not yield any result
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 gap-8">
                 {filteredSubjects?.length > 0 &&
                   filteredSubjects?.map(
                     (
@@ -126,7 +125,7 @@ function SubjectsDisplay() {
                       index: number
                     ) => (
                       <div
-                        className="bg-white p-2 h-80 rounded-lg cursor-pointer"
+                        className="bg-white h-96 p-2 rounded-lg cursor-pointer"
                         key={index}
                       >
                         {subject.cover ? (
@@ -142,7 +141,7 @@ function SubjectsDisplay() {
                             onClick={() => handleRouter(subject)}
                           ></div>
                         )}
-                        <div className="h-3/5 p-4 flex flex-col gap-5">
+                        <div className="h-fit p-4 flex flex-col gap-5">
                           <div className="flex justify-between">
                             <h3 className="font-medium">
                               {subject?.subject_name}

@@ -11,14 +11,8 @@ export interface gradeInterface {
   grade_id: number;
   grade_name: string;
 }
-function EditSubjectComp({
-  contentUpdate,
-  nameUpdate
-}: {
-  contentUpdate: (form: string) => void;
-  nameUpdate: (name: string) => void;
-}) {
-  const { id } = useParams();
+function EditSubjectComp() {
+  const { subjectId } = useParams();
   const { token } = useGetToken();
   const [grade, setGrade] = useState<gradeInterface[]>([]);
   const [loader, setLoader] = useState(false);
@@ -57,14 +51,13 @@ function EditSubjectComp({
       if (selectedCoverPhoto) {
         formData.append("cover", selectedCoverPhoto);
       }
-      const data = await EditSubject(formData, id, token);
+      const data = await EditSubject(formData, subjectId, token);
       console.log(data);
       if (data) {
-        contentUpdate("topic");
-        nameUpdate(subjectName);
+        window.location.href = `/admin/subjects/${subjectId}`;
       } else {
         console.error("Unexpected response structure:", data);
-      }
+      } 
     } catch (error) {
       console.error(error);
     }
@@ -101,10 +94,10 @@ function EditSubjectComp({
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!subjectId) return;
     const fetchSubject = async () => {
       try {
-        const data = await GetSubject(parseInt(id), token);
+        const data = await GetSubject(parseInt(subjectId), token);
         if (data) {
           console.log(data);
           setSubjectName(data[0].subject_name);
@@ -133,7 +126,7 @@ function EditSubjectComp({
     };
     fetchSubject();
     fetchTeachers();
-  }, [token, id]);
+  }, [token, subjectId]);
   if (pageLoader) {
     return <Loading />;
   }
@@ -162,9 +155,8 @@ function EditSubjectComp({
                     }}
                     className="font-semibold cursor-pointer text-blue-500"
                   >
-                    Click to upload &nbsp;
+                    Click to upload
                   </span>
-                  or drag and drop
                 </p>
                 <p className="text-[#98A2B3]">
                   SVG, PNG, JPG or GIF (max. 800x400px)
@@ -211,7 +203,7 @@ function EditSubjectComp({
                   name="grade"
                   onChange={(e) => {
                     setGrade((prevGrade) => {
-                      let exisitingGrade = prevGrade.filter(
+                      let exisitingGrade = prevGrade.find(
                         (item) => item.grade_id === gradeLabel.grade_id
                       );
                       if (exisitingGrade) {

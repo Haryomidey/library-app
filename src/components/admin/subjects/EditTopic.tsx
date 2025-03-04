@@ -3,10 +3,7 @@ import NewSubjectHeader from "./NewSubjectHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { BiCloudUpload } from "react-icons/bi";
 import useGetToken from "../../../utils/useGetToken";
-import {
-  EditTopic as EditTopicAPI,
-  GetAllTopicsUnderSubject
-} from "../AdminControllers";
+import { EditTopic as EditTopicAPI, GetSingleTopic } from "../AdminControllers";
 import Swal from "sweetalert2";
 
 export interface topicInterface {
@@ -19,22 +16,26 @@ export interface topicInterface {
   video: string | undefined | null;
   file: string | undefined | null;
 }
-const EditTopic = ({ name }: { name: string }) => {
+const EditTopic = () => {
   const { token } = useGetToken();
-  const { id } = useParams();
+  const { topicId } = useParams();
   const [loader, setLoader] = useState(false);
-  const [topics, setTopics] = useState<topicInterface[]>();
   const [pageLoader, setPageLoader] = useState(true);
-  const [week, setWeek] = useState<string>("1");
+  const [term, setTerm] = useState<string>();
   const [title, setTitle] = useState<string>();
-  const [topicId, setTopicId] = useState<string>();
+  const [subjectId, setSubjectId] = useState<number>();
   const [introduction, setIntroduction] = useState<string>("");
   const [video, setVideo] = useState<File>();
   const [file, setFile] = useState<File>();
+  const [cover, setCover] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string | null>();
   const [fileUrl, setFileUrl] = useState<string | null>();
   const uploadedVideo = useRef<HTMLInputElement | null>(null);
   const uploadedFile = useRef<HTMLInputElement | null>(null);
+  const coverPhoto = useRef<any>();
+  const [selectedCoverPhoto, setSelectedCoverPhoto] = useState<File | null>(
+    null
+  );
   const route = useNavigate();
   const handleVideoSelectionDisplay = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -54,16 +55,26 @@ const EditTopic = ({ name }: { name: string }) => {
     }
   };
 
+  const handleCoverSelectionDisplay = () => {
+    const file = coverPhoto.current.files[0];
+    if (file) {
+      setSelectedCoverPhoto(file);
+    }
+  };
   const handleTopicEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoader(true);
 
     try {
-      if (!id || !week || !title) return;
+      if (!subjectId || !term || !title) {
+        console.log("Missing required fields");
+        setLoader(false);
+        return;
+      }
       const formData = new FormData();
       formData.append("school_id", "1");
-      formData.append("subject_id", id);
-      formData.append("week", week);
+      formData.append("subject_id", subjectId.toString());
+      formData.append("term_id", term);
       formData.append("title", title);
       formData.append("introduction", introduction);
       if (video) {
@@ -72,7 +83,9 @@ const EditTopic = ({ name }: { name: string }) => {
       if (file) {
         formData.append("file", file);
       }
-
+      if (selectedCoverPhoto) {
+        formData.append("cover", selectedCoverPhoto);
+      }
       const data = await EditTopicAPI(formData, topicId, token);
       if (data) {
         console.log("Topic updated successfully:", data);
@@ -81,8 +94,9 @@ const EditTopic = ({ name }: { name: string }) => {
           icon: "success",
           timer: 2000
         });
-        route(`/admin/subjects/`);
+        window.history.back();
       } else {
+        setLoader(false);
         Swal.fire({
           title: "Oops!",
           text: "An error occured",
@@ -92,20 +106,24 @@ const EditTopic = ({ name }: { name: string }) => {
         console.error("Unexpected response structure:", data);
       }
     } catch (error) {
+      setLoader(false);
       console.error("Error updating topic:", error);
     }
-
-    setLoader(false);
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!topicId) return;
     const fetchTopic = async () => {
       try {
-        const data = await GetAllTopicsUnderSubject(id, token);
-        if (data) {
-          setTopics(data);
-          console.log(data);
+        const topic = await GetSingleTopic(topicId, token);
+        if (topic) {
+          setIntroduction(topic?.introduction);
+          setTerm(topic?.term_id);
+          setVideoUrl(topic?.video);
+          setFileUrl(topic?.file);
+          setSubjectId(topic?.cover);
+          setSubjectId(topic?.subject_id);
+          setTitle(topic?.title);
         }
       } catch (error) {
         console.error("Error fetching topic:", error);
@@ -113,41 +131,26 @@ const EditTopic = ({ name }: { name: string }) => {
       }
     };
     fetchTopic();
-  }, [token, id]);
+  }, [token, topicId]);
 
-  useEffect(() => {
-    topics?.map((topic: topicInterface) => {
-      if (topic.week === week) {
-        setIntroduction(topic?.introduction);
-        setWeek(topic?.week);
-        setVideoUrl(topic?.video);
-        setFileUrl(topic?.file);
-        setTopicId(topic?.id);
-        setTitle(topic?.title);
-      }
-      return 0;
-    });
-  }, [topics, week]);
   return (
     <div>
       <NewSubjectHeader
-        headerName={"Edit Topic"}
+        headerName="Edit Topic"
         loader={loader}
         handleSubmit={handleTopicEdit}
-        actionButtonName="Publish"
+        actionButtonName="Update"
       />
-      <form className="py-5 px-10 space-y-8" onSubmit={handleTopicEdit}>
+      <form className="py-5 px-10 space-y-8">
         <div className="flex justify-between">
           <select
-            onChange={(e) => setWeek(e.target.value)}
+            onChange={(e) => setTerm(e.target.value)}
             className="px-3 py-2 rounded-md border border-[#E4E4E7]]"
-            value={week}
+            value={term ? term : "1"}
           >
-            {[1, 2, 3, 4, 5].map((weekNum) => (
-              <option key={weekNum} value={weekNum}>
-                Week {weekNum}
-              </option>
-            ))}
+            <option value="1">1st Term</option>
+            <option value="2">2nd Term</option>
+            <option value="3">3rd Term</option>
           </select>
         </div>
         <input
@@ -157,6 +160,50 @@ const EditTopic = ({ name }: { name: string }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <div className="space-y-3">
+          <label className="font-semibold">Add a Cover Photo</label>
+          {!selectedCoverPhoto && !cover ? (
+            <div className="bg-white h-48 rounded-lg flex">
+              <div className="self-center mx-auto py-5">
+                <div className="bg-[#F9FAFB] p-6 mx-auto w-fit rounded-full">
+                  <BiCloudUpload className="text-4xl text-[#98A2B3]" />
+                </div>
+                <p className="font-light text-lg text-center">
+                  <span
+                    onClick={() => {
+                      coverPhoto.current.click();
+                    }}
+                    className="font-semibold cursor-pointer text-blue-500"
+                  >
+                    Click to upload
+                  </span>
+                </p>
+                <p className="text-[#98A2B3]">
+                  SVG, PNG, JPG or GIF (max. 800x400px)
+                </p>
+              </div>
+            </div>
+          ) : (
+            <img
+              src={
+                !selectedCoverPhoto
+                  ? cover
+                  : URL.createObjectURL(selectedCoverPhoto)
+              }
+              onClick={() => {
+                coverPhoto.current.click();
+              }}
+              className="h-48 w-full object-cover cursor-pointer"
+              alt=""
+            />
+          )}
+          <input
+            type="file"
+            ref={coverPhoto}
+            onChange={handleCoverSelectionDisplay}
+            className="hidden"
+          />
+        </div>
         {!video ? (
           <div className="bg-white h-64 rounded-lg flex flex-col justify-center gap-5 px-5 text-center">
             {!videoUrl ? (

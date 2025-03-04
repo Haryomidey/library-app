@@ -19,14 +19,15 @@ interface CourseCoverPhotoProps {
 }
 
 function SingleSubject() {
-  const {token} = useGetToken();
+  const { token } = useGetToken();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const [selectedGradeState, setSelectedGradeState] = useState<GradeState>({
-    grade_id: null,
+    grade_id: null
   });
 
-  const [courseCoverPhotoContent, setCourseCoverPhotoContent] = useState<CourseCoverPhotoProps | null>(null);
+  const [courseCoverPhotoContent, setCourseCoverPhotoContent] =
+    useState<CourseCoverPhotoProps | null>(null);
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
@@ -45,15 +46,22 @@ function SingleSubject() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetAllTopicsUnderSubject(subjectState.subject_id, token);
-          setTopics(data);
-          
+          const data = await GetAllTopicsUnderSubject(
+            subjectState.subject_id,
+            token
+          );
+          let topicsForGrade = data.filter(
+            (topic: any) =>
+              topic.grade_id === selectedGradeState.grade_id?.toString()
+          );
+          setTopics(topicsForGrade);
+
           const coverPhotoData = {
             cover: subjectState.cover || "",
             subject_id: subjectState.subject_id || "",
             teacher_name: subjectState.teacher_name || "",
             subject_name: subjectState.subject_name || "",
-            grade: selectedGradeState.grade_id || "",
+            grade: selectedGradeState.grade_id || ""
           };
 
           setCourseCoverPhotoContent(coverPhotoData);
@@ -70,12 +78,13 @@ function SingleSubject() {
     <div>
       <Header headerName="Course" />
       <div className="px-5 lg:px-10 py-5 space-y-5">
-        {courseCoverPhotoContent && <CourseCoverPhoto {...courseCoverPhotoContent} />}
-        <CourseContent 
-          contents={topics} 
+        {courseCoverPhotoContent && (
+          <CourseCoverPhoto {...courseCoverPhotoContent} />
+        )}
+        <CourseContent
+          contents={topics}
           grade={courseCoverPhotoContent?.grade}
-          subject_name={courseCoverPhotoContent?.subject_name} 
-          subject_id={courseCoverPhotoContent?.subject_id}  
+          subject_id={courseCoverPhotoContent?.subject_id}
         />
       </div>
     </div>

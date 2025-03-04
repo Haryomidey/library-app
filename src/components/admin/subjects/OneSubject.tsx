@@ -3,18 +3,31 @@ import { useNavigate, useParams } from "react-router-dom";
 import Header from "../Header";
 import ClassGrades from "./ClassGrades";
 import { BiEdit } from "react-icons/bi";
-import Cookies from "js-cookie";
+import useGetToken from "../../../utils/useGetToken";
+import { GetSubject } from "../AdminControllers";
 function OneSubject() {
-  const { name } = useParams();
   const [subjectDetails, setSubjectDetails] = useState<any>(null);
+  const { subjectId } = useParams();
+  const { token } = useGetToken();
   const route = useNavigate();
   useEffect(() => {
-    let selectedSubject = Cookies.get("selectedSubject");
-    selectedSubject && setSubjectDetails(JSON.parse(selectedSubject));
-  }, []);
+    if (!subjectId) return;
+    const fetchSubject = async () => {
+      try {
+        const data = await GetSubject(parseInt(subjectId), token);
+        if (data) {
+          console.log(data);
+          setSubjectDetails(data[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching subject: ", error);
+      }
+    };
+    fetchSubject();
+  }, [subjectId, token]);
 
   const handleRouteToEdit = () => {
-    route(`/admin/subjects/edit-subject/${subjectDetails.subject_id}`);
+    route(`/admin/subjects/edit-subject/${subjectId}`);
   };
   return (
     <div>
@@ -36,7 +49,9 @@ function OneSubject() {
           )}
           <div className="relative px-10 py-5">
             <div className="flex justify-between">
-              <h1 className="font-semibold text-lg text-white">{name}</h1>
+              <h1 className="font-semibold text-lg text-white">
+                {subjectDetails?.subject_name}
+              </h1>
               <button
                 onClick={handleRouteToEdit}
                 className="bg-[#F3F4F6] hover:bg-white hover:text-[#58A942]  text-[#BFBFBF] p-2 px-4 rounded-md inline-flex gap-2 [&>*]:self-center"
@@ -48,7 +63,7 @@ function OneSubject() {
             <p className="text-white">{subjectDetails?.subject_description}</p>
           </div>
         </div>
-        <ClassGrades name={name} />
+        <ClassGrades grades={subjectDetails?.grades} />
       </div>
     </div>
   );

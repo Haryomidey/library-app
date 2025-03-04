@@ -1,35 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
-import NewSubjectHeader from "./NewSubjectHeader";
 import { BiCloudUpload } from "react-icons/bi";
-import { CreateTopic, GetSubject } from "../AdminControllers";
+import { CreateTopic } from "../AdminControllers";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useGetToken from "../../../utils/useGetToken";
-import { gradeInterface } from "./EditSubject";
-interface NewTopicProps {
-  subjectId: number;
-  gradesForTopic: gradeInterface[];
-}
+import { FaSpinner } from "react-icons/fa6";
 
-const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
+const NewTopic = () => {
+  const { grade, subjectId } = useParams();
   const { token } = useGetToken();
   const [title, setTitle] = useState("");
   const [loader, setLoader] = useState(false);
-  const [week, setWeek] = useState(1);
+  const [term, setTerm] = useState(1);
   const [introduction, setIntroduction] = useState("");
-  const [grade, setGrade] = useState<gradeInterface[]>(gradesForTopic);
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
   const uploadedVideo = useRef<HTMLInputElement | null>(null);
   const uploadedFile = useRef<HTMLInputElement | null>(null);
-
+  const coverPhoto = useRef<any>();
+  const [selectedCoverPhoto, setSelectedCoverPhoto] = useState<File | null>(
+    null
+  );
   const [selectedSubject, setSelectedSubject] = useState<string>("");
-  const route = useNavigate();
 
   const handleTopicSubmission = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !introduction) {
+    if (!title || !introduction || !grade || !subjectId) {
       Swal.fire({
         title: "Error",
         icon: "error",
@@ -42,11 +39,12 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
     setLoader(true);
     try {
       const formData = new FormData();
+
+      formData.append("school_id", "1");
       formData.append("subject_id", subjectId.toString());
-      formData.append("week", week.toString());
-      grade.forEach((g) =>
-        formData.append("grade_ids[]", g.grade_id.toString())
-      );
+      formData.append("term_id", term.toString());
+      formData.append("grade_ids[]", grade);
+
       formData.append("title", title);
       formData.append("introduction", introduction);
       if (video) {
@@ -54,6 +52,9 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
       }
       if (file) {
         formData.append("file", file);
+      }
+      if (selectedCoverPhoto) {
+        formData.append("cover", selectedCoverPhoto);
       }
       const topicCreation = await CreateTopic(formData, token);
       if (topicCreation) {
@@ -67,7 +68,7 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
         setFile(null);
         setVideo(null);
         setFileName("");
-        route(`/admin/subjects`);
+        window.location.href = `/admin/subjects/${subjectId}/${grade}/${topicCreation.id}`;
       } else {
         Swal.fire({
           title: "Topic not Added",
@@ -76,6 +77,7 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
         });
       }
     } catch (error: any) {
+      console.error("Error uploading topic:", error);
       Swal.fire({
         title: "Topic not Added",
         icon: "error",
@@ -132,38 +134,41 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
       setFileName(file.name);
     }
   };
+  const handleCoverSelectionDisplay = () => {
+    const file = coverPhoto.current.files[0];
+    if (file) {
+      const img = new Image();
+      img.onload = () => {
+        setSelectedCoverPhoto(file);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+  };
 
-  useEffect(() => {
-    const fetchSubject = async () => {
-      try {
-        const data = await GetSubject(subjectId, token);
-        setSelectedSubject(data[0].subject_name);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchSubject();
-  }, [subjectId]);
+  // useEffect(() => {
+  //   const fetchSubject = async () => {
+  //     try {
+  //       if (!subjectId) return;
+  //       const data = await GetSubject(parseInt(subjectId), token);
+  //       setSelectedSubject(data[0].subject_name);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchSubject();
+  // }, [subjectId]);
 
   return (
     <div>
-      <NewSubjectHeader
-        headerName={"Add Topic"}
-        loader={loader}
-        handleSubmit={handleTopicSubmission}
-        actionButtonName="Publish"
-      />
-      <form className="py-5 px-10 space-y-8">
+      <form onSubmit={handleTopicSubmission} className="py-5  space-y-5">
         <div className="flex justify-between">
           <select
-            onChange={(e) => setWeek(Number(e.target.value))}
+            onChange={(e) => setTerm(parseInt(e.target.value))}
             className="px-3 py-2 rounded-md border border-[#E4E4E7]]"
           >
-            {[1, 2, 3, 4, 5].map((weekNum) => (
-              <option key={weekNum} value={weekNum}>
-                Week {weekNum}
-              </option>
-            ))}
+            <option value="1">1st Term</option>
+            <option value="2">2nd Term</option>
+            <option value="3">3rd Term</option>
           </select>
         </div>
         <input
@@ -173,6 +178,47 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <div className="space-y-3">
+          <label className="font-semibold">Add a Cover Photo</label>
+          {!selectedCoverPhoto ? (
+            <div className="bg-white h-48 rounded-lg flex">
+              <div className="self-center mx-auto py-5">
+                <div className="bg-[#F9FAFB] p-6 mx-auto w-fit rounded-full">
+                  <BiCloudUpload className="text-4xl text-[#98A2B3]" />
+                </div>
+                <p className="font-light text-lg text-center">
+                  <span
+                    onClick={() => {
+                      coverPhoto.current.click();
+                    }}
+                    className="font-semibold cursor-pointer text-blue-500"
+                  >
+                    Click to upload &nbsp;
+                  </span>
+                </p>
+                <p className="text-[#98A2B3]">
+                  SVG, PNG, JPG or GIF (max. 800x400px)
+                </p>
+              </div>
+            </div>
+          ) : (
+            <img
+              src={URL.createObjectURL(selectedCoverPhoto)}
+              onClick={() => {
+                coverPhoto.current.click();
+              }}
+              className="h-48 w-full object-contain cursor-pointer"
+              alt=""
+            />
+          )}
+          <input
+            type="file"
+            ref={coverPhoto}
+            onChange={handleCoverSelectionDisplay}
+            className="hidden"
+            accept="image/*"
+          />
+        </div>
         {!video ? (
           <div className="bg-white h-64 rounded-lg flex">
             <div className="self-center mx-auto py-5">
@@ -186,7 +232,6 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
                 >
                   Click to upload your video &nbsp;
                 </span>
-                or drag and drop
               </p>
               <input
                 type="file"
@@ -213,25 +258,29 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
         />
         <div className="space-y-3">
           <label>For Additional Materials</label>
-          <div className="bg-white rounded-lg flex justify-between [&>*]:self-center px-5 py-2 gap-4">
-            <div className="flex gap-4">
-              <div className="bg-[#F9FAFB] p-2 w-fit rounded-full">
-                <BiCloudUpload className="text-4xl text-[#98A2B3]" />
+          <div className="bg-white rounded-lg [&>*]:self-center px-5 py-2 gap-4">
+            <div className="flex justify-between">
+              <div className="flex gap-4">
+                <div className="bg-[#F9FAFB] p-2 w-fit rounded-full">
+                  <BiCloudUpload className="text-4xl text-[#98A2B3]" />
+                </div>
+                <div className="self-center">
+                  <h1 className="text-sm">
+                    Upload Additional Materials for students
+                  </h1>
+                  <p className="text-[#98A2B3]">PDF, DOC, EXCEL | 10MB max.</p>
+                </div>
               </div>
-              <div className="self-center">
-                <h1>Tap to Upload</h1>
-                <p className="text-[#98A2B3]">PDF, DOC, EXCEL | 10MB max.</p>
-              </div>
+              <span
+                onClick={(e) => {
+                  e.preventDefault();
+                  uploadedFile.current?.click();
+                }}
+                className="self-center text-blue-500 font-semibold text-sm flex cursor-pointer gap-2 rounded-md py-2 px-8"
+              >
+                Tap to Upload
+              </span>
             </div>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                uploadedFile.current?.click();
-              }}
-              className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8"
-            >
-              Upload
-            </button>
             <input
               type="file"
               accept=".pdf,.docx,.xlsx"
@@ -239,8 +288,16 @@ const NewTopic = ({ subjectId, gradesForTopic }: NewTopicProps) => {
               className="hidden"
               onChange={handleFileSelectionDisplay}
             />
-            <h1>{fileName}</h1>
+            <li className="p-4 list-inside list-none">{fileName}</li>
           </div>
+        </div>
+        <div className="w-full flex justify-center">
+          <button
+            type="submit"
+            className="bg-blue-500 mx-auto rounded-lg w-fit place-content-center text-white px-10 py-2 cursor-pointer"
+          >
+            {loader ? <FaSpinner className="animate-spin" /> : "Add Topic"}
+          </button>
         </div>
       </form>
     </div>

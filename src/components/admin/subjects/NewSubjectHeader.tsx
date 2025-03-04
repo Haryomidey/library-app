@@ -26,12 +26,10 @@ function NewSubjectHeader({
       <ul className="flex justify-between px-10 [&>*]:self-center">
       <div className="flex items-center gap-2 ml-4 cursor-pointer">
             <p onClick={handleGoBack}><FaArrowLeftLong /></p>
-            <h1 className="hidden lg:block font-semibold self-center">{headerName}</h1>
+            <h1 className="hidden text-black lg:block font-semibold self-center">{headerName}</h1>
           </div>
         <div className="flex gap-5 [&>*]:self-center">
-          {/* <button className="bg-[#FAFAFA] hover:bg-slate-500 hover:text-white flex [&>*]:self-center gap-2 text-[#71717A] rounded-md py-2 px-8">
-            Save as Draft
-          </button> */}
+
           <button
             onClick={handleSubmit}
             className="bg-blue-500 flex [&>*]:self-center gap-2 text-white rounded-md py-2 px-8"
