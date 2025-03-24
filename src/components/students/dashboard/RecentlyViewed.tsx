@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
-import DefaultImage from '../../../img/default-image.png';
+import DefaultImage from "../../../img/default-image.png";
 import Cookies from "js-cookie";
 
 interface Subject {
+  subject_id: string;
   subject_name: string;
   subject_description: string;
   cover?: string;
@@ -15,9 +16,10 @@ interface RecentlyViewedProps {
   subjects: Subject[];
 }
 
-const RecentlyViewed = ({ subjects }: RecentlyViewedProps ) => {
+const RecentlyViewed = ({ subjects }: RecentlyViewedProps) => {
   const [loading, setLoading] = useState(true);
-  const displayedSubjects = subjects?.length > 3 ? subjects.slice(0, 3) : subjects;
+  const displayedSubjects =
+    subjects?.length > 3 ? subjects.slice(0, 3) : subjects;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,11 +30,13 @@ const RecentlyViewed = ({ subjects }: RecentlyViewedProps ) => {
     return () => clearTimeout(timer);
   }, []);
 
-  
   const handleRouting = (subject: Subject) => {
-    navigate(`/student/${subject?.subject_name}`);
+    navigate(`/student/subjects/${subject.subject_id}`);
     Cookies.set("selectedSubject", JSON.stringify(subject));
-    Cookies.set("grades", JSON.stringify(subject?.grades ? subject?.grades : ''));
+    Cookies.set(
+      "grades",
+      JSON.stringify(subject?.grades ? subject?.grades : "")
+    );
   };
 
   return (
@@ -43,15 +47,20 @@ const RecentlyViewed = ({ subjects }: RecentlyViewedProps ) => {
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 py-4">
         {loading ? (
-          Array(3).fill(0).map((_, index) => (
-            <div key={index} className="bg-white lg:p-2 p-4 h-60 lg:h-72 rounded-lg">
-              <Skeleton width="100%" height="70%" />
-              <div className="p-4">
-                <Skeleton width="80%" height="20px" />
-                <Skeleton width="60%" height="20px" />
+          Array(3)
+            .fill(0)
+            .map((_, index) => (
+              <div
+                key={index}
+                className="bg-white lg:p-2 p-4 h-60 lg:h-72 rounded-lg"
+              >
+                <Skeleton width="100%" height="70%" />
+                <div className="p-4">
+                  <Skeleton width="80%" height="20px" />
+                  <Skeleton width="60%" height="20px" />
+                </div>
               </div>
-            </div>
-          ))
+            ))
         ) : displayedSubjects?.length > 0 ? (
           displayedSubjects?.map((subject, index) => (
             <div
@@ -60,10 +69,16 @@ const RecentlyViewed = ({ subjects }: RecentlyViewedProps ) => {
               onClick={() => handleRouting(subject)}
             >
               <div className="bg-[#58A942] rounded-lg h-[70%]">
-                <img src={subject?.cover ? subject?.cover : DefaultImage} className="w-full h-full object-cover rounded-md" alt={subject.subject_name} />
+                <img
+                  src={subject?.cover ? subject?.cover : DefaultImage}
+                  className="w-full h-full object-cover rounded-md"
+                  alt={subject.subject_name}
+                />
               </div>
               <div className="px-4 pb-4 pt-1">
-                <h3 className="font-medium">{subject?.subject_name ? subject?.subject_name : 'None'}</h3>
+                <h3 className="font-medium">
+                  {subject?.subject_name ? subject?.subject_name : "None"}
+                </h3>
                 {/* <p className="font-light">{subject?.subject_description ? subject?.subject_description : 'None'}</p> */}
               </div>
             </div>

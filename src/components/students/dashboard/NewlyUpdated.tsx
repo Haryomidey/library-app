@@ -5,6 +5,7 @@ import DefaultImage from '../../../img/default-image.png';
 import Cookies from "js-cookie";
 
 interface Subject {
+  subject_id:string;
   subject_name: string;
   subject_description: string;
   cover?: string;
@@ -29,7 +30,7 @@ const NewlyUpdated = ({ subjects }: NewlyUpdatedProps) => {
   }, []);
 
   const handleRouting = (subject: Subject) => {
-    navigate(`/student/${subject?.subject_name}`);
+    navigate(`/student/subjects/${subject?.subject_id}`);
     Cookies.set("selectedSubject", JSON.stringify(subject));
     Cookies.set("grades", JSON.stringify(subject?.grades));
 

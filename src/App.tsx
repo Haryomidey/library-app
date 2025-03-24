@@ -7,9 +7,6 @@ import DashboardBody from "./components/admin/dashboard/DashoardBody";
 import StudentComp from "./components/students/StudentComp";
 import StudentDashboard from "./components/students/dashboard/StudentDashboard";
 import AllSubjects from "./components/students/subjects/AllSubjects";
-import SingleSubject from "./components/students/subjects/SingleSubject";
-import LessonDetails from "./components/students/subjects/lesson/LessonDetails";
-import SingleMaterial from "./components/students/subjects/lesson/SingleMaterial";
 import LibraryHome from "./components/students/library/LibraryHome";
 import Settings from "./components/students/settings/Settings";
 import UserManagementTeacher from "./components/admin/user management/userManagementTeacher";
@@ -47,6 +44,9 @@ import TeacherNotifications from "./components/teachers/TeacherNotifications";
 import EditContainer from "./components/admin/subjects/EditContainer";
 import EditContainerTeacher from "./components/teachers/subjects/EditContainerTeacher";
 import FileViewer from "./components/FileViewer";
+import StudentOneSubject from "./components/students/subjects/StudentOneSubject";
+import StudentSubjectForGrade from "./components/students/subjects/StudentSubjectForGrade";
+import LessonDetailsStudent from "./components/students/subjects/lesson/LessonDetailsStudent";
 
 const router = createBrowserRouter([
   {
@@ -94,7 +94,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "/admin/subjects/:subjectId",
-                element: <OneSubject />
+                element: <OneSubject/>
               },
               {
                 path: ":grade",
@@ -190,7 +190,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <SingleSubject />
+            element: <StudentOneSubject />
           },
           {
             path: ":id/",
@@ -261,38 +261,52 @@ const router = createBrowserRouter([
         element: <StudentNotifications />
       },
       {
-        path: "subjects",
-        element: <AllSubjects />
-      },
-      {
-        path: ":subject/",
-        children: [
-          {
-            path: "",
-            element: <SingleSubject />
-          },
-          {
-            path: ":id/",
-            children: [
-              {
-                path: ":subject_topic",
-                element: <LessonDetails />
-              },
-              {
-                path: ":subject_topic/video",
-                element: <SingleMaterial />
-              }
-            ]
-          }
-        ]
-      },
-      {
         path: "library",
         element: <LibraryHome />
       },
       {
         path: "settings",
         element: <Settings />
+      },
+      {
+        path: "subjects",
+        children: [
+          {
+            path: "/student/subjects",
+            element: <AllSubjects />
+          },
+          {
+            path: ":subjectId",
+            children: [
+              {
+                path: "/student/subjects/:subjectId",
+                element: <StudentOneSubject />
+              },
+              {
+                path: ":grade",
+                children: [
+                  {
+                    path: "/student/subjects/:subjectId/:grade",
+                    element: <StudentSubjectForGrade />
+                  },
+                  {
+                    path: ":topicId",
+                    children: [
+                      {
+                        path: "/student/subjects/:subjectId/:grade/:topicId",
+                        element: <LessonDetailsStudent />
+                      },
+                      {
+                        path: "video",
+                        element: <SingleMaterialAdmin />
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   },

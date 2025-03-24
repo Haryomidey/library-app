@@ -3,8 +3,8 @@ import Header from "../Header";
 import CourseContent from "./CourseContent";
 import CourseCoverPhoto from "./CourseCoverPhoto";
 import Cookies from "js-cookie";
-import { GetAllTopicsUnderSubject } from "../StudentController";
 import useGetToken from "../../../utils/useGetToken";
+import { GetAllTopicsUnderSubject } from "../../admin/AdminControllers";
 
 interface GradeState {
   grade_id: string | null;
@@ -15,46 +15,23 @@ interface CourseCoverPhotoProps {
   teacher_name: string;
   subject_name: string;
   grade: string;
+  subject_id: string;
 }
 
-const updateCookieArray = (newObject: CourseCoverPhotoProps) => {
-  const cookieName = "recently_viewed";
-  let dataArray = [];
-
-  const existingData = Cookies.get(cookieName);
-  if (existingData) {
-    dataArray = JSON.parse(existingData);
-  }
-
-  dataArray = dataArray.filter((item: CourseCoverPhotoProps) => (
-    item.cover !== newObject.cover ||
-    item.teacher_name !== newObject.teacher_name ||
-    item.subject_name !== newObject.subject_name ||
-    item.grade !== newObject.grade
-  ));
-
-  dataArray.unshift(newObject);
-
-  if (dataArray.length > 3) {
-    dataArray.pop();
-  }
-
-  Cookies.set(cookieName, JSON.stringify(dataArray), { expires: 7 });
-};
-
-function SingleSubject() {
-  const {token} = useGetToken();
+function StudentSubjectForGrade() {
+  const { token } = useGetToken();
   const [subjectState, setSubjectState] = useState<any>(null);
   const [topics, setTopics] = useState<any>(null);
   const [selectedGradeState, setSelectedGradeState] = useState<GradeState>({
-    grade_id: null,
+    grade_id: null
   });
 
-  const [courseCoverPhotoContent, setCourseCoverPhotoContent] = useState<CourseCoverPhotoProps | null>(null);
+  const [courseCoverPhotoContent, setCourseCoverPhotoContent] =
+    useState<CourseCoverPhotoProps | null>(null);
 
   useEffect(() => {
     const subject = Cookies.get("selectedSubject");
-    const grades = Cookies.get("grades");
+    const grades = Cookies.get("selectedGrade");
 
     if (subject) {
       setSubjectState(JSON.parse(subject));
@@ -69,19 +46,25 @@ function SingleSubject() {
     const fetchTopicDetails = async () => {
       if (subjectState?.subject_id) {
         try {
-          const data = await GetAllTopicsUnderSubject(subjectState.subject_id, token);
-          setTopics(data);
-          
+          const data = await GetAllTopicsUnderSubject(
+            subjectState.subject_id,
+            token
+          );
+          let topicsForGrade = data.filter(
+            (topic: any) =>
+              topic.grade_id === selectedGradeState.grade_id?.toString()
+          );
+          setTopics(topicsForGrade);
+
           const coverPhotoData = {
             cover: subjectState.cover || "",
+            subject_id: subjectState.subject_id || "",
             teacher_name: subjectState.teacher_name || "",
             subject_name: subjectState.subject_name || "",
-            grade: selectedGradeState.grade_id || "",
+            grade: selectedGradeState.grade_id || ""
           };
 
           setCourseCoverPhotoContent(coverPhotoData);
-
-          updateCookieArray(subjectState);
         } catch (error: any) {
           console.error(error.message);
         }
@@ -89,17 +72,23 @@ function SingleSubject() {
     };
 
     fetchTopicDetails();
-  }, [subjectState, selectedGradeState]);
+  }, [subjectState, selectedGradeState, token]);
 
   return (
     <div>
       <Header headerName="Course" />
       <div className="px-5 lg:px-10 py-5 space-y-5">
-        {courseCoverPhotoContent && <CourseCoverPhoto {...courseCoverPhotoContent} />}
-        <CourseContent contents={topics} subject_name={courseCoverPhotoContent?.subject_name} />
+        {courseCoverPhotoContent && (
+          <CourseCoverPhoto {...courseCoverPhotoContent} />
+        )}
+        <CourseContent
+          contents={topics}
+          grade={courseCoverPhotoContent?.grade}
+          subject_id={courseCoverPhotoContent?.subject_id}
+        />
       </div>
     </div>
   );
 }
 
-export default SingleSubject;
+export default StudentSubjectForGrade;
